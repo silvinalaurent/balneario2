@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Recaudacion</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../recaudacion/recaudacion.js?v=3.0"></script>
+	
+	
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 	/*	n =  new Date();
+ 		y = n.getFullYear();
+		m = n.getMonth() + 1;
+		d = n.getDate();
+		var hoy=y + "-" + m + "-" + d;
+		console.log("Fecha de hoy ",hoy);
+		$("#buscafecha").val(hoy);
+ 		trae_pagos(1,hoy);
+ 		trae_devoluciones_recaudacion(1,hoy); //desde recaudacion
+ 	*/	
+    });      
+
+
+</script>
+   </head>
+
+
+<body>
+	<div id="general">
+	<h2>Recaudacion</h2>
+	
+		<div class="cuadro" id="recaudacionbusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna2fila2"><label>Fecha</label>
+			<input type="date" name="buscafecha" id="buscafecha" onchange="filtrar(this.value);"></div>
+			<div id="columna4fila2"><input type="button" onclick="imprimerecaudacion($('#buscafecha').val());" value="Imprime" class="boton" /></div>
+		</div>
+	
+		<div class="tablas">
+			<h3>Recaudacion x mes</h3>	
+			<table id="tablarecaudacion" name="tablarecaudacion" class="tabla">
+				<thead>
+					<tr>
+						<th>Mes</th>					
+						<th>Estadias</th>					
+						<th>Monto</th>					
+						
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<label id="texto"></label>	
+			<br><br>
+			
+		</div>
+		
+		<h3>Total $ <label id="total"></label></h3>
+		<br>
+		<br>
+		<br>
+</div>
+	
+</body>
+</html>

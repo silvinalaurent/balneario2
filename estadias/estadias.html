@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Estadias</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=2.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js"></script>
+	<script type="text/javascript" src="estadias.js?v=4.4"></script>
+	<script type="text/javascript" src="../turistas/acompanantes.js?v=3.0"></script>
+ 
+</head>
+
+<body>
+	<div id="general">
+		<h2>Estadias</h2>
+		<form name="busqueda" id="buscaestadia" method="post" accept-charset="utf-8">
+			<div class="cuadro" id="cajabusqueda">
+				<div id="fila1" class="titulos">
+					<h3>Buscar por... </h3>
+				</div>
+				<div id="columna1fila2">
+					<label>Turista :</label>
+					<input type="text" name="apellido" id="qapellido" placeholder="Ingrese Apellido y/nombre " size="40">
+				</div>
+				<div id="columna2fila2">
+					<label>Parcela :</label>
+					<input type="text" name="idparcela" id="qidparcela" size="5">
+				</div>
+				<div id="columna3fila2">
+					<label>Carpa :</label>
+					<input type="text" name="nrocarpa" id="qnrocarpa" size="5">
+				</div>
+				<div id="columna4fila2">
+					<label>Patente :</label>
+					<input type="text" name="patente" id="qpatente" size="5">
+				</div>
+				<div id="columna1fila3">
+					<label>Inicio :</label>
+					<input type="date" name="fdesde" id="qfdesde" >
+					<label>Fin :</label> 
+					<input type="date" name="fhasta" id="qfhasta" >
+				</div>
+
+				<div id="columna2fila3">
+					<label>Estado :</label>
+					<select name="estado" id="qestado">
+						<option value="0" selected="true">Todos</option>
+						<option value="1">Activas</option>
+						<option value="2">Vencidas</option>
+					</select>
+				</div>
+
+				<div id="columna3fila3">
+					<label>Telefono :</label>
+					<input type="text" name="telefono" id="qtelefono" placeholder="Ingrese Telefono " size="20">
+				</div>
+				<div id="columna4fila3">
+					<div class="button" onclick="traeEstadias()">Consulta Estadias</div>
+					<div class="button" onclick="imprSelec('listado')">Imprimir Consulta</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- <div id="general">
+		<h2>Estadias</h2>
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos">
+				<h3>Buscar por... </h3>
+			</div>
+			<div id="columna1fila2">
+				<label>Turista</label>
+				<input type="search" name="buscaapellido" id="buscaapellido" placeholder="Ingrese al menos 4 letras..." size="40" onkeyup="filtrarturistaestadia(this.value);">
+			</div>
+			<div id="columna2fila2">
+				<label>Parcela</label>
+				<input type="search" name="buscaaparcela" id="buscaparcela" size="5" onkeyup="filtrarparcelaestadia(this.value);">
+			</div>
+			<div id="columna3fila2">
+				<label>Carpa</label>
+				<input type="search" name="buscaacarpa" id="buscacarpa" size="5" onkeyup="filtrarcarpaestadia(this.value);">
+			</div>
+			<div id="columna4fila2">
+				<label>Patente</label>
+				<input type="text" name="buscapatente" id="buscapatente" size="5" onkeyup="filtrarpatenteestadia(this.value);">
+			</div>
+			<div id="columna1fila3">
+				<label>Inicio</label>
+				<input type="date" name="buscaestadiai" id="buscaestadiai" >
+				<label>Fin</label> 
+				<input type="date" name="buscaestadiaf" id="buscaestadiaf" >
+			</div>
+			<div id="columna2fila3">
+				<button onclick="busca_estadias()">Buscar fechas</button>
+			</div>
+			<div id="columna3fila3">
+				<label class="etiquetacasilla">
+					<input id="estadiasactivas" name="estadias" type="radio" class="casilla" value=""/>Estadias Activas
+				</label>
+				<label class="etiquetacasilla2">
+					<input id="estadiasvencidas" name="estadias" type="radio" class="casilla" value=""/>Estadias Vencidas
+				</label>
+			</div>
+			<div id="columna4fila3">
+				<button onclick="imprSelec('listado')">Imprimir</button>
+			</div>
+		</div>
+	</div> -->
+
+	<div id="renglon">
+		<div id="columna1">
+			Datos: <label id="datos_estadias">-</label> estadia/s
+		</div>
+	</div>
+	
+	<input id="mostrar-modal" name="modal" type="radio" /> 
+		
+	<div id="modal">
+		<input id="cerrar-modal" name="modal" type="radio" /> 
+		<label for="cerrar-modal"> X </label> 
+	  	
+		<div id="turistas_estadia">
+			<h2>Visitantes</h2>
+			<form id="form_turista_estadias" name="form_turista_estadias"  method="post" accept-charset="utf-8">
+				<table id="tablaturistas" name="tablaturistas" class="tabla">
+					<thead>
+						<tr>
+							<th>Apellido y nombre</th>		
+							<th>Documento</th>		
+							<th>Telefono</th>								
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>			
+			</form>
+		</div>
+	</div>	  	
+	
+	<div id="listado">
+		<div class="tablas">
+			<table id="tablaestadias" name="tablaestadias" class="tabla">
+				<thead>
+					<tr>
+						<th>Estadia</th>		
+						<th>Parcela</th>		
+						<th>Nro Carpa</th>								
+						<th>Turista</th>				
+						<th>Inicio</th>					
+						<th>Fin</th>					
+						<th>Tipo Carpa</th>
+						<th>Patente</th>					
+						<th>Total</th>		
+						<th>Acciones</th>	
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<br>
+		</div>
+    </div>
+	
+</body>
+<script type="text/javascript">	
+	function imprSelec(nombre) {
+	    var ficha = document.getElementById(nombre);
+	    var ventimp = window.open(' ', 'popimpr');
+	    ventimp.document.write( ficha.innerHTML );
+	    ventimp.document.close();
+	    ventimp.print( );
+	    ventimp.close();
+	}
+
+	$( document ).ready(function() {
+
+		//checkout_estadias_viejas();
+	 	
+		// $('#estadiasactivas').change(function(){
+		//     if ($(this).is(':checked')){
+		//         filtrar_estadias_activas();
+		//     } 
+	  	// });  
+
+	    // $('#estadiasvencidas').change(function(){
+		//     if ($(this).is(':checked')){
+		//         filtrar_estadias_vencidas();
+		//     } 
+	    // });
+	});      
+
+</script>
+</html>

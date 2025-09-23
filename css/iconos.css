@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'iconos';
+  src: url('iconfont/iconos.ttf?49940259') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'pines';
+  src: url('iconfont/pines.ttf?36131053') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.configuracion:before { content: '\e800';   font-family: "iconos";} /* '' */
+.guardar:before { content: '\e801';   font-family: "iconos";} /* '' */
+.cancelar:before { content: '\e802';   font-family: "iconos";} /* '' */
+.buscar:before { content: '\e803';   font-family: "iconos";} /* '' */
+.whatsapp:before { content: '\e804';   font-family: "iconos";} /* '' */
+.expandir:before { content: '\e805';   font-family: "iconos";} /* '' */
+.contraer:before { content: '\e806';   font-family: "iconos";} /* '' */
+.compartir:before { content: '\e807';   font-family: "iconos";} /* '' */
+.pinterest:before { content: '\e808';   font-family: "iconos";} /* '' */
+.twitter:before { content: '\e809';   font-family: "iconos";} /* '' */
+.youtube:before { content: '\e80a';   font-family: "iconos";} /* '' */
+.facebook:before { content: '\e80b';   font-family: "iconos";} /* '' */
+.googleplus:before { content: '\e80c';   font-family: "iconos";} /* '' */
+.instagram:before { content: '\e80d';   font-family: "iconos";} /* '' */
+.salir:before { content: '\e80e';   font-family: "iconos";} /* '' */
+.usuario:before { content: '\e80f';   font-family: "iconos";} /* '' */
+.casa:before { content: '\e810';   font-family: "iconos";} /* '' */
+.llave:before { content: '\e811';   font-family: "iconos";} /* '' */
+.flecha-izquierda:before { content: '\e812';   font-family: "iconos";} /* '' */
+.flecha-derecha:before { content: '\e813';   font-family: "iconos";} /* '' */
+.flecha-arriba:before { content: '\e814';   font-family: "iconos";} /* '' */
+.flecha-abajo:before { content: '\e815';   font-family: "iconos";} /* '' */
+.suma:before { content: '\e816';   font-family: "iconos";} /* '' */
+.resta:before { content: '\e817';   font-family: "iconos";} /* '' */
+.impresora:before { content: '\e818';   font-family: "iconos";} /* '' */
+.iconomenu:before { content: '\e819';   font-family: "iconos";} /* '' */
+.registro:before { content: '\e81a';   font-family: "iconos";} /* '' */
+.lapiz:before { content: '\e81b';   font-family: "iconos";} /* '' */
+.releer:before { content: '\e81c';   font-family: "iconos";} /* '' */
+.descargar:before { content: '\e81d';   font-family: "iconos";} /* '' */
+.subir:before { content: '\e82d';   font-family: "iconos";} /* '' */
+.excel:before { content: '\e81e';   font-family: "iconos";} /* '' */
+.word:before { content: '\e81f';   font-family: "iconos";} /* '' */
+.email:before { content: '\e820';   font-family: "iconos";} /* '' */
+.telefono:before { content: '\e821';   font-family: "iconos";} /* '' */
+.error:before { content: '\e822';   font-family: "iconos";} /* '' */
+.ojo:before { content: '\e823';   font-family: "iconos";} /* '' */
+.imagenes:before { content: '\e824';   font-family: "iconos";} /* '' */
+.mensages:before { content: '\e825';   font-family: "iconos";} /* '' */
+.camara:before { content: '\e826';   font-family: "iconos";} /* '' */
+.microfono:before { content: '\e827';   font-family: "iconos";} /* '' */
+.seguro:before { content: '\e828';   font-family: "iconos";} /* '' */
+.inseguro:before { content: '\e829';   font-family: "iconos";} /* '' */
+.bien:before { content: '\e82a';   font-family: "iconos";} /* '' */
+.mal:before { content: '\e82b';   font-family: "iconos";} /* '' */
+.entrar:before { content: '\e82c';   font-family: "iconos";} /* '' */
+.parlante:before { content: '\e82e';font-family: "iconos"; } /* '' */
+.play:before { content: '\e82f';font-family: "iconos"; } /* '' */
+.stop:before { content: '\e830';font-family: "iconos"; } /* '' */
+
+.desenganchado:before { content: '\e800';font-family: "pines"; } /* '' */
+.enganchado:before { content: '\e801'; font-family: "pines"; } /* '' */
+
+
+.trabajando{
+	animation-name:giro;
+	animation-duration:2s;
+	animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes giro{
+	100%{
+		transform:rotateZ(360deg);
+	}
+}

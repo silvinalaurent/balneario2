@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Reservas</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../reservas/reservas.js?v=3.0"></script>
+	<script type="text/javascript" src="../tarifas/tarifas.js?v=3.0"></script>
+	<script type="text/javascript" src="../turistas/turistas.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/provincias.js?v=3.0"></script>
+	
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+		lista_tarifas("listadotarifasr");
+	 	lista_turistas("listaturistasr");
+	 	lista_provincias("provincia1r");
+	 	console.log("va a traer reservas 2 ");
+		trae_reservas(0,"","R");
+
+    });      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="general">
+	<h2>Reservas</h2>
+	
+	<!-- <form name="busqueda" method="post" accept-charset="utf-8"> -->
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			
+			 <div id="columna1fila2"><label>Fecha Ingreso</label>
+				<input type="DATE" name="buscareservafecha" id="buscareservafecha" ></div>
+				
+			<div id="columna2fila2"><label>Fecha Egreso</label>
+				<input type="DATE" name="buscareservafecha2" id="buscareservafecha2"></div>
+			<div id="columna4fila2">
+				<button onclick="busca_reservas()">Buscar</button>
+			</div>
+		</div>
+	<!-- </form>	 -->
+		
+			<div>
+				<input id="mostrar-modal2" name="modal" type="radio" /> 
+		<!-- 		<label for="mostrar-modal2" onclick="agrega_reserva(document.getElementById('numeroparcela').textContent)"><h3>+</h3></label>
+ -->
+				<div id="modal">
+					<input id="cerrar-modal2" name="modal" type="radio" /> 
+					<label for="cerrar-modal2"> X </label> 
+				  	<div id="reserva">
+				  		<h2>Reservas</h2>
+				
+				  		<form id="form_reserva" name="form_reserva"  method="post" accept-charset="utf-8">
+					  		<input id="idreserva" name="idreserva" style="display:none" type="text" />
+											
+							<div id="renglon">
+					  			<div id="columna1"><label>Parcela</label></div>
+					  			<div id="columna2"><input type="text" id="numeroparcelar" name="numeroparcelar" size="4"></div>
+					  		</div>
+							<div id="renglon">
+					  			<div id="columna1"><label>Fecha Desde</label></div>
+					  			<div id="columna2"><input type="date" id="fechadr" name="fechadr" ></div>
+					  			<div id="columna3"><label>Fecha Hasta</label></div>
+					  			<div id="columna4"><input type="date" id="fechahr" name="fechahr"></div>
+					  		</div>
+							<div id="renglon">
+					  			<div id="columna1"><label>Tipo</label></div>
+					  			<div id="columna2"><select id="listadotarifasr" name="listadotarifasr" onchange="eligetarifa(this.value);"></select></div>
+					  			<div id="columna3"><label>Cantidad</label></div>
+					  			<div id="columna4"><input type="text" id="cantidadr" name="cantidadr" size="2"></div>
+					  		</div>
+					  		<div id="renglon">
+					  			<div id="columna1"><label>Turista</label></div>
+					  			<div id="columna2"><select name="listaturistasr" id="listaturistasr" onchange="console.log('Turista ',this.value);"></select></div>
+					  			
+								<div id="columna4"><label onclick="agrega_turistar()">+</label></div>
+							</div>
+							<div id="renglondoble">
+					  			<div id="columna1"><label>Observaciones</label></div>
+					  			<div id="columna234"><textarea id="observacionesr" name="observacionesr" rows="2" cols="80"></textarea></div>
+					  			
+					  		</div>
+					  		
+							<div id="renglon">
+								<div id="columna4"><input type="button" id="guardarr" onclick="guarda_reserva()" value="Aceptar"></div>
+							</div>	
+										<!--Div nuevoturista se oculta	  		 -->
+								  		<div id="nuevoturistar" style="display:none;">
+								  			<div class="cuadro2">
+									  		<form id="form_turistar" name="form_turistar"  method="post" accept-charset="utf-8">
+									  		<input id="idturistar" name="idturistar" style="display:none" type="text" />
+											<div id="renglon">
+									  			<div id="columna1"><label>Apellido</label></div>
+									  			<div id="columna2"><input type="text" id="apellidor" name="apellidor" size="30"></div>
+									  			<div id="columna3"><label>Nombres</label></div>
+									  			<div id="columna4"><input type="text" id="nombresr" name="nombresr" size="30"></div>
+									  		</div>
+											<div id="renglon">
+									  			<div id="columna1"><label>Documento</label></div>
+									  			<div id="columna2"><input type="text" id="documentor" name="documentor" size="10"></div>
+									  			<div id="columna3"><label>Domicilio</label></div>
+									  			<div id="columna4"><input type="text" id="domicilior" name="domicilior" size="40"></div>
+									  		</div>
+											<div id="renglon">
+												<div id="columna1"><label>Ciudad</label></div>
+									  			<div id="columna2"><input type="text" id="ciudad1r" name="ciudad1r" size="40"></div>
+									  			<div id="columna3"><label>Provincia</label></div>
+									  			<div id="columna4"><select id="provincia1r" name="provincia1r"></select></div>
+									  		</div>
+											<div id="renglon">
+									  			<div id="columna1"><label>Celular</label></div>
+									  			<div id="columna2"><input type="text" id="telefonor" name="telefonor" size="15"></div>
+									  			<div id="columna3"><label>E-mail</label></div>
+									  			<div id="columna4"><input type="text" id="emailr" name="emailr" size="50"></div>
+									  		</div>
+									  		<div id="renglon">
+									  			<div id="columna1"><label>Redes sociales</label></div>
+									  			<div id="columna2"><input type="text" id="redesr" name="redesr" size="80"></div>
+									  		</div>
+									  		<div id="renglon">
+												<div id="columna4"><input type="button" id="guardar2r" onclick="guarda_turista('R');" value="Guarda Turista">
+												<input type="button" id="cancelarr" onclick="cierraventanar()" value="Cierra"></div>
+											</div>
+									  	</form>
+									  	</div><!-- nuevoturistar -->
+									  	
+						  	
+				  		</form>
+						
+					</div><!-- reserva -->
+				</div><!-- modal -->
+				</div>
+
+				<div class="tablas">
+					<table id="tablareservas" name="tablareservas">
+						<thead>
+							<tr>
+								<th>Parcela</th>					
+								<th>Turista</th>				
+								<th>Inicio</th>					
+								<th>Fin</th>					
+								<th>Tipo Carpa</th>					
+								<th>Observaciones</th>			
+								<th width="150px">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+		    	</div><!-- tablas -->
+		
+	
+	</div>
+	
+	
+</body>
+</html>

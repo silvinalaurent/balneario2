@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Descuentos</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script> 
+	<script type="text/javascript" src="../js/funciones.js"></script> 
+		<script type="text/javascript" src="descuentos.js"></script>
+	
+	
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		trae_descuentos(0,"");
+    });      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="generalchico">
+	<h2>Descuentos</h2>
+	
+		
+	<form name="busqueda" method="post" accept-charset="utf-8">
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna1fila2"><label>Descripcion</label>
+			<input type="search" name="buscadescuento" id="buscadescuento" size="40" onkeyup="filtrar(this.value);"></div>
+			
+		</div>
+	</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_descuento()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="modaldescuento">
+		  		<h2>Descuentos</h2>
+		
+		  		<form id="form_descuento" name="form_descuento"  method="post" accept-charset="utf-8">
+		  		<input id="iddescuento" name="iddescuento" style="display:none" type="text" />
+				
+				<div id="renglon">
+		  			<div id="columna1"><label>Descripcion</label></div>
+		  			<div id="columna2"><input type="text" id="descripcion" name="descripcion" value="" size="100"></div>
+		  		</div>
+		  		<div id="renglon">
+		  			<div id="columna1"><label>% Descuento</label></div>
+		  			<div id="columna2"><input type="text" id="precio" name="precio" value="" placeholder="0..100"></div>
+		  			</div>
+				
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_descuento()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+	</div>
+		  	
+
+	<div class="tablaschicas">
+			
+		<table id="tabla" name="tabla" class="tabla">
+			<thead>
+				<tr>
+					<th>Descripcion</th>					
+					<th>Descuento</th>					
+					<th width="150px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+    </div>
+	</div>
+	 
+</body>
+</html>

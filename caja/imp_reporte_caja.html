@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Impresion de Reporte de Caja - Administracion Balneario - Municipalidad de San José</title>
+	<link rel="shortcut icon" href="../img/impresora.ico"/>
+
+
+	<link rel="stylesheet" href="../css/framesp.css">
+	<link rel="stylesheet" href="../css/iconos.css">
+	<link rel="stylesheet" href="../css/comprobantes.css">
+		
+	<script type='text/javascript' src='../js/jquery-3.1.0.min.js'></script>
+	<script type='text/javascript' src='../js/funciones.js?v=2'></script>
+		
+	<script type="module" src="../imports/rad-reporte.js"></script>
+	<script type="module" src="../imports/rad-boton.js"></script>
+	
+	<style>
+		@media print {
+			rad-boton{
+				display: none;
+			}
+		}
+	</style>
+
+</head>
+<body>
+	<!-- MODAL RELOJ -->
+	<div class="fondo-modal horizontal-centro vertical-centro tiempo" >
+		<div class="reloj"></div>
+	</div>
+	<script>
+
+		function traePagos(fdesde,fhasta,idusuario){
+			var diferido = $.Deferred();
+
+			$.ajax({
+				url:"reporte_caja.php",
+				type:"POST",
+				dataType:'json',
+				data:{
+					fdesde:fdesde,
+					fhasta:fhasta,
+					idusuario:idusuario
+				},
+				success:function(data){
+					diferido.resolve(data);
+				}
+			});
+			
+			return diferido.promise();
+
+		};
+		
+	  	$(document).ready(function(){
+		  	var GET = leerGET();
+			
+		  	var fdesde = GET["fdesde"];
+		  	var fhasta = GET["fhasta"];
+		  	var idusuario = GET["idusuario"];
+
+		  	$(".tiempo").show();
+		    traePagos(fdesde,fhasta,idusuario).then((data)=>{
+		    	console.log(data);
+		    	for(var x in data){
+		    		data[x].cantidad_personas = data[x].cantidad_personas==null?0:data[x].cantidad_personas;
+		    	};
+
+				$("body").append('<rad-reporte nombre="reportetotal" logo="../img/marcasanjose.png" titulo="Reporte de Caja desde el '+fdesde+' hasta el '+fhasta+' " encabezados=\'["Secuencia","Fecha - Hora","Nro.Estadia","Ingreso / Egreso","Turista","Nro.Parcela","Cant.Personas","$Efectivo","$Debito","$Transf.","($Devoluciones)","$Tot.Efect","$Tot.Debito","$Tot.Transf.","$Tot.General","Usuario"]\' totales=\'["cantidad_personas","efectivo","debito","transferencia","devoluciones","total_efectivo","total_debito","total_transferencia","total_general"]\' elementosxpagina=58 orientacion="horizontal"  elementos=\''+JSON.stringify(data)+'\'> </rad-reporte>');
+				$(".tiempo").hide();
+			});
+	  	});
+	</script>
+</body>
+</html>

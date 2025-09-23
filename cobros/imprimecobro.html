@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Impresion de Cobros</title>
+  <link rel="stylesheet" href="../css/estiloimp.css?v=12">
+  <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+  <script type="text/javascript" src="../cobros/cobros.js?v=3.0"></script>
+  <script type="text/javascript" src="../js/funciones.js?v=3.0"></script>
+  
+
+<script type="text/javascript"> 
+ 
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  };
+
+
+
+ $( document ).ready(function() {
+      
+      var idcobro = getParameterByName('variable');
+      imprime_cobro(idcobro);
+    
+  });
+
+</script>
+
+</head>
+
+<body>
+  
+  <div id="ticket">
+
+  <div id="original">
+  <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h4>Municipalidad de San José</h4>
+  -- Tiquet Cobro --<br><br>
+   
+        NºCobro: <label id="idcobro"></label><br>
+        Fecha: <label id="fecha"></label><br>
+        Turno: <label id="turno"></label><br>
+        Concepto: <label id="concepto"></label><br>
+        Atendio: <label id="usuario"></label><br>
+        <br>
+        
+        Observaciones: <label id="observaciones"></label><br>
+                
+        <u>TOTAL       $</u>: <label id="total"></label> <br>
+       
+        <br>
+    
+        Temporada 2024-2025<br>
+        <h4>Para la Administracion.-</h4><br>            
+        <p style="text-align: center;">__________________<br>
+             Firma</p>
+   </div>
+   <br><br><br>
+  <div id="duplicado">
+    <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h4>Municipalidad de San José</h4>
+  -- Tiquet Cobro --<br><br>
+   
+        NºCobro: <label id="idcobrod"></label><br>
+        Fecha: <label id="fechad"></label><br>
+        Turno: <label id="turnod"></label><br>
+        Concepto: <label id="conceptod"></label><br>
+        Atendio: <label id="usuariod"></label><br>
+        <br>
+        
+        Observaciones: <label id="observacionesd"></label><br>
+                
+        <u>TOTAL       $</u>: <label id="totald"></label> <br>
+        
+        <br>
+    
+        Temporada 2024-2025<br>
+        <h4>Para el Visitante.-</h4><br>            
+        <p style="text-align: center;">__________________<br>
+             Firma</p>
+  </div>
+    
+</div>
+
+</body>
+</html>

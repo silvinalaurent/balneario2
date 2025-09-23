@@ -1,0 +1,137 @@
+/*
+	Version: 6.0;
+*/
+  *
+{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body
+{
+	font-family: 'Verdana', sans-serif;
+}
+
+label
+{
+	line-height: 2.5em;
+}
+
+input
+{
+	line-height: 2.5em;
+}
+
+h3
+{
+	padding: 10px;
+}
+
+a
+{ font-style: bold; }
+
+.error{
+    background-color: #E74F4F;
+    position: absolute;
+    top: 0;
+    padding: 10px 0 ;
+    border-radius:  0 0 5px 5px;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+#login
+{
+	position: absolute;
+	background-color: #f79b4e;
+	width: 24%;
+	height: 40%;
+	top: 25%;
+	left: 38%;
+	
+	padding: 30px;
+	margin: 30px;
+	border:solid 1px #CCC;
+  	border-radius:15px;
+  	box-shadow: 2px 2px 2px 0px #818181;
+}
+	
+#gridlogin
+{
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto auto auto auto;
+}
+
+
+#titulo {
+	grid-column: 1;
+	grid-row: 1;
+	text-align: center;
+	line-height: 3em;
+}
+
+#usuario{
+	grid-column: 1;
+	grid-row: 2;
+	line-height: 3em;
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	grid-template-rows: auto;
+	}
+
+#izquierda
+{	grid-column: 1;
+	grid-row: 1;
+	}
+
+#derecha{
+	grid-column: 2;
+	grid-row: 1;
+	
+}
+
+#clave{
+	grid-column: 1;
+	grid-row: 3;
+	line-height: 3em;
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	grid-template-rows: auto;
+}
+
+
+#confirma{
+	grid-column: 1;
+	grid-row: 4;
+	line-height: 3em;
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	grid-template-rows: auto;
+	padding: 10px;
+
+}
+
+.boton
+ {
+	
+	background-color: #ff3300;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+	border-radius:10px;
+	
+	line-height: 2.5em;
+	display:table-cell;  /*Propiedad obligatoria*/
+	text-align:center;
+	vertical-align:middle; /*Propiedad obligatoria*/
+}
+
+.foco
+{
+	border:solid 2px #655751;
+	background-color: #e7885f;
+  	}

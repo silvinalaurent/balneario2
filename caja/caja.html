@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Caja</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js?v=5.0"></script>
+	<script type="text/javascript" src="../caja/caja.js?v=6.0"></script>
+	<script type="text/javascript" src="../cobros/cobros.js?v=5.0"></script>
+	<script type="text/javascript" src="../devoluciones/devoluciones.js?v=5.0"></script>
+	
+<script type="text/javascript">	
+ $( document ).ready(function() {
+
+	//informe de caja por cajero
+			var hoy=fechaHoy();
+			console.log("fecha para caja ",hoy);
+			$("#buscafecha").val(hoy);
+			trae_pagos(1,hoy);
+ 		
+    });      
+
+
+</script>
+   </head>
+
+
+<body>
+	<div id="general">
+	<h2>Caja</h2>
+	
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna2fila2"><label>Fecha</label>
+			<input type="date" name="buscafecha" id="buscafecha" onchange="filtrar(this.value);"></div>
+			<div id="columna4fila2"><input type="button" onclick="imprimecaja($('#buscafecha').val());" value="Imprime" class="boton" /></div>
+		</div>
+	
+		<div class="tablas">
+			<h3>Estadias</h3>	
+			<table id="tablapagos" name="tablapagos" class="tabla">
+				<thead>
+					<tr>
+						<th>Nro.</th>					
+						<th>Parcela</th>					
+						<th>Nro.Carpa</th>	
+						<th>Estadia</th>
+						<th width="150px">Periodo </th>					
+						<th>Turista</th>	
+						<th>Ciudad</th>					
+						<th>Personas</th>
+						<th>Monto</th>
+						<th>Adicional</th>										
+						<th>Descuento</th>					
+						<th>Total</th>	
+						<th>Pago</th>
+						<th>Usuario</th>				
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<label id="texto"></label>	
+			<br><br>
+	<!-- agregamos cobro de parrillas dic 2024 -->
+		<h3>Parrillas/Otros</h3>	
+		<div id="renglon">
+			<div id="columna1">Importe $ </div>	
+			<div id="columna2"><label id="importecobros">0</label></div>
+		</p>
+		</div>
+		<br><br>
+	<!-- agregamos cobro de parrillas dic 2024 -->
+	
+	
+			
+			<h3>Devoluciones</h3>
+			<table id="tabladevoluciones" name="tabladevoluciones" class="tabla">
+				<thead>
+					<tr>
+						<th>Nro</th>		
+						<th>Fecha</th>					
+						<th>Estadia </th>					
+						<th>Turista</th>					
+						<th>Importe</th>					
+						<th>Motivo</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<label id="textodevolucion"></label>	
+			<br>
+		</div>
+		
+		<div id="renglon">
+			<div id="columna1"><h4>Cantidad Pagos: </h4></div>
+			<div id="columna2"><h4><label id="cantidadpagos"></label></h4></div>
+	   </div>
+	   <div id="renglon">
+		   <div id="columna1"><h4>Cantidad Pagos Efectivo: </h4></div>
+		   <div id="columna2"><h4><label id="cantidadefectivo"></label></h4></div>
+		</div>
+		<div id="renglon">
+			<div id="columna1"><h4>Cantidad Pagos Debito: </h4></div>
+			<div id="columna2"><h4><label id="cantidaddebito"></label></h4></div>
+		 </div>
+		<div id="renglon">
+			<div id="columna1"><h4>Efectivo $ </h4></div>
+			<div id="columna2importe"><h4><label id="subtotale"></label></h4></div>
+		</div>
+		<div id="renglon">
+	   	<div id="columna1"><h4>Debito $ </h4></div>
+	   	<div id="columna2importe"><h4><label id="subtotald"></label></h4></div>
+	   </div>
+	   <div id="renglon">
+		<div id="columna1"><h4>Transferencia $ </h4></div>
+		<div id="columna2importe"><h4><label id="subtotalt"></label></h4></div>
+	</div>
+	   <div id="renglon">	    
+	   	<div id="columna1"><h3>SubTotal $ </h3></div>
+	   	<div id="columna2importe"><h3><label id="total"></label></h3></div>
+	   </div>
+
+	    <input type="text" id="subtotalx" name="subtotalx" style="display:none">
+	    <div id="renglon">
+	    	<div id="columna1"><h4>Devoluciones $ </h4></div>
+	    	<div id="columna2importe"><h4><label id="devoluciones"></label></h4></div>
+	    </div>
+	    <input type="text" id="devolucionx" name="devolucionx" style="display:none">
+	   <br><br>
+		
+		
+		<div id="renglon">
+	    	<div id="columna1"><h3>Total $ </h3></div>
+	    	<div id="columna2importe"><h3><label id="totalfinal"></label></h3></div>
+	    </div>
+		<br>
+		<br>
+		<br>
+</div>
+	
+</body>
+</html>

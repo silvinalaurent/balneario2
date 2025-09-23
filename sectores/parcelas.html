@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Sectores</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js"></script>
+	<script type="text/javascript" src="../sectores/sectores.js?v=3.0"></script>
+	<script type="text/javascript" src="../sectores/parcelas.js?v=8.0"></script>
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		arma_tabla2(); 
+});      
+</script>
+   
+</head>
+<body>
+	<div id="general">
+	
+		<h2>Parcelas Balneario</h2>
+		
+		 <!-- <div id="renglon">
+			<div id="columna3"><h3><label>Fecha</label></h3></div>
+		  	<div id="columna4"><input type="date" name="buscareservafecha" id="buscareservafecha" onchange="muestra_ocupaciones(this.value)"></div>
+		</div> -->
+		
+  		 <h4>
+			<input type='button' class='estilocarpa'> Carpas : <label id="carpas"></label> 
+			<input type='button' class='estilorodado'> Rodados : <label id="rodados"></label> 
+			<input type='button' class='estilovencido'> Vencidos : <label id="vencidos"></label>
+			<input type='button' class='estiloinvitado'> Invitados Especiales : <label id="invitados"></label> 
+			<input type='button' class='estiloguarda'> Guarda Mensual : <label id="guardas"></label>
+		</h4>  
+		
+		<div class="tablas">
+			<table id="tablaparcelas" name="tablaparcelas">
+			<thead>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		
+	
+	</div>
+	
+	
+</body>
+</html>

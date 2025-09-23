@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Permisos</title>
+	<link rel="stylesheet" href="css/estilos.css?v=65.0">
+	<link type="text/css" rel="stylesheet" href="fontello/css/fontello.css" />
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="permisos.js?v=4.0"></script>
+	<script type="text/javascript" src="menues.js?v=3.0"></script>
+	<script type="text/javascript" src="usuarios.js?v=3.0"></script>
+
+<script type="text/javascript">	
+    $( document ).ready(function() {
+ 	    lista_menues();
+ 	    lista_usuarios();
+ 	    blanquea();
+ 	   
+	});      
+</script>
+   
+</head>
+
+<body>
+	<div id="general">
+		
+		  	
+		  		<h2>Permisos</h2>
+		
+		  		<form id="form_permiso" name="form_permiso"  method="post" accept-charset="utf-8">
+		  		
+		  		<input id="idusuario" name="idusuario" style="display:none" type="text" />
+	 			<div id="permisos">
+					<div id="renglon">
+			  			<div id="columna1"><label>Usuario</label></div>
+			  			<div id="columna2"><select id="usuario_id" onclick="lista_permisos(this.value)"></select></div>
+			  			<div id="columna34">
+			  				<table id="tabla" name="tabla">
+								<thead>
+									<tr>
+										<th>Id</th>	
+										<th>Menu</th>	
+										<th>Permiso</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table></div>
+			  		</div> 
+					
+					<br><br>
+			  		<div id="renglon">
+						<div id="columna4"><input type="button" id="guardar" onclick="guarda_permisos()" value="Aceptar"></div>
+					</div>
+				</div>	
+				</form>
+			
+			</div>
+			
+ 
+
+	
+</body>
+</html>

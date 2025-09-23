@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Ciudades</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="ciudades.js?v=3.0"></script>
+	<script type="text/javascript" src="provincias.js?v=3.0"></script>
+	<script type="text/javascript" src="paises.js?v=3.0"></script>
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		lista_provincias("buscaprovincia");
+		lista_paises("qpais");
+		lista_paises("buscapais");
+ 		//trae_ciudades(0,"");
+    });      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="general">
+	<h2>Ciudades</h2>
+	
+		
+	<form name="busqueda" method="post" accept-charset="utf-8">
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna1fila2"><label>País</label>
+				<select name="qpais" id="qpais" onclick="lista_provincias_pais('qprovincia',this.value);"></select></div>
+			
+			<div id="columna2fila2"><label>Provincia</label>
+				<select name="qprovincia" id="qprovincia" onclick="trae_ciudades(2,this.value)"></select></div>
+			
+
+			<div id="columna3fila2">
+				<label>Ciudad</label>
+				<input type="search" name="buscaciudad" id="buscaciudad" size="50" placeholder="Ingrese al menos 4 letras..." onkeyup="filtrar_ciudades(this.value);">
+			</div>
+			
+		</div>
+	</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_ciudad()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="ciudad">
+		  		<h2>Ciudad</h2>
+		
+		  		<form id="form_ciudad" name="form_ciudad"  method="post" accept-charset="utf-8">
+		  		<input id="idciudad" name="idciudad" style="display:none" type="text" />
+				
+				<div id="renglon">
+					<div id="columna1"><label>Pais</label></div>
+					<div id="columna2"><select id="buscapais" name="buscapais" onclick="lista_provincias_pais('buscaprovincia',this.value)"></select></div>
+				
+					
+				</div>
+
+				<div id="renglon">
+					<div id="columna1"><label>Provincia</label></div>
+					<div id="columna2"><select id="buscaprovincia" name="buscaprovincia"></select></div>
+				
+					
+				</div>
+				
+				<div id="renglon">
+		  			<div id="columna1"><label>Nombre</label></div>
+		  			<div id="columna2"><input type="text" id="nombre" name="nombre" value="" size="50"></div>
+		  		</div>
+				
+				
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_ciudad()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		</form>
+		</div>
+
+	</div>
+		  	
+
+	<div class="tablaschicas">
+			
+		<table id="tabla" name="tabla" class="tabla">
+			<thead>
+				<tr>
+					<th>Ciudad</th>					
+					<th>Provincia</th>					
+					<th width="100px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+    </div>
+	</div>
+	
+</body>
+</html>

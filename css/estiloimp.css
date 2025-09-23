@@ -1,0 +1,130 @@
+/*	Version:12.0; */
+.borrar { display: none }
+.ancho { width: 100% } 
+
+body 
+{ 
+	background-color: white; 
+	font-family: Aria
+	l, Helvetica, Verdana;
+	font-size: 10pt; 
+	color: black;
+	
+}
+
+
+#encabezado h3
+{ 	text-align: center;}
+
+label
+{ font-weight:bold; }
+
+h3{
+	font-size: 14px;
+}
+h4{
+	font-size: 12px;
+}
+#renglon
+{
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25% ;
+	grid-template-rows: auto;
+
+}
+
+#renglon * {
+	line-height: 1em;
+}
+
+#columna1234{
+	grid-column: 1/4;
+	grid-row: 1;
+	}
+
+#columna1{
+	grid-column: 1;
+	grid-row: 1;
+	text-align: left;
+	
+}
+#columna2{
+	grid-column: 2;
+	grid-row: 1;
+	text-align: left;
+	
+}
+#columna3{
+	grid-column: 3;
+	grid-row: 1;
+	text-align: left;
+	
+}
+#columna4{
+	grid-column: 4;
+	grid-row: 1;
+	text-align: left;
+	
+}
+
+
+#ticket
+{
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: auto;
+
+}
+#original
+{	
+	grid-column: 1;
+	grid-row: 1;
+}
+
+#duplicado
+{
+	grid-column: 2;
+	grid-row: 1;
+}
+
+#tablapagos tabladevoluciones{
+		border: black 1px solid;
+}
+
+#tablapagos tr { 
+	font-size: 9px;
+}	
+
+#tablacobros tr { 
+	font-size: 9px;
+}	
+
+#tabladevoluciones tr { 
+	font-size: 9px;
+	
+}	
+
+table,tr,th,td {
+  border: 1px solid darkgray;
+  border-collapse: collapse;
+  border-style: groove;
+}
+
+
+#renglon-importes
+{
+	display: grid;
+	grid-template-columns: 200px 200px;
+	grid-template-rows: auto;
+
+}
+
+#renglon-importes * {
+	line-height: 1em;
+}
+
+#resumen
+{
+	padding-top: 20px;
+}
+

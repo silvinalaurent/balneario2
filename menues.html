@@ -1,0 +1,117 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Menues</title>
+	<link rel="stylesheet" href="css/estilos.css?v=35.0">
+	<link type="text/css" rel="stylesheet" href="fontello/css/fontello.css" />
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="menues.js?v=3.0"></script>
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 	   limpia_busqueda();		
+       trae_menues(0,"");
+	});      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="general">
+	<h2>Tipos de Menues</h2>
+	
+		
+	<form name="busqueda" method="post" accept-charset="utf-8">
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna1fila2"><label>Titulo</label>
+			<input type="search" name="buscatipo" id="buscatipo" size="50" onkeyup="filtrar(this.value);"></div>
+			
+		</div>
+	</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_menu()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="menu">
+		  		<h2>Menu</h2>
+		
+		  		<form id="form_ayuda" name="form_menu"  method="post" accept-charset="utf-8">
+		  		<input id="idmenu" name="idmenu" style="display:none" type="text" />
+				
+				<div id="renglon">
+		  			<div id="columna1"><label>Titulo del Menu</label></div>
+		  			<div id="columna2"><input type="text" id="titulo" name="titulo" value="" size="50"></div>
+		  			</div>
+				<div id="renglon">
+		  			<div id="columna1"><label>URL</label></div>
+		  			<div id="columna2"><input type="text" id="url" name="url" value="" size="50"></div>
+		  			</div>
+		  		<div id="renglon">
+		  			<div id="columna1"><label>Nivel</label></div>
+		  			<div id="columna2"><input type="text" id="nivel" name="nivel" value="" size="50"></div>
+		  			</div>
+				<div id="renglon">
+		  			<div id="columna1"><label>Padre</label></div>
+		  			<div id="columna2"><input type="text" id="padre" name="padre" value="" size="50"></div>
+		  			</div>
+				
+				
+				
+		  		
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_menu()" value="Aceptar"></div>
+				</div>
+		  	
+		  	
+
+		
+			
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+	</div>
+		  	
+
+	<div class="tablas">
+			
+		<table id="tabla" name="tabla">
+			
+			<thead>
+				<tr>
+					<th>Id</th>	
+					<th>Titulo</th>	
+					<th>URL</th>	
+					<th>Nivel</th>	
+					<th>Padre</th>	
+					<th>Acciones</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				
+			</tbody>
+		</table>
+
+	</div>
+	
+		</div>
+	
+
+	
+	</div>
+ 
+
+	
+</body>
+</html>

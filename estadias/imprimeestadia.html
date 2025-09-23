@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago de Estadia</title>
+  <link rel="stylesheet" href="../css/estiloimp.css?v=12">
+  <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+  <script type="text/javascript" src="../estadias/estadias.js?v=11.0"></script>
+  
+
+<script type="text/javascript"> 
+ 
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  };
+
+
+
+ $( document ).ready(function() {
+      
+      var idestadia = getParameterByName('variable');
+      
+      imprime_pago_estadia(idestadia);
+      
+    
+  });
+
+</script>
+
+</head>
+
+<body>
+  
+  <div id="ticket">
+
+  <div id="original">
+  <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h4>Municipalidad de San José</h4>
+
+  -- Tiquet Cobro Estadia --<br><br>
+   
+        NºSecuencia: <label id="secuencia"></label><br>
+        Fecha: <label id="fecha"></label><br><br>
+        Estadia: Nº <label id="estadia"></label>- Sector:  <label id="sector"></label><br>
+        Parcela: Nº <label id="nparcela"></label> - Carpa: Nº <label id="nrocarpa"></label><br>
+        Visitante: <label id="visitante"></label><br>
+        Tipo: <label id="tipo"></label><br>
+        <br>
+        Estadia     $: <label id="montoestadia"></label><br>  
+        Adic.   $: <label id="adicionales"></label> -         Desc.   $: <label id="descuento"></label><br>
+        <u>TOTAL       $</u>: <label id="total"></label> - <label id="forma_pago"></label><br>
+        <br>
+        Estadia válida para <label id="personas"></label> personas,<br> hasta las 10hs del día <label id="fvence"></label><br>
+        <label id="detalleadicional3"></label>
+        <label id="observaciones"></label><br><br>
+        Gracias por elegirnos,que disfrute su estadia.- <br>                                    
+        Temporada 2024-2025<br>
+        <h4><img src="../img/whatsapp.jpg" width="20px" alt=""> 3447-641922<br> 
+          <img src="../img/facebook.png" width="25px" alt=""> balneariocampingsanjose <img src="../img/instagram.png" width="20px" alt=""></h4>
+          
+        <h4>Para el Visitante.-</h4><br>            
+        <p style="text-align: center;">__________________<br><br>
+             Firma</p>
+        <p>Fecha Hora Impresion: <label id="fecha_hora"></label></p>  
+   </div>
+
+  <div id="duplicado">
+  <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h4>Municipalidad de San José</h4>
+  -- Tiquet Cobro Estadia --<br><br>
+   
+        NºSecuencia: <label id="secuenciad"></label><br>
+        Fecha: <label id="fechad"></label><br><br>
+        Estadia: Nº <label id="estadiad"></label>- Sector:  <label id="sectord"></label><br>
+        Parcela: Nº <label id="nparcelad"></label> - Carpa: Nº <label id="nrocarpad"></label><br>
+        Visitante: <label id="visitanted"></label><br>
+        Tipo: <label id="tipod"></label><br>
+        <br>
+        Estadia     $: <label id="montoestadiad"></label><br>  
+        Adic.   $: <label id="adicionalesd"></label> - Desc.   $: <label id="descuentod"></label><br>
+        <u>TOTAL       $</u>: <label id="totald"></label> - <label id="forma_pagod"></label><br>
+        <br>
+        Estadia válida para <label id="personasd"></label> personas,<br> hasta las 10hs del día <label id="fvenced"></label><br>
+        <label id="detalleadicional3d"></label>
+        <label id="observacionesd"></label><br><br>
+        Gracias por elegirnos, que disfrute su estadia.-<br>
+        Temporada 2024-2025<br>
+        <h4><img src="../img/whatsapp.jpg" width="20px" alt=""> 3447-641922<br> 
+        <img src="../img/facebook.png" width="25px" alt=""> balneariocampingsanjose <img src="../img/instagram.png" width="20px" alt=""></h4>
+        <h4>Para la Administracion.-</h4><br>
+        <p style="text-align: center;">__________________<br><br>
+               Firma</p>
+        <p>Fecha Hora Impresion: <label id="fecha_horad"></label></p>  
+   </div>
+    
+</div>
+
+</body>
+</html>

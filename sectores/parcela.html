@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Parcela</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src="../js/sistema.js?v=5.0"></script>
+	<script type="text/javascript" src="../js/funciones.js"></script>
+	<script type="text/javascript" src="../sectores/sectores.js?v=3.0"></script>
+	<script type="text/javascript" src="../sectores/parcelas.js?v=13.0"></script>
+	<script type="text/javascript" src="../tarifas/tarifas.js?v=3.0"></script>
+	<script type="text/javascript" src="../turistas/turistas.js?v=11.0"></script>
+	<script type="text/javascript" src="../turistas/acompanantes.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/ciudades.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/provincias.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/paises.js?v=3.0"></script>
+	<script type="text/javascript" src="../estadias/estadias.js?v=17.0"></script>
+	<script type="text/javascript" src="../caja/caja.js?v=3.0"></script>
+	<script type="text/javascript" src="../adicionales/adicionales.js?v=3.0"></script>
+	<script type="text/javascript" src="../descuentos/descuentos.js?v=3.0"></script>
+
+	<script type="text/javascript">	
+ 
+	   function getParameterByName(name) {
+		    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		    results = regex.exec(location.search);
+		    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+		
+	 $( document ).ready(function() {
+			localStorage.setItem("unidad_tarifa", '');
+	 		var idparcela = getParameterByName('variable');
+	 		document.getElementById("numeroparcela").textContent=idparcela;
+	 		$("#idparcela").val(idparcela);
+	 		lista_tarifas("listadotarifas");
+	 		lista_sectores("listasectores");
+	 		lista_provincias("provincia1");
+			lista_paises("pais");
+			lista_adicionales("detalleadicional");
+	 		lista_adicionales("detalleadicional2");
+	 		lista_descuentos("descuento");
+			
+	 		//poner fecha actual en fechad
+	 		n =  new Date();
+	 		y = n.getFullYear();
+			m = n.getMonth() + 1;
+			d = n.getDate();
+			var anio = n.getFullYear();
+        	var mes = (n.getMonth() + 1).toString().padStart(2, '0');  // Asegurarse de que el mes tenga dos dígitos
+        		var dia = n.getDate().toString().padStart(2, '0');  // Asegurarse de que el día tenga dos dígitos
+        	var fechaFormateada = anio + '-' + mes + '-' + dia;
+	        // Establecer la fecha en el campo de entrada
+        	document.getElementById('fechad').value = fechaFormateada;
+
+			// Obtener la hora, minutos y segundos
+			var horas = n.getHours();
+			var minutos = n.getMinutes();
+			var segundos = n.getSeconds();
+
+			// Asegurarse de que los valores sean de dos dígitos
+			horas = horas < 10 ? '0' + horas : horas;
+			minutos = minutos < 10 ? '0' + minutos : minutos;
+			segundos = segundos < 10 ? '0' + segundos : segundos;
+
+			// Mostrar la hora en formato HH:mm:ss
+			console.log(horas + ':' + minutos + ':' + segundos);
+	 		
+	 		var resultado=trae_estadias(3,idparcela,"P");//corrobar que sea esta busqueda
+
+	 		if (resultado)
+	 			{
+	 				//$('#suma_estadia').hide();
+	 				document.getElementById("suma_estadia").style.visibility="hidden";
+	 			}
+	 		else
+	 			{
+	 				$('#suma_estadia').show();
+	 			}
+	
+	    });      
+	
+		
+</script>
+
+</head>
+<body>
+
+	<div id="general">
+		
+		<div id="renglon">
+		  			<div id="columna1"><h3><label>Parcela</label></h3></div>
+		  			<div id="columna2"><label id="numeroparcela" name="numeroparcela" class="resaltado"></label></div>
+		  			
+
+		</div>
+
+	
+	<br>
+			<input id="mostrar-modal3" name="modal" type="radio" /> 
+	
+		  	<div id="modal">
+					<input id="cerrar-modal3" name="modal" type="radio" /> 
+					<label for="cerrar-modal3"> X </label> 
+				  	<div id="estadiafecha">
+				  		<h2>Estadia. Reduce duracion</h2>
+				
+				  			<div id="renglon">
+					  			<div id="columna1"><label>Fecha egreso</label></div>
+					  			<div id="columna2"><input type="date" id="fechaegreso2" name="fechaegreso2"></div>
+					  		</div>
+					  		<div id="renglon">
+				  			<div id="columna4"><input type="button" id="guardarfecha" onclick="modifica_egreso()" value="Guarda Fecha"></div>
+						</div>
+				  	</div>	  
+			</div>	  		
+		
+
+		<div>
+			<h3>Estadia</h3>
+
+			<input id="mostrar-modal" name="modal" type="radio" /> 
+		  	<label id="suma_estadia" for="mostrar-modal" onclick="agrega_estadia(document.getElementById('numeroparcela').textContent)"><h3>+</h3></label>
+
+			<div id="modal">
+					<input id="cerrar-modal" name="modal" type="radio" /> 
+					<label for="cerrar-modal"> X </label> 
+			
+				  	<div id="estadia">
+				  		<h2>Estadia</h2>
+				
+				  		<form id="form_estadia" name="form_estadia"  method="post" accept-charset="utf-8">
+				  		<input id="idestadia" name="idestadia" style="display:none" type="text" />
+				  		<input id="idreservaprevia" name="idreservaprevia" style="display:none" type="text" />
+						<input id="idparcela" name="idparcela" style="display:none" type="text" />
+						
+						<div id="renglon">
+				  			<div id="columna1"><label>Parcela</label></div>
+				  			<!-- cambio 18-1-21 se modifica parcela reservada -->
+				  			<div id="columna2">
+				  				<input type="text" id="numeroparcela2" name="numeroparcela2" size="3" onchange="parcela_disponible(this.value)">
+				  				
+				  				
+				  			</div>
+				  			<div id="columna3"><label for="nrocarpa">Nro. de Carpa</label></div>
+				  			<div id="columna4"><input type="text" id="nrocarpa" name="nrocarpa" size="3">
+				  				
+				  			</div>
+				  			
+				  		</div>
+						<div id="renglon">
+				  			<div id="columna1"><label>Fecha Desde</label></div>
+				  			<div id="columna2"><input type="date" id="fechad" name="fechad" onchange="calcula_dias()"></div>
+				  			<div id="columna3"><label>Fecha Hasta</label></div>
+				  			<div id="columna4"><input type="date" id="fechah" name="fechah" onchange="calcula_dias()"></div>
+				  		</div>
+						
+						<div id="nomodifica">
+							<div id="renglon">
+								<div id="columna1"><label>Dias</label></div>
+					  			<div id="columna2"><label id="dias" name="dias"></label></div>
+					  			<div id="columna3"><label>Nro. de personas</label></div>
+					  			<div id="columna4"><input type="number"  id="cantidad" name="cantidad" value="1" min="1" onchange="calculaestadia()"></div>
+					  		</div>
+							<div id="renglon">
+					  			<div id="columna1"><label>Tipo</label></div>
+					  			<div id="columna2"><select id="listadotarifas" name="listadotarifas" onchange="eligetarifa(this.value);"></select></div>
+					  			<div id="columna3"><label>Importe $</label></div>
+					  			<div id="columna4"><input type="text" id="importe" name="importe" readonly="readonly" size="10" onchange="calculaestadia();"><ins></ins>
+					  				<input type="text" id="importedias" name="importedias" readonly="readonly" size="10">
+						  			</div>
+					  		</div>
+					  		<!-- datos primer adicional -->
+					  		<!-- <div id="renglon">
+					  			<div id="columna1"><label>Adicional 1</label></div>
+					  			<div id="columna2"><select id="detalleadicional" name="detalleadicional" onchange="cambiaadicional(this.value)";></select></div>
+					  			<div id="columna3"><label>Importe Adic.1 $</label></div>
+					  			<div id="columna4"><input type="text" id="adicional" name="adicional" size="10" readonly="readonly" onchange="calculaestadia()">
+					  			<input type="text" id="adicionaldias" name="adicionaldias" readonly="readonly" size="10">	
+					  			</div>
+					  		</div> -->
+							<!-- datos segundo adicional -->
+					  		<!-- <div id="renglon">
+					  			<div id="columna1"><label>Adicional 2</label></div>
+					  			<div id="columna2"><select id="detalleadicional2" name="detalleadicional2" onchange="cambiaadicional2(this.value)";></select></div>
+					  			<div id="columna3"><label>Importe Adic.2 $</label></div>
+					  			<div id="columna4"><input type="text" id="adicional2" name="adicional2" size="10" readonly="readonly" onchange="calculaestadia()">
+					  			<input type="text" id="adicional2dias" name="adicional2dias" readonly="readonly" size="10">
+					  			</div>
+					  		</div> -->
+					  		<!-- datos tercer adicional -->
+					  		<div id="renglon">
+					  			<div id="columna1"><label>Adicional</label></div>
+					  			<div id="columna2"><input type="text" id="detalleadicional3" name="detalleadicional3" size="40"></div>
+					  			<div id="columna3"><label>Importe Adic. $</label></div>
+					  			<div id="columna4"><input type="text" id="adicional3" name="adicional3" size="10" onchange="calculaestadia()"></div>
+								
+					  		</div>
+					  		<div id="renglon">
+					  			<div id="columna1"><label>Descuentos</label></div>
+					  			<div id="columna2">
+					  			<select id="descuento" name="descuento" onchange="calculaestadia();">
+					  			</select>
+					  			</div>
+					  			<div id="columna3"><label>Importe descuento $</label></div>
+					  			<div id="columna4"><label id="montodescuento" name="montodescuento" class="resaltado"></label></div>
+					  		</div>
+							
+							<div id="renglon">
+					  			<div id="columna1"><label>Total</label></div>
+					  			<div id="columna2"><label id="total" name="total" class="resaltado"></label></div>
+					  			<div id="columna3"><label for="forma_pago">Forma de Pago</label></div>
+				  				<div id="columna4">
+					  			<select id="forma_pago" onchange="datos_pago(this.value)">
+					  				<option value="E">EFECTIVO</option>
+					  				<option value="D">DEBITO</option>
+									<option value="T">TRANSFERENCIA</option>
+				  				</select>
+			  					</div>
+							</div>
+							
+							<div id="renglon" name="datos_debito" style="display: none;">
+								<div id="columna1"></div>
+								<div id="columna2"></div>
+								<div id="columna3"><label for="lote">Lote</label></div>
+								<div id="columna4">
+									<input type="number" id="lote" name="lote" size="5" >
+									<label for="cupon">Cupon</label>
+									<input type="number" id="cupon" name="cupon" size="10" >
+								</div>
+					  		</div>
+					  		<div id="renglon">
+					  			<div id="columna1"><label>Patente</label></div>
+					  			<div id="columna2"><input type="text" id="patente" name="patente" size="12" onblur="formatea_patente(this.value)"></div>
+								 <div id="columna3"><label for="">Sector</label></div>
+				  			<div id="columna4">
+				  				<select name="listasectores" id="listasectores"></select>
+				  			</div>
+					  		</div>
+
+					  		<div id="renglon">
+					  			<div id="columna1"><input type="checkbox" id="discapacidad" name="discapacidad"></div>
+					  			<div id="columna2"><label for="discapacidad">Discapacidad</label></div>
+								<div id="columna3"><input type="checkbox" id="mascotas" name="mascotas" size="40"></div>
+					  			<div id="columna4"><label for="mascotas">Mascotas</label></div>
+					  		</div>
+					  		<div id="renglondoble">
+					  			<div id="columna1"><label>Observaciones</label></div>
+					  			<div id="columna234"><textarea id="observaciones" name="observaciones" cols="100" rows="3"></textarea></div>
+					  			
+			  			</div>
+							
+							<div class="cuadro2">
+								<h3>Visitantes</h3> 
+									<div class="contenido">
+									<input id="turistaid" type="text" list="listaautocompletarturista" placeholder="Busca por apellido y nombre o DNI" autocomplete="off">
+  			 						<datalist id="listaautocompletarturista"></datalist>
+                                	<input type="button" class="boton" id="agregar" onclick="agrega_turista_existente()" value="Agrega Turista Existente">
+									<input type="button" class="boton" id="cargar" onclick="agrega_turista()" value="Agrega Nuevo Turista">
+									</div>
+									
+
+									<div class="tablas">
+								  				<table id="tablaturistas" class="tabla">
+													<thead>
+														<tr>
+															<td>ID</td>
+															<td>Turista</td>
+															<td>Documento</td>
+															<td>Telefono</td>
+															<td>Ciudad</td>
+															<td>Provincia</td>
+															<td>Acciones</td>
+														</tr>
+													</thead>
+												</table>
+									</div>
+																
+										
+								
+								<!-- //Div nuevoturista se oculta	 -->  		
+								<div id="nuevoturista" style="display:none;">
+									<form id="form_turista" name="form_turista"  method="post" accept-charset="utf-8">
+									<input id="idturista" name="idturista" style="display:none" type="text" />
+								  <div id="renglon">
+										<div id="columna1"><label>Apellido</label></div>
+										<div id="columna2"><input type="text" id="apellido" name="apellido" size="30"></div>
+										<div id="columna3"><label>Nombres</label></div>
+										<div id="columna4"><input type="text" id="nombres" name="nombres" size="30"></div>
+									</div>
+								  <div id="renglon">
+										<div id="columna1"><label>Documento</label></div>
+										<div id="columna2"><input type="text" id="documento" name="documento" size="10" onblur="corrobora_dni(this.value)"></div>
+										<div id="columna3"><label>Domicilio</label></div>
+										<div id="columna4"><input type="text" id="domicilio" name="domicilio" size="40"></div>
+									</div>
+									<div id="renglon">
+									  <div id="columna1"><label>Pais</label></div>
+										<div id="columna2"><select id="pais" name="pais" onclick="lista_provincias_pais('provincia1',this.value)"></select></div>
+										<div id="columna3"><label>Provincia</label></div>
+										<div id="columna4"><select id="provincia1" name="provincia1" onclick="lista_ciudades_provincia('ciudad1',this.value)"></select></div>
+									</div>
+								  <div id="renglon">
+									  <div id="columna1"><label>Ciudad</label></div>
+										<!-- <div id="columna2"><input type="text" id="ciudad1" name="ciudad1" size="40"></div> -->
+										<div id="columna2"><select id="ciudad1" name="ciudad1"></select></div>
+										
+									</div>
+									<div id="renglon">
+									  <div id="columna1"><label>Fecha Nacimiento</label></div>
+										<div id="columna2"><input type="date" id="fecha_nacimiento" name="ciudad1" size="40"></div>
+										<div id="columna3"><label>Ocupacion</label></div>
+										<div id="columna4"><select id="ocupacion" name="ocupacion">
+											<option value='NINGUNO'>NINGUNO</option>
+											<option value='EMPLEADO PRIVADO'>EMPLEADO PRIVADO</option>
+											<option value='EMPLEADO PUBLICO'>EMPLEADO PUBLICO</option>
+											<option value='TRABAJADOR INDEPENDIENTE'>TRABAJADOR INDEPENDIENTE</option>
+											<option value='PROFESIONAL'>PROFESIONAL</option>
+											<option value='JUBILADO'>JUBILADO</option>
+										</select></div>
+									</div>
+								  <div id="renglon">
+										<div id="columna1"><label>Celular</label></div>
+										<div id="columna2"><input type="text" id="telefono" name="telefono" size="15"></div>
+										<div id="columna3"><label>E-mail</label></div>
+										<div id="columna4"><input type="text" id="email" name="email" size="50"></div>
+									</div>
+									<div id="renglon">
+										<div id="columna1"><label>Redes sociales</label></div>
+										<div id="columna2"><input type="text" id="redes" name="redes" size="100"></div>
+									</div>
+									<div id="renglon">
+									  <div id="columna3"><input type="button" id="guardar2" onclick="guarda_turista('E')" value="Aceptar"></div>
+									  <div id="columna4"><input type="button" id="cancelar" onclick="cierraventana()" value="Cancelar"></div>
+								  </div>
+
+								</form>
+								</div><!-- nuevoturista -->
+						  	</div>
+
+						</div>
+						
+						<div id="renglon">
+							<div id="columna1"></div>
+							<div id="columna2"></div>
+							<div id="columna3"></div>
+							<div id="columna4"><input type="button" id="guardar" onclick="guarda_estadia()" value="Guarda Estadia"></div>
+						</div>
+						</div>
+				  	
+					
+				  	</form> 
+				</div> <!-- estadia -->
+			</div><!-- modal -->
+		</div>
+			<div class="tablas">
+				<table id="tablaestadias" name="tablaestadias" class="tabla">
+					<thead>
+						<tr>
+							<th>Estadia</th>
+							<th>Parcela</th>					
+							<th>Nro Carpa</th>					
+							<th>Turista</th>				
+							<th>Inicio</th>					
+							<th>Fin</th>					
+							<th>Tipo Carpa</th>					
+							<th>Patente</th>								
+							<th width="200px">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div> <!-- tabla -->
+
+		</div><!-- renglon -->	
+	</div><!-- general -->
+
+<script>
+	var controladorTiempo = '';
+	$("[list=listaautocompletarturista]").on("keyup",function(event) {
+					console.log("se dispara keyup");
+					if(event.keyCode!=8){
+						clearTimeout(controladorTiempo);
+						var eltexto = $(this);
+						controladorTiempo = setTimeout(function(){
+		            		var tx = $(eltexto).val();
+		            		if(tx.length > 5){
+			                    completa_lista_turistas(tx);
+			                    
+			                }else{
+			                	$("#listaautocompletarturista").html("");
+			                };
+						},1000);
+					};
+	            });
+
+</script>
+
+</body>
+</html>

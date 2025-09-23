@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html>
+<meta charset="utf-8" />
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<head>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+  <script src="leaflet-search-master\src\leaflet-search.js"></script>
+  <link rel="stylesheet" href="leaflet-search-master\src\leaflet-search.css" />
+  <link rel="stylesheet" href="css\estilos.css" />
+  <!-- Leaflet Measure plugin -->
+  <link rel="stylesheet" href="leaflet.measurecontrol-master/leaflet.measurecontrol.css">
+    
+  <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+  <script src="js/leaflet.awesome-markers.js"></script>
+  <!-- Leaflet Draw From CDN -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" integrity="sha512-vJfMKRRm4c4UupyPwGUZI8U651mSzbmmPgR3sdE3LcwBPsdGeARvUM5EcSTg34DK8YIRiIo+oJwNfZPMKEQyug==" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js" integrity="sha512-ozq8xQKq6urvuU6jNgkfqAmT7jKN2XumbrX1JiB3TnF7tI48DPI4Gy1GXKD/V3EExgAs1V+pRO7vwtS1LHg0Gw==" crossorigin="anonymous"></script>
+  <script src="leaflet.measurecontrol-master/leaflet.measurecontrol.min.js"></script>
+
+  <link rel="stylesheet" href="leaflet.fullscreen-master/Control.FullScreen.css" />
+  <script src="leaflet.fullscreen-master/Control.FullScreen.js"></script> 
+
+<link rel="stylesheet" href = "Leaflet.MousePosition-master/src/L.Control.MousePosition.css"/>
+<script type="text/javascript" src ="Leaflet.MousePosition-master/src/L.Control.MousePosition.js"></script>
+
+<meta name="author" content="Silvina Laurent">
+<meta name="description" content="Visor Geografico de la Municipalidad de San José, Entre Ríos, Argentina. Informacion Actualizada sobre el Catastro y las redes de servicios de nuestra ciudad. Adheridos a IDERA. ">
+ </head>
+ <body>
+    
+    <header>
+      <div id="logo"><img src="imagenes/munisanjoseer.png" height="75px"></div>
+      <div id="titulo"><h2>Información Geográfica Espacial de la Municipalidad de San José</h2></div>
+      <div id="actualizacion"><h3>Act. 31/05/2022</h3></div>
+    </header>
+    <main>
+      <div class="contenedor">
+        <div id="page-loader">
+          <span class="preloader-interior"></span> 
+    
+        <div id="map"></div>
+        
+      </div>                                                                                                                                                                                                                                        
+      </div>
+    </main>
+    <footer>
+      <div class="contenedor">
+        Grupo GIS - Municipalidad de San José - Entre Ríos - República Argentina  
+      </div>
+    </footer>
+  </div>
+      
+  
+<script>
+
+      var parcelas,agua,cloacas,alumbrado,cordoncuneta,pavimento,gas,manzanas,calles,barrios,plazas,escuelas,instituciones,clubes,fraccionamiento,oficinas,numeracion,obras1,obras2,obras3,obras4;
+      
+
+      function obtenerColor(d) {                        
+         var color ='';
+         switch (d) {
+            case 'CORR.' : color='#280cc7'; break;                 
+            case 'I.U.' : color='#f14414'; break;                    
+            case 'N.U.1' : color='#e30052'; break;                    
+            case 'N.U.A' : color='#2a8cd1'; break;    
+            case 'Z.A.A.T' : color='#c8a2c8'; break;
+            case 'Z.CH.' : color='#a0ff00';break;
+            case 'Z.I.M.' : color='#4b3029'; break;
+            case 'Z.Q.' : color='#01796f';
+         }
+         return color;
+      } ; 
+      
+      function estilo(feature) {                      
+          return {
+            fillColor: obtenerColor(feature.properties.REFERENCIA),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+         };
+      };
+
+      function colorZona(d) {                        
+         var color ='';
+         switch (d) {
+            case 'A' : color='#432626'; break;                 
+            case 'ABALNEARIA' : color='#d911ab'; break;                    
+            case 'B' : color='#54eb7a'; break;                    
+            case 'C' : color='#cba02b'; break;    
+            case 'D' : color='#975ed4'; break;
+            case 'E' : color='#2458e6';break;
+            case 'F' : color='#30eeee'; break;
+            
+         }
+         return color;
+      } ; 
+      
+      function estiloZona(feature) {                      
+          return {
+            fillColor: colorZona(feature.properties.ZONA),
+            weight: 1,
+            opacity: 1,
+            color: 'black',
+            dashArray: '3',
+            fillOpacity: 0.7
+         };
+      };
+
+      function traeCapas(){
+        $.ajax({
+            url:"geojson.php",
+            type:'POST',
+            data:{acc:1},
+            dataType:"json",
+            async:false,
+            success:function(data){
+              $(".tiempo").hide();
+              if(data["error"] == 1){
+                alert(data.valor);
+              }else{
+                for(var x in data){
+                  $.ajax({
+                      url:"geojson.php",
+                      type:'POST',
+                      data:{acc:3,capa_id:data[x].id},
+                      dataType:"json",
+                      async:false,
+                      success:function(data2){
+                        eval(data[x].variable+"="+data2[0].geojson);
+                      }
+                  });
+                };
+              };
+            }
+        });
+      };
+
+//      $(document).ready(function(){
+        traeCapas();
+        //se crea mapa con coordenadas
+        var map = L.map('map',{
+             fullscreenControl: true,
+             fullscreenControlOptions: {
+             position: 'topright'}
+         }).setView([-32.1933,-58.2194], 14);
+
+        
+
+        L.control.scale().addTo(map);
+       
+        L.control.mousePosition().addTo(map); 
+
+        //Marcadores
+
+        var marcadorEscuelas = L.AwesomeMarkers.icon({
+          icon: 'school',
+          markerColor: 'red',
+          iconColor: 'yellow'
+        });  
+
+        var marcadorAlumbrado = {
+            radius: 2,
+            fillColor: "#FFC300",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        var marcadorSodio = {
+            radius: 3,
+            fillColor: "#FFC300",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        var marcadorLed = {
+            radius: 3,
+            fillColor: "#FFFFFF",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        
+        var marcadorInstituciones = {
+            radius: 5,
+            fillColor: "#F99F3A",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+        
+        var marcadorClubes = {
+            radius: 5,
+            fillColor: "#117864",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+         var marcadorColisiones = {
+            radius: 5,
+            fillColor: "#FF0000",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+       var customIcon = new L.Icon({
+          iconUrl: 'img/alfiler.svg',
+          iconSize: [30, 30],
+          iconAnchor: [25, 30]
+        });
+
+        var marcadorNumeracion = {
+            radius: 1,
+            fillColor: "#ccc",
+            color: "#000",
+            weight: 0.5,
+            opacity: 0.5,
+            fillOpacity: 0.7
+        };
+
+        var marcadorNumChico = {
+            radius: 2,
+            fillColor: "none",
+            color: "#000",
+            weight: 1,
+            opacity: 0.5,
+            fillOpacity: 0
+        };
+
+//inicio colores poligonos
+function aleatorio(inferior,superior){
+           numPosibilidades = superior - inferior;
+           aleat = Math.random() * numPosibilidades;
+           aleat = Math.floor(aleat);
+           return parseInt(inferior) + aleat;
+        }
+
+        function dame_color_aleatorio(){
+           hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")
+           color_aleatorio = "#";
+           for (i=0;i<6;i++){
+              posarray = aleatorio(0,hexadecimal.length);
+              color_aleatorio += hexadecimal[posarray]
+           }
+           return color_aleatorio
+        }
+
+function getColor(d) {
+  return d > 100000000 ? '#800026' :
+  d > 50000000 ? '#BD0026' :
+  d > 20000000 ? '#E31A1C' :
+  d > 10000000 ? '#FC4E2A' :
+  d > 5000000 ? '#FD8D3C' :
+  d > 2000000 ? '#FEB24C' :
+  d > 1000000 ? '#FED976' :
+  '#FFEDA0';
+  }
+ 
+  function style(feature) {
+    return { 
+      fillColor: dame_color_aleatorio(),
+      weight: 3,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.3
+    };
+  }
+//fin colores poligonos
+
+        function popup(feature, layer) {
+
+          if (feature.properties && feature.properties.PARMUNI) {
+            
+             var frente='';
+             if (feature.properties.frente!='') {frente=feature.properties.frente;}
+             var fondo='';
+             if  (feature.properties.fondo!='') {fondo=feature.properties.fondo;}
+             var superficie='';
+             if  (feature.properties.superficie!='') {superficie=feature.properties.superficie;}
+             var mensura='';
+             if  (feature.properties.plano!='') {mensura=feature.properties.plano;}
+            
+             layer.bindPopup("<div style=text-align:center><h3>PARTIDA MUNICIPAL: "+feature.properties.PARMUNI+"<h3></div><hr>PARTIDA PROVINCIAL: "+feature.properties.PARTPROV+"<table><tr><td>"+feature.properties.calle+" "+feature.properties.numero+"</td></tr><tr><td>Frente: "+frente+"</td></tr><tr><td>Fondo: "+fondo+"</td></tr><tr><td>Superficie: "+superficie+"</td></tr><tr><td>Plano mensura: "+mensura+"</td></tr></table>", {minWidth: 150, maxWidth: 200});
+            
+          };
+        };
+
+        function popupManzanas(feature, layer) {
+          var concesion="";
+          if (feature.properties && feature.properties.MANZANAS) {
+              concesion ="<div style=text-align:center><h3>CONCESION: "+feature.properties.CONCESION+"<h3></div><hr><table><tr><td>MANZANA: "+feature.properties.MANZANAS+  "</td></tr><tr><td>BARRIO: "+feature.properties.BARRIO+ "</td></tr></table>";
+              }
+          else{
+              concesion= "<div style=text-align:center><h3>CONCESION: "+feature.properties.CONCESION+"<h3></div>";
+            };
+          layer.bindTooltip(concesion, {minWidth: 150, maxWidth: 200});
+        };
+
+
+        function popupBarrios(feature, layer) {
+          if (feature.properties && feature.properties.Nombre) {
+              layer.bindTooltip("<div><h3>"+feature.properties.Nombre+"<h3></div>",  {direction: "center",permanent: true, className:"my-label", offset: [0, 0] });
+          };
+        };
+
+        function popupAlumbrado(feature, layer) {
+           
+          layer.bindPopup("<div style=text-align:center><h3>Potencia: "+feature.properties.POTENCIA+"<h3></div><hr><table><tr><td>Tipo: "+feature.properties.LUMINARIA + "</td></tr><tr><td>Columna: "+feature.properties.Columnas+"</td></tr></table>", {minWidth: 150, maxWidth: 200}).openTooltip();
+          };
+
+        function popupFraccionamiento(feature, layer) {
+          if (feature.properties && feature.properties.ZONA) {
+               layer.bindTooltip("<div style='color:black;'><h3>"+feature.properties.ZONA+"</h3><h4>Sup. Minima: "+feature.properties.SUPMINIMA+"<br>Frente Minimo: "+feature.properties.FRENTEMIN+"</h4></div>", {minWidth: 150, maxWidth: 200} );
+              /*{direction: "center",permanent: true, className:"my-label", offset: [0, 0] });*/
+          };
+        };
+
+        function popupInstituciones(feature, layer) {
+          if (feature.properties && feature.properties.Nombre) {
+               if (feature.properties.calle != undefined) 
+                  var domicilio=feature.properties.Calle + " " + feature.properties.Nro
+               else
+                  var domicilio='';
+               layer.bindTooltip("<div style=text-align:center><h3>Institucion: "+feature.properties.Nombre+"</h3></div><hr><table><tr><td>Domicilio: "+domicilio+  "</td></tr></table>", {minWidth: 150, maxWidth: 200});
+             };
+        };     
+
+       function popupCalles(feature, layer) {
+          if (feature.properties && feature.properties.NOMBRE) {
+             
+              layer.bindTooltip("<div style=text-align:center><h3>Calle: "+feature.properties.NOMBRE+"</h3></div>", {minWidth: 150, maxWidth: 200});
+          };
+        };      
+       
+        function popupEscuelas(feature, layer) {
+          if (feature.properties && feature.properties.Nombre) {
+              layer.bindTooltip("<div>"+feature.properties.Nombre+"</div>").openTooltip();
+          };
+        };        
+       
+        function popupPlazas(feature, layer) {
+           if (feature.properties) {
+             if (feature.properties.NOMBRE!=undefined)
+              {
+                layer.bindPopup("<div style=text-align:center><h3>"+feature.properties.ELEMENTO+"</h3></div><hr><table><tr><td>"+feature.properties.NOMBRE+  "</td></tr></table>", {minWidth: 150, maxWidth: 200});
+              }
+             
+          };
+        }; 
+        
+        function popupClubes(feature, layer) {
+          if (feature.properties && feature.properties.Nombre) {
+             
+               layer.bindTooltip("<strong>Club: " + feature.properties.Nombre).openTooltip();
+          };
+        };         
+
+        function popupOficinas(feature, layer) {
+          if (feature.properties && feature.properties.nombre) {
+               layer.bindTooltip("<div style=text-align:center><h3>"+feature.properties.nombre+"</h3></div><hr><table><tr><td>Domicilio: "+feature.properties.domicilio+  "</td></tr><tr><td>"+feature.properties.telefonos+"</td></tr></table></div>", {minWidth: 150, maxWidth: 200}
+              
+               ).openTooltip();
+
+          };
+        };         
+        
+       function popupNumeracion(feature, layer) {
+          if (feature.properties && feature.properties.numero) {
+              layer.bindTooltip("<div><h3 style='color:darkblue;text-shadow: 0.1em 0.1em #fff'>"+feature.properties.numero+"</h3></div>", {direction: "center",permanent: true, className:"my-label", offset: [0, 0] });
+              
+          };
+
+        };
+        function popupObras1(feature, layer) {
+  
+          if (feature.properties && feature.properties.ZONA) {
+         
+          layer.bindTooltip("<div style=text-align:center><h3>Referencia: "+feature.properties.REFERENCIA+"<br>ZONA: "+feature.properties.ZONA+"<h3></div><hr><table><tr><td>SUP.MIN.: "+feature.properties.SUPMINIMA+"</td></tr><tr><td>FRENTE MIN.:"+feature.properties.FRENTEMIN+"<tr><td>FOS: "+feature.properties.FOS+"</td></tr><tr><td>FOT: "+feature.properties.FOT+"</td></tr><tr><td>RETIRO: "+feature.properties.RETIRO_MIN+"</td></tr></table>", {minWidth: 150, maxWidth: 200});
+          };
+        };
+
+        function popupObras2(feature, layer) {
+          if (feature.properties) {
+             
+             layer.bindTooltip("<div style=text-align:center><h3>"+feature.properties.ZONA+"<br></h3></div>", {minWidth: 50, maxWidth: 50,direction: "center",permanent: true, className:"my-label", offset: [0, 0] });
+             
+          };
+        };                  
+
+        function popupObras4(feature, layer) {
+          if (feature.properties) {
+               layer.bindTooltip("<div style=text-align:center><h3>"+feature.properties.HORA+"<br></h3></div>", {minWidth: 150, maxWidth: 200});
+           };
+        };              
+        
+       
+
+        var capaParcelas = L.geoJson(parcelas, {style: {color: 'black', weight:1, fillColor: 'gray', fillOpacity: 0.2}, onEachFeature:popup}); 
+         
+        var capaAgua = L.geoJson(agua);
+        var capaCloacas = L.geoJson(cloacas, { style: {color: 'brown'}});
+        var capaCordonCuneta = L.geoJson(cordoncuneta, { style: {color: 'crimson'}});
+        var capaPavimento = L.geoJson(pavimento, { style: {color: '#011210'}});
+        var capaManzanas = L.geoJson(manzanas, {style: {color: 'forestgreen', weight:2}, onEachFeature: popupManzanas});
+        
+        var capaCalles= L.geoJson(calles,{style: {color: 'sienna'}, weight:2, onEachFeature:popupCalles});
+
+        
+        var capaBarrios = L.geoJson(barrios, { style: style, onEachFeature: popupBarrios});
+        var capaFraccionamiento = L.geoJson(fraccionamiento, { style: estilo, onEachFeature: popupFraccionamiento});
+        var capaGas = L.geoJson(gas, { style: {color: '#a5760b'}});
+        
+        var capaPlazas = L.geoJson(plazas, {style: {color: '#0D8403', weight:1, fillColor: '#1A930F'}, onEachFeature: popupPlazas,
+            pointToLayer: function (feature, latlng) {
+                
+                }});
+        
+        var capaAlumbrado = L.geoJson(alumbrado,{ 
+            pointToLayer: function (feature, latlng) {
+              if (feature.properties.LUMINARIA=="SODIO")
+                  return L.circleMarker(latlng, marcadorSodio)
+                else
+                  return L.circleMarker(latlng, marcadorLed);
+              
+                },onEachFeature: popupAlumbrado, 
+            });
+        
+        var capaEscuelas = L.geoJson(escuelas,{onEachFeature: popupEscuelas,
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, marcadorEscuelas);
+                
+                }
+            });
+        var capaInstituciones = L.geoJson(instituciones, {
+                              onEachFeature: popupInstituciones,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, marcadorInstituciones);
+                }
+                                });
+        var capaClubes = L.geoJson(clubes, {
+                              onEachFeature: popupClubes,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, marcadorClubes);
+                }
+                                });
+        
+        var capaOficinas = L.geoJson(oficinas, {
+                              onEachFeature: popupOficinas,
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {icon: customIcon});
+                }
+             });
+
+        var capaNumeracion = L.geoJson(numeracion, {
+                              onEachFeature: popupNumeracion,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, marcadorNumChico);
+                }
+
+            });
+        //capa Codigo de Edificacion
+        var capaObras1 = L.geoJson(obras1, { style: estilo, onEachFeature: popupObras1});
+        
+        //Ordenanza Impositiva
+        var capaObras2 = L.geoJson(obras2, { style: estiloZona, onEachFeature: popupObras2});
+     
+        //Zona de riesgo Hidrico
+        var capaObras3 =L.geoJson(obras3, { style: {color: 'blue',opacity:0.5}});
+        
+        //Colisiones
+        var capaObras4 = L.geoJson(obras4, {
+                              onEachFeature: popupObras4,
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, marcadorColisiones);
+                 }
+
+            });
+
+        L.geoJson(barrios, {
+            onEachFeature: function(feature, layer) {
+              var label = L.marker(layer.getBounds().getCenter(), {
+                icon: L.divIcon({
+                  className: 'my-label',
+                  html:  feature.properties.NOMBRE,
+                  iconSize: [50, 20]
+                })
+              });
+          }
+        });
+
+  
+        
+       //se agrega control de busqueda por partida
+        var searchControl = new L.Control.Search({
+               layer: capaParcelas,
+               initial: false,
+               propertyName: 'PARMUNI','calle'
+               circleLocation: false,
+               buildTip: function(text, val) {
+               var type = val.layer.feature.properties.amenity;
+               return '<a href="#" class="'+type+'">'+text+'<b>'+type+'</b></a>';
+               
+        });
+        searchControl.on('search_locationfound', function(e) {
+            e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+        });
+
+  
+        map.addControl(searchControl);
+       
+
+        var capaIGN = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+        attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
+              minZoom: 3,
+              maxZoom: 18
+          });
+
+        var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+                });
+
+        googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        });
+        var capasBase = {"Inst. Geog. Nacional": capaIGN,
+                         "Calles Google": googleStreets, 
+                         "Satelite Google": googleSat
+                          };
+
+        var capas = {
+            "Parcelas": capaParcelas,      
+            "Manzanas": capaManzanas,
+            "Calles": capaCalles,
+            "Numeracion": capaNumeracion,
+            "Agua": capaAgua,
+            "Cloacas": capaCloacas,
+            "Alumbrado": capaAlumbrado,
+            "Cordon Cuneta": capaCordonCuneta,
+            "Pavimento": capaPavimento,
+            "Barrios": capaBarrios,
+            "Ordenanza Impositiva": capaObras2, 
+            "Cod.Urbano Edificacion": capaObras1,
+            "Fraccionamiento": capaFraccionamiento,
+            "Traza de Gas": capaGas,
+            
+            "Recreacion": capaPlazas,
+            "Escuelas": capaEscuelas,
+            "Instituciones": capaInstituciones,
+            "Clubes": capaClubes,
+            "Oficinas": capaOficinas,
+            "Colisiones": capaObras4,
+            "Riesgo Hidrico": capaObras3
+        };
+
+        var selectorCapas = new L.control.layers(capasBase,capas);
+        selectorCapas.addTo(map);
+        
+    var geometriasDibujadas = L.featureGroup().addTo(map);
+
+
+    var controlDibujo = new L.Control.Draw ({
+        edit: {
+            featureGroup: geometriasDibujadas,
+            edit: false,
+        },
+        draw: {
+            polygon: true,
+            rectangle: false,
+            circle: false,
+            circlemarker: false,
+            polyline: false,
+            marker: false,
+        }
+    });
+    map.addControl(controlDibujo);
+
+    var obtenerContenido = function(layer, type) {
+        var contenido = null;
+        var area = L.GeometryUtil.geodesicArea(layer._defaultShape()),
+            areaLegible = L.GeometryUtil.readableArea(area, true),
+            contenido = areaLegible;
+        return contenido;
+    };
+
+    map.on(L.Draw.Event.CREATED, function(e) {
+        var layer = e.layer,
+            type = e.layerType;
+        layer.bindTooltip(obtenerContenido(layer, type), {
+            permanent: true,
+            direction: 'bottom',
+            offset: L.point(0, -10),
+        }); 
+        geometriasDibujadas.addLayer(layer);
+    });
+
+
+        L.Control.measureControl().addTo(map);
+
+         
+    $(window).load(function(){
+        $('#page-loader').fadeOut(500);
+            });
+
+    </script>
+   
+
+
+  </body> 
+ </html>

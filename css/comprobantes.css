@@ -1,0 +1,23 @@
+.pagina{
+	height:27.8cm;
+	width:19.2cm;
+	float: none;
+	display: block; 
+    page-break-before: always;
+	font-family:"Lucida Console", Monaco, monospace;
+	font-size:15px;
+}
+
+.lineapunteada{
+	height: 1px;
+	width: 100%;
+	border-bottom: dashed 1px rgba(0,0,0,.3);
+	margin-top: 5px;
+	margin-bottom: 5px; 
+}
+
+/*Parche para evitar la duplicacion de los encabezados en las ojas posteriores*/
+thead{
+	display: table-row-group;
+}
+

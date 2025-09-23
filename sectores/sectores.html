@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Sectores</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="sectores.js?v=3.0"></script>
+	
+<script type="text/javascript">	
+
+ $( document ).ready(function() {
+ 		trae_sectores(0,"");
+    });      
+
+  
+</script>
+   
+</head>
+
+
+<body>
+	<div id="general">
+	<h2>Sectores</h2>
+	
+	
+	<input id="mostrar-modal" name="modal" type="radio" /> 
+  	<label for="mostrar-modal" onclick="agrega_sector()"><h2>+</h2></label>
+
+	<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="sector">
+		  		<h2>Sector</h2>
+		
+		  		<form id="form_sector" name="form_sector"  method="post" accept-charset="utf-8">
+		  		<input id="idsector" name="idsector" style="display:none" type="text" />
+				
+				<div id="renglon">
+					<div id="columna1"><label>Nombre</label></div>
+		  			<div id="columna234"><input type="text" id="nombre" name="nombre" size="30"></div>
+		  		</div>
+				
+				
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_sector()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+
+		
+		<div class="tablas">
+			<table id="tabla" name="tabla" class="tabla">
+			<thead>
+				<th>Descripcion</th>
+				<th>Acciones</th>
+			</thead>
+			<tbody>
+			</tbody>
+			</table>
+		</div>
+		</div>
+		
+</body>
+</html>

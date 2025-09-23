@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Visitantes</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js"></script>
+	<script type="text/javascript" src="turistas.js?v=11"></script> <!-- utiliza el local -->
+	<script type="text/javascript" src="../ciudades/ciudades.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/provincias.js?v=3.0"></script>
+	<script type="text/javascript" src="../ciudades/paises.js?v=3.0"></script>
+	<script type="text/javascript" src="../estadias/estadias.js?v=3.0"></script>
+	<script type="text/javascript" src="../componentes/componentes-turista.js"></script> 
+  
+</head>
+<body>
+	<div id="general">
+		<h2>Visitantes</h2>
+		<form name="busqueda" id="buscaturista" method="post" accept-charset="utf-8">
+			<div class="cuadro" id="cajabusqueda">
+				<div id="fila1" class="titulos">
+					<h3>Buscar por... </h3>
+				</div>
+				<div id="columna1fila2">
+					<label>Apellido :</label>
+					<input type="text" name="apellido" id="qapellido" size="20" placeholder="Ingrese Apellido">
+					<label>D.N.I. :</label>
+					<input type="text" name="nro_documento" id="nro_documento" size="20" placeholder="Nro de Documento">
+					<label>Tel. :</label>
+					<input type="text" name="movil" id="qmovil" size="20" placeholder="Nro de Telefono">
+					<input type="button" id="guardar2" onclick="traeTuristas()" value="Consultar">
+					
+				</div>
+			</div>
+		</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_turista()"><h3>+</h3></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+			<div id="turista">
+				<turista-componente></turista-componente>
+			</div>
+	  	</div>
+	</div>
+		  	
+
+		<input id="mostrar-modal2" name="modal" type="radio" /> 
+		<div id="modal">
+			<input id="cerrar-modal2" name="modal" type="radio" /> 
+			<label for="cerrar-modal2"> X </label> 
+		  	
+			<div id="estadiasturista">
+				<h3>Estadias del Visitante</h3>
+				<div class="tablas">
+			
+				<table id="tabla2" name="tabla2" class="tabla">
+				<thead>
+				<tr>
+					<th>Estadia</th>		
+					<th>Parcela</th>		
+					<th>Nro Carpa</th>								
+					<th>Turista</th>				
+					<th>Inicio</th>					
+					<th>Fin</th>					
+					<th>Tipo Carpa</th>					
+					<th>Total</th>		
+					
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>		  		
+			</div>
+
+		</div>
+	
+	<div class="tablas">
+			
+		<table id="tabla" name="tabla" class="tabla">
+			<thead>
+				<tr>
+					<th>Id</th>					
+					<th>Apellido</th>					
+					<th>Nombres</th>				
+					<th>Documento</th>				
+					<th>Domicilio</th>					
+					<th>Ciudad</th>			
+					<th>Provincia</th>	
+					<th>Pais</th>			
+					<th>Telefono</th>			
+					<th width="150px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+    </div>
+	</div>
+	
+</body>
+<script type="text/javascript">	
+	$( document ).ready(function() {
+ 		lista_paises("pais");
+ 		trae_turistas(0,"");
+	});      
+</script>
+</html>

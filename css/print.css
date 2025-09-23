@@ -1,0 +1,18 @@
+body {
+  background-image: none;
+  color: #000; 
+  font: 100%/150% Georgia, "Times New Roman", Times, serif; 
+}
+header, footer, nav, #cajabusqueda, #modal,  {
+  display: none;
+}
+
+/*
+h3 {
+	page-break-before: always;
+}
+ul, img, table {
+	page-break-inside: avoid;
+}
+*/
+

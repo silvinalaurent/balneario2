@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Rendiciones</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link rel="stylesheet" href="../css/framesp.css">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script> 
+	<script src="../js/print.min.js"></script>
+	<script type="text/javascript" src="../caja/caja.js?v=4.0"></script>
+	<script type="text/javascript" src="../devoluciones/devoluciones.js?v=4.0"></script>
+	<script type="text/javascript" src="../cobros/rendiciones.js?v=5.0"></script>
+	<script type="text/javascript" src="../cobros/cobros.js?v=5.0"></script>
+	<script type="text/javascript" src="../js/funciones.js?v=4.0"></script>
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ });      
+</script>
+</head>
+
+
+<body>
+	<div id="general">
+	<h2>Rendiciones</h2>
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna2fila2"><label>Desde</label>
+			<input type="date" name="buscafecha1" id="buscafecha1"></div>
+			<div id="columna3fila2"><label>Hasta</label>
+			<input type="date" name="buscafecha2" id="buscafecha2"></div>
+			
+			<div id="columna4fila2"><input type="button" onclick="trae_rendiciones($('#buscafecha1').val(),$('#buscafecha2').val());" value="Consultar" class="boton" />    <input type="button" onclick="imprime_rendicion();" value="Imprimir" class="boton" /></div>
+		</div>
+		
+		<br>	   
+ 
+		<div class="tablas">
+			<h3>Estadias</h3>	
+			<table id="tablapagos" name="tablapagos" class="tabla">
+				<thead>
+					<tr>
+						<th width="30px">Nro</th>	
+						<th width="30px">Parcela</th>					
+						<th width="30px">Carpa</th>		
+						<th width="80px">Estadia </th>					
+						<th width="200px">Turista</th>				
+						<th width="200px">Localidad</th>						
+						<th width="30px">Cant.</th>
+						<th>Monto</th>
+						<th>Adicional</th>										
+						<th>Descuento</th>					
+						<th>Total</th>	
+						<th>Pago</th>				
+						<th>Usuario</th>				
+						<th>Acciones</th>	
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<label id="texto"></label>	
+					 
+		
+		<h3>Total Estadias</h3>
+		<br>
+		<div id="renglon">
+			<div id="columna1"><h4>Cantidad Pagos: </h4></div>
+			<div id="columna2"><h4><label id="cantidadpagos"></label></h4></div>
+		</div>
+	   <div id="renglon">
+			<div id="columna1"><h4>Cantidad Pagos Efectivo: </h4></div>
+			<div id="columna2"><h4><label id="cantidadefectivo"></label></h4></div>
+			<div id="columna3"><h4>Cantidad Pagos Debito: </h4></div>
+			<div id="columna4"><h4><label id="cantidaddebito"></label></h4></div>
+	   </div>
+		<div id="renglon">
+			<div id="columna1"><h4>Total Acampantes: </h4></div>
+			<div id="columna2"><h4><label id="totalacampantes"></label></h4></div>
+			<div id="columna3"><h4>Total Parcelas Ocupadas: </h4></div>
+			<div id="columna4"><h4><label id="totalparcelas"></label></h4></div>
+		 
+		 </div>
+		<div id="renglon">
+			<div id="columna1"><h4>Efectivo $ </h4></div>
+			<div id="columna2importe"><h4><label id="subtotale"></label></h4></div>
+    	</div>
+    	<div id="renglon">
+    		<div id="columna1"><h4>Debito $ </h4></div>
+    		<div id="columna2importe"><h4><label id="subtotald"></label></h4></div>
+	   </div>
+	   <div id="renglon">
+	   	<div id="columna1"><h3>SubTotal $ </h3></div>
+	   	<div id="columna2importe"><h3><label id="total"></label></h3>
+	   	<input type="text" id="subtotalx" name="subtotalx" style="display:none"></div>
+	   </div>	
+	   <br><br>
+
+		<!-- agregamos cobro de parrillas Enero 2025 -->
+		<h3>Parrillas/Otros</h3>	
+		<table id="tablacobros" name="tablacobros" class="tabla">
+			<thead>
+				<tr>
+					<th>Nro</th>
+					<th>Fecha</th>					
+					<th>Tipo </th>					
+					<th>Talonario</th>					
+					<th>Tickets</th>					
+					<th>Monto</th>
+					<th>Usuario</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<label id="textocobros"></label>
+		<h3>Total Cobros : <label id="totalcobros"></label></h3>
+		<input type="text" id="cobrosx" name="cobrosx" style="display:none">
+		<br><br>
+
+		<!-- agregamos cobro de parrillas Enero 2025 -->
+			
+		<h3>Devoluciones</h3>
+			<table id="tabladevoluciones" name="tabladevoluciones" class="tabla">
+				<thead>
+					<tr>
+						<th>Nro</th>
+						<th>Fecha</th>					
+						<th>Estadia </th>					
+						<th>Turista</th>					
+						<th>Importe</th>					
+						<th>Motivo</th>
+						<th>Usuario</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<label id="textodevolucion"></label>	
+			<h3>Total Devoluciones : <label id="totaldevoluciones"></label></h3>
+			<input type="text" id="devolucionx" name="devolucionx" style="display:none">
+			<br>
+		</div>
+		
+		<br>
+		<br>
+		
+		<h3>RESUMEN</h3>
+		<br>
+		<div id="renglon">
+			 <div id="columna1"><h3>Total Efectivo $ </h3></div>
+			 <div id="columna2importe"><h3><label id="efectivo"></label></h3></div>
+		</div>
+		<div id="renglon">
+			<div id="columna1"><h3>Total Debito $ </h3></div>
+			<div id="columna2importe"><h3><label id="debito"></label></h3></div>
+		</div>
+		<div id="renglon">
+			<div id="columna1"><h3>Total Devoluciones $ </h3></div>
+			<div id="columna2importe"><h3><label id="devoluciones2"></label></h3></div>
+		</div>
+		<div id="renglon">
+			<div id="columna1"><h3>Total General $ </h3></div>
+			<div id="columna2importe"><h3><label id="total_general"></label></h3></div>
+		</div>
+		<br>
+		
+
+</div>
+	<!-- MODAL RELOJ -->
+	<div class="fondo-modal horizontal-centro vertical-centro tiempo" style="display: none";>
+		<div class="reloj"></div>
+</div>	
+</body>
+</html>

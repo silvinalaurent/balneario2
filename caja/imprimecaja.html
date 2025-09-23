@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de Caja</title>
+  <link rel="stylesheet" href="../css/estiloimp.css?v=12">
+  <script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+  <script type="text/javascript" src="../caja/caja.js?v=7.0"></script>
+  <script type="text/javascript" src="../cobros/cobros.js?v=5.0"></script>
+  <script type="text/javascript" src="../devoluciones/devoluciones.js?v=7.0"></script>
+  <script type="text/javascript" src="../usuarios/usuarios.js?v=4.0"></script>
+
+<script type="text/javascript"> 
+ 
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  };
+
+
+
+ $( document ).ready(function() {
+      var fecha = getParameterByName('variable'); 
+      console.log("imprime caja de fecha ",fecha);
+      trae_pagos(1,fecha);
+      //trae_devoluciones_caja(1,fecha); //desde caja
+      var fechaf= convertDateFormat(fecha);
+      document.getElementById("fecha").innerHTML = fechaf; 
+      
+      
+  }); 
+
+  function datosusuario()
+  {
+      var usuarioactivo = sessionStorage.getItem("Usuario");
+      console.log("usuario ",usuarioactivo);
+      //promise
+      
+      nombre_usuario(usuarioactivo).then(r =>{
+                        console.log("resultado " ,r)
+                        if (r!='') 
+                        {
+                          document.getElementById("usuario").innerHTML=r; 
+                        }
+                        
+                          
+                        }).catch(() => {
+                              console.log('Algo salió mal');
+                        });    
+      
+     
+      
+      
+  }
+</script>
+
+</head>
+
+<body onload="datosusuario();">
+  
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+  <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h3>Municipalidad de San José</h3>
+  <br>
+  Fecha: <label id="fecha"></label><br>
+  Usuario: <label id="usuario" name="usuario"></label><br>
+  <br>
+  <div class="tablas">
+    <h3>Estadias</h3> 
+    <table id="tablapagos" name="tablapagos">
+      <thead>
+        <tr>
+          <th>Nro</th> 
+          <th>Parcela</th>          
+          <th>Carpa</th>   
+          <th>Estadia</th>       
+          <th width="150px">Periodo </th>       
+          <th>Turista</th>          
+          <th>Ciudad</th>          
+          <th>Personas</th>
+          <th>Monto</th>
+          <th>Adicional</th>                    
+          <th>Descuento</th>          
+          <th>Total</th>  
+          <th>Pago</th>       
+          <th>Usuario</th>       
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <label id="texto"></label>  
+    <br>
+    <!-- agregamos cobro de parrillas dic 2024 -->
+		<h3>Parrillas/Otros</h3>	
+		<div id="renglon-importes">
+			<div id="columna1">Importe $ </div>	
+			<div id="columna2"><label id="importecobros">0</label></div>
+		</p>
+		</div>
+		<br><br>
+	<!-- agregamos cobro de parrillas dic 2024 -->
+    <h3>Devoluciones</h3>
+    <table id="tabladevoluciones" name="tabladevoluciones">
+      <thead>
+        <tr>
+          <th>Nro</th>    
+          <th>Fecha</th>          
+          <th>Estadia </th>         
+          <th>Turista</th>          
+          <th>Importe</th>          
+          <th>Motivo</th>
+          <th>Pago</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <label id="textodevolucion"></label>  
+   </div>
+
+
+
+   <br><br>
+     
+   <div id="renglon-importes">
+    <div id="columna1"><h4>Cantidad Pagos: </h4></div>
+    <div id="columna2"><h4><label id="cantidadpagos"></label></h4></div>
+   </div>
+   <div id="renglon-importes">
+     <div id="columna1"><h4>Cantidad Pagos Efectivo: </h4></div>
+     <div id="columna2"><h4><label id="cantidadefectivo"></label></h4></div>
+  </div>
+  <div id="renglon-importes">
+    <div id="columna1"><h4>Cantidad Pagos Debito: </h4></div>
+    <div id="columna2"><h4><label id="cantidaddebito"></label></h4></div>
+   </div>
+    <div id="renglon-importes">
+      <div id="columna1">Efectivo $ </div>
+      <div id="columna2"><label id="subtotale"></label></div>
+      </div>
+      <div id="renglon-importes">
+        <div id="columna1">Debito $ </div>
+        <div id="columna2"><label id="subtotald"></label></div>
+     </div>
+     <div id="renglon-importes">
+      <div id="columna1">Transferencia $ </div>
+      <div id="columna2"><label id="subtotalt"></label></div>
+   </div>
+     <div id="renglon-importes">
+      <div id="columna1">SubTotal $ </div>
+      <div id="columna2"><label id="total"></label>
+      <input type="text" id="subtotalx" name="subtotalx" style="display:none"></div>
+     </div>
+     <div id="renglon-importes">
+      <div id="columna1">Devoluciones $ </div>
+      <div id="columna2"><label id="devoluciones"></label><input type="text" id="devolucionx" name="devolucionx" style="display:none"></div>
+     </div>
+     </h4>
+     <div id="renglon-importes">
+      <div id="columna1"><h3>Total $ </h3></div>
+      <div id="columna2"><h3><label id="totalfinal" ></label></h3></div>
+     </div>
+
+  
+</div>
+
+</body>
+</html>

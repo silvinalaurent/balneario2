@@ -1,0 +1,108 @@
+{
+  "name": "@webcomponents/webcomponentsjs",
+  "version": "2.1.3",
+  "description": "Web Components Polyfills",
+  "main": "webcomponents-bundle.js",
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [
+    "webcomponents",
+    "web-components",
+    "polyfill",
+    "shim"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webcomponents/webcomponentsjs.git"
+  },
+  "author": {
+    "name": "The Polymer Authors"
+  },
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/webcomponents/webcomponentsjs/issues"
+  },
+  "scripts": {
+    "build": "gulp",
+    "test": "wct",
+    "regen-package-lock": "rm -rf node_modules package-lock.json; npm install",
+    "prepack": "npm run build",
+    "clean": "gulp clean"
+  },
+  "homepage": "https://webcomponents.org/polyfills",
+  "devDependencies": {
+    "@gulp-sourcemaps/sources-content": "^1.0.0",
+    "@webcomponents/custom-elements": "^1.2.0",
+    "@webcomponents/shadycss": "^1.5.2",
+    "@webcomponents/shadydom": "^1.2.0",
+    "@webcomponents/template": "^1.4.0",
+    "@webcomponents/url": "^0.7.1",
+    "@webcomponents/webcomponents-platform": "^1.0.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-minify": "^0.4.3",
+    "del": "^3.0.0",
+    "eslint": "^5.6.0",
+    "eslint-plugin-html": "^4.0.5",
+    "get-own-property-symbols": "^0.9.2",
+    "google-closure-compiler": "^20180805.0.0",
+    "gulp": "^3.8.8",
+    "gulp-babel": "^7.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-rollup": "^2.16.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "promise-polyfill": "^8.0.0",
+    "rollup": "^0.60.7",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-license": "^0.6.0",
+    "run-sequence": "^2.2.1",
+    "wct-browser-legacy": "^1.0.1",
+    "web-component-tester": "^6.7.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "c4802b0f85cb7c6a69de3e7a0e943853914d9870",
+  "_id": "@webcomponents/webcomponentsjs@2.1.3",
+  "_npmVersion": "5.6.0",
+  "_nodeVersion": "8.11.3",
+  "_npmUser": {
+    "name": "azakus",
+    "email": "dfreedm2@gmail.com"
+  },
+  "dist": {
+    "integrity": "sha512-0UHJNY88lR3pnEYtBVT7F8cuuxOiITQGWJa0LxoELqkBSB7IabzJFOj5K99PajD3CGAsWpjB0CAeijfe376Y1w==",
+    "shasum": "f7430c6efe52ab06f69d219fddd32afd2758f683",
+    "tarball": "https://registry.npmjs.org/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.1.3.tgz",
+    "fileCount": 21,
+    "unpackedSize": 2555216,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbn+wmCRA9TVsSAnZWagAAsiAQAIjHyBnsVBeVRAi9eg+i\nU5sOEJsoIURu7/wGq/0ophH6Ut3vPX3q64eSpihCEWcsiW+cx1WyiWh17aAA\nuCNfU9ThlyZUo0Tsadi0LMAP+iPaZ7wws4StuU6bnurdRi2quXO146wh1qk9\nd2phNGX7/Kuu/1ffl8tckbN8km/NCS2Mng5FqbEFJa9l4555qTiBTvonWb2n\nEnCijCHSINnCX9uGCicQWQ0AkRQb/ZlvmJSarz9wsxdhTiYbDfKjFov2pxW7\nzFn9yrhdxSOnlk1Hq+GwOQ6Kpq7LyUuMDGvORMDKF6mZQpkkEl1KZNlTqf9n\n3UFEE5BYbkezb2cbjGLvps5W8QkhNeTu9CgGIIVjbuiJUNYJyRDqCb52Gf7W\nAboiJmXEZdq8VoqFqKnKX8+bjX/qWvwvU0JbJTe0WmzvoeSW9C4MB2R28b4B\n5NEASAFVLRlvrbj8gtTIkWmmURPfglucJlzNfN/jRum8NtEqbqdEnAxL+u1t\nxLWlNpZ5Cocc77njRTYNlK+lzm5L7vXMYHcMOUr5fXCznGII0tLLAxWQ3lRD\ntCLNVGLggwKjErqhrkA2KmcSpIGyHnYzuYu+x42RvLgBw6CACEkxTyqVd4+N\nI2hSHm2g8CH9Zl7Xm5altLyycKtSjtRYo/XFUMKNg19JSNp5JfmcVSk4Hpy7\nzdJh\r\n=+84s\r\n-----END PGP SIGNATURE-----\r\n"
+  },
+  "maintainers": [
+    {
+      "email": "dfreedm2@gmail.com",
+      "name": "azakus"
+    },
+    {
+      "email": "bicknellr@gmail.com",
+      "name": "bicknellr"
+    },
+    {
+      "email": "fkschott@gmail.com",
+      "name": "fredkschott"
+    },
+    {
+      "email": "polymer-ci@google.com",
+      "name": "webcomponents-devs"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/webcomponentsjs_2.1.3_1537207333439_0.2501226764639042"
+  },
+  "_hasShrinkwrap": false,
+  "_shasum": "f7430c6efe52ab06f69d219fddd32afd2758f683",
+  "_resolved": "https://registry.npmjs.org/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.1.3.tgz",
+  "_from": "@webcomponents/webcomponentsjs@latest"
+}

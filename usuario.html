@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Usuarios</title>
+	<link rel="stylesheet" href="css/estilologin.css?v:22.0">
+	<link type="text/css" rel="stylesheet" href="fontello/css/fontello.css" />
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="usuarios.js?v=3.0"></script>
+
+<script type="text/javascript">	
+ 
+   function getParameterByName(name) {
+	    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	    results = regex.exec(location.search);
+	    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+
+   $(document).ready(function() {
+   		
+   		var  usuario = getParameterByName('variable');
+   		console.log(usuario);
+   		document.querySelector('#nombreusuario').innerText = usuario;
+   		
+	});
+
+
+</script>
+   
+</head>
+
+
+<body>
+
+	<div id="login">
+<!-- 	<div id="general"> -->
+	
+				
+		  		
+		
+		  		<form id="form_usuario" name="form_usuario"  method="post" accept-charset="utf-8">
+		  		<input id="idusuario" name="idusuario" type="text" style="display: none;"/>
+				
+				<div id="titulo"><h4><label id="nombreusuario" name="nombreusuario"></label></h4></div>
+								
+		  		<div id="clave">
+		  		
+		  			<input type="password" id="claveusuario" name="claveusuario" size="15" placeholder="Ingrese nueva contraseña...">
+		  		</div>
+				<div id="clave">
+		  			
+		  			<input type="password" id="claverep" name="claverep" size="15" placeholder="Repita la nueva contraseña...">
+		  		</div>
+				
+		  		
+		  		<div id="confirma">
+					<input type="button" class="boton" id="guardar" onclick="cambiar_clave_usuario()" value="Aceptar">
+				</div>
+			
+			</div>
+			</div>  	
+		  	
+		  	</form>
+	 </div>
+	
+</body>
+</html>

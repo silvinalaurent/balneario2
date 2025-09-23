@@ -1,0 +1,95 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Cobros</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="tipos_cobros.js?v=3.0"></script>
+	
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		trae_tipos_cobro(0,"");
+    });      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="generalchico">
+	<h2>Tipos de Cobros</h2>
+	
+		
+	<form name="busqueda" method="post" accept-charset="utf-8">
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna1fila2"><label>Nombre</label>
+			<input type="search" name="buscatipocobro" id="buscatipocobro" size="50" onkeyup="filtrar(this.value);"></div>
+			
+		</div>
+	</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_tipo_cobro()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="tipocobro">
+		  		<h2>Tipos de cobros</h2>
+		
+		  		<form id="form_" name="form_tipo_cobro"  method="post" accept-charset="utf-8">
+		  		<input id="idtipo_cobro" name="idtipo_cobro" style="display:none" type="text" />
+				
+				<div id="renglon">
+		  			<div id="columna1"><label>Nombre</label></div>
+		  			<div id="columna2"><input type="text" id="nombre" name="nombre" value="" size="100"></div>
+		  		</div>
+		  		<div id="renglon">
+		  			<div id="columna1"><label>Importe</label></div>
+		  			<div id="columna2"><input type="text" id="importe" name="importe" value=""></div>
+		  		</div>
+				<div id="renglon">
+		  			<div id="columna1"><label>Temporada</label></div>
+		  			<div id="columna2"><input type="text" id="temporada" name="temporada" value=""></div>
+		  		</div>
+				
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_tipo_cobro()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+	</div>
+		  	
+
+	<div class="tablaschicas">
+			
+		<table id="tabla" name="tabla">
+			<thead>
+				<tr>
+					<th>Nombre</th>					
+					<th>Importe</th>					
+					<th>Temporada</th>					
+					<th width="150px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+    </div>
+	</div>
+	 
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de Estadias Activas</title>
+  <link rel="stylesheet" href="../css/estiloimp.css?v=12">
+  <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="../estadias/estadias.js?v=3.0"></script>
+  
+
+<script type="text/javascript"> 
+ 
+      function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  };
+
+
+
+ $( document ).ready(function() {
+      
+      var fecha1 = new Date();
+
+      var argDate=fecha1.toLocaleString();
+
+      document.getElementById("fecha").textContent=argDate;
+
+      imprime_listado_estadias();
+      
+    
+  });
+
+</script>
+
+</head>
+
+<body>
+<div id="general">
+<div id="original">
+<h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h3>Municipalidad de San José</h3>
+  <br>
+  <h3>Listado de estadias</h3>
+
+  Fecha: <label id="fecha"></label><br>
+  <br>
+<div class="tablas">
+      
+    <table id="tablaestadias" name="tablaestadias">
+      <thead>
+        <tr>
+          <th>Estadia</th>    
+          <th>Parcela</th>    
+          <th>Nro. Carpa</th>          
+          <th>Turista</th>        
+          <th>Inicio</th>         
+          <th>Fin</th>          
+          <th>Tipo Carpa</th>    
+          <th>Patente</th>    
+          <th>Pago</th>    
+         
+        
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+<h4>Total de personas :<label id="cantidadpersonas"></label></h4>
+<h4>Total de carpas :<label id="cantidadcarpas"></label></h4>
+</div>
+</div>   
+</body>
+</html>

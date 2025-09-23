@@ -1,0 +1,120 @@
+/*Version: 55.0;*/
+
+
+:root {
+  --colorfuerte: #1B5858;
+  --colorclaro: #1C9B9B;
+}
+
+*
+{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body
+{
+	font-family: 'Verdana', sans-serif;
+}
+
+label
+{
+	line-height: 2em;
+}
+
+input
+{
+	line-height: 1.5em;
+}
+
+h3
+{
+	padding: 10px;
+}
+
+.error{
+    background-color: var(--colorfuerte);
+    position: absolute;
+    top: 100px;
+    padding: 10px 0 ;
+    border-radius:  0 0 5px 5px;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+#login
+{
+	position: absolute;
+	background-color: var(--colorclaro);
+	width: 20%;
+	height: 40%;
+	top: 25%;
+	left: 40%;
+	padding: 30px;
+	margin: 30px;
+	border:solid 1px #CCC;
+  	border-radius:15px;
+  	box-shadow: 2px 2px 2px 0px #818181;
+  	text-align : center;
+}
+	
+#gridlogin
+{
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto auto auto auto;
+}
+
+#titulo {
+	grid-column: 1;
+	grid-row: 1;
+	height: 3em;
+}
+
+#usuario{
+	grid-column: 1;
+	grid-row: 2;
+	height: 3em;
+	}
+
+#clave{
+	grid-column: 1;
+	grid-row: 3;
+	height: 3em;
+}
+
+#confirma{
+	grid-column: 1;
+	grid-row: 4;
+	height: 3em;
+	text-align: right;
+}
+
+.boton
+ {
+	background-color: var(--colorfuerte);
+	border: none;
+	color: white;
+	font-weight: bold;
+	margin:10px;
+	padding: 10px;
+	width: 80px;
+	display:table-cell;
+	text-align: center;
+}
+
+input{
+	padding:10px;
+	width:100%;
+	outline:none;
+	transition: all 0.15s ease-in-out;
+	border-radius:3px;
+	border:1px solid rgba(0,0,0,0.2);
+	text-align: center;
+}
+	
+
+.naranja:focus {box-shadow: 0 0 5px rgba(12,66,39,0);border:1px solid rgba(12,66,39,0.8);}

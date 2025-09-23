@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Paises</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="paises.js?v=3.0"></script>
+	
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		trae_paises(0,"");
+    });      
+</script>
+   
+</head>
+
+
+<body>
+	<div id="generalchico">
+	<h2>Paises</h2>
+	
+		
+	<form name="busqueda" method="post" accept-charset="utf-8">
+		<div class="cuadro" id="cajabusqueda">
+			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
+			<div id="columna1fila2"><label>Nombre</label>
+			<input type="search" name="buscapais" id="buscapais" size="50" onkeyup="filtrar_paises(this.value);"></div>
+			
+		</div>
+	</form>	
+		
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_pais()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+		  	<div id="provincia">
+		  		<h2>pais</h2>
+		
+		  		<form id="form_pais" name="form_pais"  method="post" accept-charset="utf-8">
+		  		<input id="idpais" name="idpais" style="display:none" type="text" />
+				
+				<div id="renglon">
+		  			<div id="columna1"><label>Pais</label></div>
+		  			<div id="columna2"><input type="text" id="nombre" name="nombre" value="" size="50"></div>
+		  			</div>
+				
+		  		<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_pais()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+	</div>
+		  	
+
+	<div class="tablaschicas">
+			
+		<table id="tabla" name="tabla" class="tabla">
+			<thead>
+				<tr>
+					<th>Pais</th>					
+					<th width="150px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+    </div>
+	</div>
+	
+</body>
+</html>

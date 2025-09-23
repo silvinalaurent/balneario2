@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Component con Select y PHP/MySQL</title>
+</head>
+<body>
+
+    <!-- Uso del Web Component -->
+    <custom-select></custom-select>
+
+    <script>
+        class CustomSelect extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+
+                const select = document.createElement('select');
+
+                const style = document.createElement('style');
+                style.textContent = `
+                    
+                select {
+                        font-size: 16px;
+                        padding: 8px;
+                        margin: 10px 0;
+                        width: 100%;
+                        
+                    }
+                `;
+
+                this.shadowRoot.append(style, select);
+                this.loadOptions(select);
+            }
+
+            async loadOptions(select) {
+                try {
+                    // Usamos fetch para hacer una llamada al archivo PHP
+                    const response = await fetch('obtener_paises.php');
+                    const data = await response.json();
+
+                    // Iteramos sobre los datos y creamos una opción para cada elemento
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.pais;
+                        select.appendChild(option);
+                        
+                    });
+                } catch (error) {
+                    console.error('Error al cargar opciones:', error);
+                }
+            }
+        }
+
+        customElements.define('custom-select', CustomSelect);
+    </script>
+
+</body>
+</html>

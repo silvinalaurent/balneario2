@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <html lang="es">
+  <title>Estadisticas</title>
+  <link rel="stylesheet" href="../css/estilos.css?v=1.0">
+  <link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script> 
+  <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+  <script>
+   
+   google.load("visualization", "1", {packages:["corechart"]});
+   //google.setOnLoadCallback(dibujarGrafico);
+   //google.setOnLoadCallback(dibujarGrafico2);
+   //google.setOnLoadCallback(dibujarGrafico3);
+   //google.setOnLoadCallback(dibujarGrafico4);
+  
+   function dibujarGrafico(fd,fh) {
+     // Tabla de datos: valores y etiquetas de la gráfica
+            console.log("desde ",fd, " hasta ",fh);
+            if (fd==undefined) 
+              //busqueda general
+              datos={accion:4, operacion:0}
+            else
+              datos={accion:4, operacion:5, fd:fd,fh:fh};
+            var acumulado=0;
+            var contenido=new Array(new Array);
+            contenido[0][0]='Periodo';
+            contenido[0][1]='Recaudado';
+            $("#tablaestadisticas tbody").html("");
+            $.ajax({
+                  
+                      type: "POST",
+                      url:"estadisticas.php",
+                      data: datos,
+                      dataType: "json",
+                      async: false,
+                      success: function(recaudaciones){
+                          
+                          for (var i in recaudaciones){
+                              $("#tablaestadisticas tbody").append("<tr><td style='text-align: right';>"+recaudaciones[i].mes+"/"+recaudaciones[i].anio+"</td><td style='text-align: center;'>"+recaudaciones[i].cantidad+"</td><td  style='text-align: right;'>"+parseFloat(recaudaciones[i].suma).toFixed(2)+"</td></tr>"); 
+                             acumulado=acumulado+parseFloat(recaudaciones[i].suma);  
+                             contenido.push([recaudaciones[i].mes+'/'+recaudaciones[i].anio,parseFloat(recaudaciones[i].suma)]);
+                          }; 
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                      }
+            });
+            console.log("Total ",acumulado);
+            console.log("Contenido ", contenido);
+           
+            $("#totalRecaudacion").html(acumulado);  
+     var data = google.visualization.arrayToDataTable(contenido
+           
+     );
+     var options = {
+       title: 'Recaudacion Balneario',
+       hAxis: {title: 'Periodo', titleTextStyle: {color: 'Black'}},
+       vAxis: {minValue: 0}
+     }
+     // Dibujar el gráfico
+     new google.visualization.ColumnChart( 
+     //ColumnChart sería el tipo de gráfico a dibujar
+       document.getElementById('GraficoRecaudacion')
+     ).draw(data, options);
+   }
+
+
+   function dibujarGrafico2(fd,fh) {
+     //Estadias por provincia
+            if (fd==undefined)
+              //busqueda general
+              datos={accion:4, operacion:0};
+            else
+              datos={accion:4, operacion:6, fd:fd,fh:fh};
+            var contenido=new Array(new Array);
+            contenido[0][0]='Provincia';
+            contenido[0][1]='Estadias';
+            $("#tablaestadisticas2 tbody").html("");
+            $.ajax({
+                  
+                      type: "POST",
+                      url:"estadisticas.php",
+                      data: datos,
+                      dataType: "json",
+                      async: false,
+                      success: function(estadias){
+                          
+                          for (var i in estadias){
+                             
+                             $("#tablaestadisticas2 tbody").append("<tr><td>"+estadias[i].provincia+"</td><td>"+estadias[i].cantidad+"</td></tr>"); 
+                             contenido.push([estadias[i].provincia,parseInt(estadias[i].cantidad)]);
+                          }; 
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                          
+                      }
+
+            });
+            
+     var data = google.visualization.arrayToDataTable(contenido
+           
+     );
+     var options = {
+       title: 'Estadias por Provincia',
+       hAxis: {title: 'Periodo', titleTextStyle: {color: 'Black'}},
+       vAxis: {minValue: 0}
+     }
+     // Dibujar el gráfico
+     new google.visualization.PieChart( 
+     //ColumnChart sería el tipo de gráfico a dibujar
+       document.getElementById('GraficoProvincias')
+     ).draw(data, options);
+   }
+
+   function dibujarGrafico3(fd,fh) {
+     //Estadias por carpa
+            if (fd==undefined)
+              //busqueda general
+              datos={accion:4, operacion:0};
+            else
+              datos={accion:4, operacion:7, fd:fd,fh:fh};
+            var contenido=new Array(new Array);
+            contenido[0][0]='Tipo de Carpa';
+            contenido[0][1]='Estadias';
+            $("#tablaestadisticas3 tbody").html("");
+            $.ajax({
+                  
+                      type: "POST",
+                      url:"estadisticas.php",
+                      data: datos,
+                      dataType: "json",
+                      async: false,
+                      success: function(estadias){
+                          
+                          for (var i in estadias){
+                             
+                           $("#tablaestadisticas3 tbody").append("<tr><td>"+estadias[i].descripcion+"</td><td>"+estadias[i].cantidad+"</td></tr>"); 
+                             contenido.push([estadias[i].descripcion,parseInt(estadias[i].cantidad)]);
+                          }; 
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                          
+                      }
+
+            });
+            
+     var data = google.visualization.arrayToDataTable(contenido);
+     var options = {
+       title: 'Estadias por Tipo de Carpa',
+       hAxis: {title: 'Descripcion', titleTextStyle: {color: 'Black'}},
+       vAxis: {minValue: 0}
+     }
+     // Dibujar el gráfico
+     new google.visualization.BarChart( 
+     //ColumnChart sería el tipo de gráfico a dibujar
+       document.getElementById('GraficoCarpas')
+     ).draw(data, options);
+   }
+
+   function dibujarGrafico4(fd,fh) {
+     //Estadias por carpa
+            if (fd==undefined)
+              //busqueda general
+              datos={accion:4, operacion:0};
+            else
+              datos={accion:4, operacion:8, fd:fd,fh:fh};
+            var contenido=new Array(new Array);
+            contenido[0][0]='Periodo';
+            contenido[0][1]='Cantidad';
+            $("#tablaestadisticas4 tbody").html("");
+            $.ajax({
+                  
+                      type: "POST",
+                      url:"estadisticas.php",
+                      data: datos,
+                      dataType: "json",
+                      async: false,
+                      success: function(estadias){
+                          
+                          for (var i in estadias){
+                             
+                              $("#tablaestadisticas4 tbody").append("<tr><td>"+estadias[i].mes+"/"+estadias[i].anio+"</td><td>"+estadias[i].cantidad+"</td></tr>"); 
+                             contenido.push([estadias[i].mes+"/"+estadias[i].anio,parseInt(estadias[i].cantidad)]);
+                          }; 
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                          
+                      }
+
+            });
+            
+     var data = google.visualization.arrayToDataTable(contenido
+           
+     );
+     var options = {
+       title: 'Estadias por Tipo de Carpa',
+       hAxis: {title: 'Descripcion', titleTextStyle: {color: 'Black'}},
+       vAxis: {minValue: 0}
+     }
+     // Dibujar el gráfico
+     new google.visualization.LineChart( 
+     //ColumnChart sería el tipo de gráfico a dibujar
+       document.getElementById('GraficoPersonas')
+     ).draw(data, options);
+   }
+
+   function estadisticasentrefechas()
+   {
+      var fdesde=$("#desde").val();
+      var fhasta=$("#hasta").val();
+      if ((fdesde<=fhasta) && (fdesde!=null) && (fhasta!=null))
+      {
+        dibujarGrafico(fdesde,fhasta);
+        dibujarGrafico2(fdesde,fhasta);
+        dibujarGrafico3(fdesde,fhasta);
+        dibujarGrafico4(fdesde,fhasta);
+      }
+      else
+        alert("Por favor, introduzca un rango valido de fechas");
+
+   }
+ </script> 
+</head>
+<body>
+<div id="general">
+    <h2>Estadisticas</h2>
+    <div class="cuadro">
+      <div id="renglon">
+          <div id="columna1">Desde</div>
+          <div id="columna2"><input type="date" id="desde" name="desde"></div>
+          <div id="columna3">Hasta</div>
+          <div id="columna4"><input type="date" id="hasta" name="hasta"></div>
+      </div>
+      <div style="text-align: right;">
+          <button onclick="estadisticasentrefechas()">Consultar</button>
+      </div>
+    </div>
+    <div id="recaudacion" class="graficos">
+      <div class="tablas">
+      <div id="paneles">
+        <div id="panelizquierdo">
+            <div class="tablas">
+                  <h3>Recaudacion x mes</h3>
+                  <table id="tablaestadisticas" name="tablaestadisticas" class="tabla">
+                    <thead>
+                      <tr>
+                        <th>Mes/Año</th>          
+                        <th>Cantidad estadias</th>  
+                        <th>Importe</th>          
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+            <h3 style="text-indent: 50px">Total Recaudacion $ <label id="totalRecaudacion"></label></h3>
+        </div>
+        <div id="panelderecho">
+          <div id="GraficoRecaudacion" style="width: 600px; height: 400px">           
+        </div>
+        </div>
+        </div>
+      </div>    
+    </div>
+
+    <div id="estadiasporprovincia" class="graficos">
+      <div class="tablas">
+        <div id="paneles">
+          <div id="panelizquierdo">
+              <h3>Estadias por provincia de origen</h3>
+              <table id="tablaestadisticas2" name="tablaestadisticas2" class="tabla">
+                <thead>
+                  <tr>
+                    <th>Provincia</th>          
+                    <th>Cantidad Estadias</th>          
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div id="panelderecho">
+              <div id="GraficoProvincias" style="width: 600px; height: 400px"> 
+            </div>
+          </div>
+        </div>
+        </div>
+          
+      
+    </div>
+    <div id="estadiasporcarpas" class="graficos">
+       <div id="paneles">
+              <div id="panelizquierdo">
+                <h3>Estadias por Tipo de Carpa</h3>
+                  <table id="tablaestadisticas3" name="tablaestadisticas3" class="tabla">
+                    <thead>
+                      <tr>
+                        <th>Descripcion </th>          
+                        <th>Cantidad estadias</th>  
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+              </div>
+              <div id="panelderecho">
+                  <div id="GraficoCarpas" style="width: 600px; height: 400px"> 
+              </div>
+        </div>
+    </div>
+
+    <div id="personasestadias" class="graficos">
+        <div class="tablas">
+            <h3>Acampantes</h3>
+            <div id="paneles">
+              <div id="panelizquierdo">
+                  <table id="tablaestadisticas4" name="tablaestadisticas4" class="tabla">
+                    <thead>
+                      <tr>
+                        <th>Mes/Año</th>          
+                        <th>Cantidad personas</th>  
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+              </div>
+              <div id="panelderecho">
+                  <div id="GraficoPersonas" style="width: 600px; height: 400px"> 
+              </div>
+        </div>
+      </div> 
+      
+    </div>
+    </div>
+</div>
+</body>
+</html>

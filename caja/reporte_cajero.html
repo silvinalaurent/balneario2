@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Caja Diaria</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js?v=5.0"></script>
+	<script type="text/javascript" src="../caja/caja.js?v=8.0"></script>
+	<script type="text/javascript" src="../cobros/cobros.js?v=4.0"></script>
+	<script type="text/javascript" src="../devoluciones/devoluciones.js?v=4.0"></script>
+	<script type="text/javascript" src="../usuarios/usuarios.js?v=5.0"></script>
+
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 	var f=fechaHoy();
+    var u = sessionStorage.getItem('Usuario');
+    imprimereporte(f,f,u);
+    });      
+
+
+</script>
+   </head>
+
+
+<body>
+	<div id="general">
+	
+        <h2>Reporte de Caja de Usuario </h2>
+	
+	</div>	
+	
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar JSON con Fetch</title>
+    <script src="ciudades/ciudades.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+
+    <h1>Listado de Localidades</h1>
+    <div id="resultado"></div>
+
+    <script>
+        // Usar fetch para cargar el archivo JSON
+        fetch('municipios.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar el archivo JSON');
+                }
+                return response.json();  // Convertir a JSON
+            })
+            .then(data => {
+                // Ahora 'data' es el array de objetos
+                let resultado = document.getElementById('resultado');
+                let provincia=''; let ciudad=''; let c=0;
+                data.forEach(localidad => {
+                    // Crear elementos para mostrar la información
+                    provincia=localidad.provincia.nombre;
+                    ciudad=localidad.nombre;
+                    c=0;
+                    if (provincia=='Tierra del Fuego, Antártida e Islas del Atlántico Sur'){                       
+                        c=c+1;
+                        $.ajax({      
+                            type: "post",
+                            url:"localidades.php",
+                            data:{ciudad:ciudad, provincia:26},
+                            dataType: "json",
+                            async: true,
+                            success: function(ciudades){
+                                            if (ciudades["error"]==0) {
+                                                console.log(c, ' ', ciudad);    
+                                            } 
+                                            else{
+                                                alert(ciudades["valor"]);
+                                            };                  
+                            },
+                            error: function (obj, error, objError){
+                                alert(error);//avisar que ocurrió un error
+                            }
+                        });
+                    }
+                    
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    </script>
+
+</body>
+</html>

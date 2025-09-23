@@ -1,0 +1,103 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<html lang="es">
+	<title>Devoluciones</title>
+	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
+	<script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="../js/funciones.js?v=4"></script>
+	<script type="text/javascript" src="../devoluciones/devoluciones.js?v=6"></script>
+	<script type="text/javascript" src="../estadias/estadias.js?v=3.0"></script>
+	<script type="text/javascript" src="../turistas/turistas.js?v=3.0"></script>
+
+<script type="text/javascript">	
+ $( document ).ready(function() {
+ 		lista_estadias("selestadia");
+ 		trae_devoluciones(0,"");
+		 
+    });      
+</script>
+   
+</head>
+
+<body>
+	<div id="general">
+	<h2>Devoluciones</h2>
+		<input id="mostrar-modal" name="modal" type="radio" /> 
+  		<label for="mostrar-modal" onclick="agrega_devolucion()"><h2>+</h2></label>
+		
+		<div id="modal">
+			<input id="cerrar-modal" name="modal" type="radio" /> 
+			<label for="cerrar-modal"> X </label> 
+
+		  	<div id="devolucion">
+		  	
+				<h2>Devolucion</h2>
+		
+		  		<form id="form_devolucion" name="form_devolucion"  method="post" accept-charset="utf-8">
+		  		<input id="iddevolucion" name="iddevolucion" style="display:none" type="text" />
+				
+				<!-- <div id="renglon">
+		  			<div id="columna1"><label for="fecha">Fecha</label></div>
+		  			<div id="columna234"><input type="date" id="fecha" name="fecha"></div>
+		  		</div> -->
+
+		  		<div id="renglon">
+		  			<div id="columna1"><label>Estadia</label></div>
+		  			<div id="columna234">
+		  				<input type="text" id="idestadia" name="idestadia" value="" size="5" onblur="busca_estadia(this.value)">
+		  				<label id="textoestadia" size="100">Datos de la estadia</label>
+		  			</div>
+		  		</div>
+				
+		  		<div id="renglon">
+		  			<div id="columna1"><label>Importe</label></div>
+		  			<div id="columna234"><input type="text" id="importe" name="importe" size="10" onblur="chequea_importe_devolucion()"></div>
+		  		</div>
+				
+		  		<div id="renglon">
+		  			<div id="columna1"><label>Motivo</label></div>
+		  			
+					<div id="columna234"><textarea id="motivo" name="motivo" cols="80" rows="2"></textarea></div>
+		  		</div>
+		  		<br>
+				<div id="renglon">
+					<div id="columna4"><input type="button" id="guardar" onclick="guarda_devolucion()" value="Aceptar"></div>
+				</div>
+		  	
+			</div>
+			</div>  	
+		  	
+		  	</form>
+			</div>
+
+	</div>
+		  	
+
+	<div class="tablas">
+			
+		<table id="tabladevoluciones" name="tabladevoluciones" class="tabla">
+			<thead>
+				<tr>
+					<th>ID</th>					
+					<th>Fecha</th>					
+					<th>Estadia</th>					
+					<th>Datos de Estadia</th>
+					<th>Importe</th>					
+					<th>Motivo</th>					
+					<th width="150px">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	<label id="textodevolucion"></label>	
+	</div>
+    </div>
+	</div>
+	
+</body>
+</html>
