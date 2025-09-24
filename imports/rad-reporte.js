@@ -176,8 +176,24 @@ export class RADReporte extends PolymerElement {
               
               <template is="dom-if" if="{{!_esseparador(renglon)}}">
                 <tr>
-                  <template is="dom-repeat" items="{{ _toArray(renglon) }}">
-                    <td align="{{alineacion(item.valor,item.nombre)}}"><div class="itemvalor" inner-h-t-m-l="[[decimales(item.valor,item.nombre)]]" ></div></td>
+                  <template is="dom-repeat" items="{{ _toArray(renglon) }}" as="item">
+                    <td align="{{alineacion(item.valor,item.nombre)}}">
+                      <template is="dom-if" if="[[ _esSecuencia(item.nombre) ]]">
+                       <div class="itemvalor">
+                          [[decimales(item.valor,item.nombre)]]
+                          <a href="javascript:void(0)"
+                            on-click="cambiarPago"
+                            title="Cambiar Forma de Pago"
+                            data-id$="[[item.valor]]"
+                            data-forma$="[[renglon.forma]]">
+                           <span class="lapiz"></span>
+                          </a>
+                        </div>
+                      </template>
+                      <template is="dom-if" if="[[ !_esSecuencia(item.nombre) ]]">
+                        <div class="itemvalor" inner-h-t-m-l="[[decimales(item.valor,item.nombre)]]"></div>
+                      </template>
+                    </td>
                   </template>
                 </tr>
               </template>
@@ -283,6 +299,91 @@ export class RADReporte extends PolymerElement {
 
   };
   
+  //agregado 24/09/25 **************************************************************
+  _esSecuencia(nombre) {
+  return nombre === "secuencia"; // o el nombre real de tu campo
+  }
+
+ cambiarPago(e) {
+    e.preventDefault();
+    console.log(e);
+    const id = e.currentTarget.dataset.id;
+    console.log(id);
+    const forma_actual = e.currentTarget.dataset.forma;
+    console.log(forma_actual);
+    
+    
+
+    if (!id || !forma_actual) {
+        alert("No se encontró el dato de forma de pago");
+        return;
+    }
+
+    let opciones = [];
+    if (forma_actual === 'E') opciones = ['D', 'T'];
+    else if (forma_actual === 'D') opciones = ['E', 'T'];
+    else if (forma_actual === 'T') opciones = ['E', 'D'];
+
+    //const nuevaForma = prompt(`Forma de pago actual: ${forma_actual}.\nElija una nueva: ${opciones.join(", ")}\nE (Efectivo), D(Debito), T(Transferencia)`);
+
+    const nuevaForma = prompt(`ELija Nueva Forma de Pago: ${opciones.join(", ")} `).toUpperCase();
+
+    if (nuevaForma && opciones.includes(nuevaForma)) {
+        fetch(`cambiar_forma_pago.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `id=${encodeURIComponent(id)}&forma_pago=${encodeURIComponent(nuevaForma)}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                alert("Forma de pago actualizada correctamente");
+                this._recargarComponente();
+            } else {
+                alert("Error: " + data.msg);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Error en la solicitud");
+        });
+    }
+    else alert('Forma de pago incorrecta');
+}
+_recargarComponente() {
+  // Leer parámetros desde la URL
+  const params = new URLSearchParams(window.location.search);
+  const fdesde = params.get("fdesde");
+  const fhasta = params.get("fhasta");
+  const idusuario = params.get("idusuario");
+
+  // Mostrar loading si existe el modal
+  const modal = document.querySelector(".tiempo");
+  if (modal) modal.style.display = "block";
+
+  // Volver a consultar datos
+  fetch("reporte_caja.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `fdesde=${encodeURIComponent(fdesde)}&fhasta=${encodeURIComponent(fhasta)}&idusuario=${encodeURIComponent(idusuario)}`
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Datos recargados:", data);
+      // Actualiza los elementos y vuelve a armar las páginas
+      this.elementos = data;
+      this.paginas = [];
+      this.ready();
+    })
+    .catch(err => {
+      console.error("Error recargando reporte:", err);
+      alert("No se pudo recargar el reporte.");
+    })
+    .finally(() => {
+      if (modal) modal.style.display = "none";
+    });
+}
+
   _toArray(obj) {
       return Object.keys(obj).map(function(key) {
           return {
