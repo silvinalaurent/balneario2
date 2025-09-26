@@ -58,8 +58,8 @@ function trae_cobros(tipooperacion,letras) {
 
             });
 };
-
-function total_cobros(tipooperacion,letras,usuario) {
+//no se utiliza, se traen los pagos desde reporte
+/* function total_cobros(tipooperacion,letras,usuario) {
   $.ajax({
                  type: "POST",
                  url:"../cobros/cobros.php",
@@ -80,7 +80,7 @@ function total_cobros(tipooperacion,letras,usuario) {
                   document.getElementById('importecobros').textContent = 0;
                  }
        });
-};
+}; */
 
 function trae_cobros2(fecha1,fecha2)
 {     
@@ -118,7 +118,7 @@ function trae_cobros2(fecha1,fecha2)
 
 
 
-function borra_pago_cobro(id){
+/* function borra_pago_cobro(id){
 //se cambia de estado el pago
  if (window.confirm("Desea realmente anular este pago"))
  {
@@ -144,7 +144,7 @@ function borra_pago_cobro(id){
 
             });
   }
-};	
+};	 */
 
 
 function blanquea_cobro(){
@@ -158,7 +158,7 @@ function blanquea_cobro(){
     $("#ticket_desde").val('');
     $("#ticket_hasta").val('');
     $("#observaciones").val('');
-    $("#total").val('');
+    $("#efectivo").val('');
     
   };
 
@@ -175,9 +175,12 @@ function agrega_cobro(d){
     var fechahoy=armaFecha2(hoy);
     $("#fecha_cobro").text(fechahoy);
     $("#tipo_cobro").focus();
+    ultimoticket().then(function(ultimo) {
+         $("#desde_ticket").val(parseInt(ultimo)+1);
+});
 }
 
-
+/* 
 function modifica_cobro(cobro){
    //no se utiliza
     
@@ -195,10 +198,9 @@ function modifica_cobro(cobro){
     $("#forma_pago").val(cobro.forma_pago);
     $("#observaciones").val(cobro.observaciones);
     document.getElementById("mostrar-modal").checked =true;
-      
-};
+};*/
 
-function ultimocobro(){
+/* function ultimocobro(){
 return new Promise(function(resolve, reject) {
       $.ajax({
                   
@@ -226,7 +228,7 @@ return new Promise(function(resolve, reject) {
                       }
             });
      });
-};
+}; */
 
 
 
@@ -234,13 +236,12 @@ function guarda_cobro() {
   if (window.confirm("Desea realmente confirmar el COBRO ?")) {
             let datos_enviados=false;
             var usuario=sessionStorage.getItem('Usuario');
-            if (($("#turno").val()!='') && ($("#efectivo").val()!='') && ($("#efectivo").val()!='') && ($("#tipo_cobro").val()!='') && !datos_enviados )
+            
+            if (($("#turno").val()!='') &&  ($("#efectivo").val()!='') && ($("#tipo_cobro").val()!='') && !datos_enviados )
               {
                 datos_enviados=true;
                 var datos = $("form").serialize();
                 var fecha_cobro = $("#fecha_cobro").text();
-                console.log(fecha_cobro);
-                console.log(datos);
                 var monto =parseFloat($("#total").text());
                 datos=datos+"&fecha_cobro="+fecha_cobro+"&idusuario="+usuario;
                 var id= $("#idcobro").val();
@@ -408,3 +409,29 @@ function trae_pagos_cobros() {
 
          });
 };
+
+
+function ultimoticket() {
+  return new Promise(function(resolve, reject) {
+    $.ajax({
+      type: "POST",
+      url: "../cobros/cobros.php",
+      data: { accion: 4, operacion: 8 },
+      dataType: "json",
+      success: function(response) {
+        if (response.error == 1) {
+          
+          resolve(0);
+        } else {
+          
+          resolve(response[0].ultimo);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Error en AJAX:", status, error);
+        reject(error);
+      }
+    });
+  });
+}
+

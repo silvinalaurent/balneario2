@@ -64,14 +64,14 @@
 		  				</select>
 		  			</div>
 		  		</div>
-				<div id="renglon">
+				<!-- <div id="renglon">
 		  			<div id="columna1"><label>Talonario Nro.</label></div>
 		  			<div id="columna2"><input type="text" id="talonario_nro" name="talonario_nro"  size="10"></div>
-		  		</div>
+		  		</div> -->
 				
 		  		<div id="renglon">
 		  			<div id="columna1"><label>Desde Ticket</label></div>
-		  			<div id="columna2"><input type="number" id="desde_ticket" name="desde_ticket"  size="10"></div>
+		  			<div id="columna2"><input type="number" id="desde_ticket" name="desde_ticket"  size="10" readonly></div>
 		  			<div id="columna3"><label>Hasta Ticket</label></div>
 		  			<div id="columna4"><input type="number" id="hasta_ticket" name="hasta_ticket"  size="10"></div>
 		  		</div>
@@ -84,15 +84,15 @@
 				<div id="renglon">
 		  			<div id="columna1"><label>Monto $</label></div>
 		  			<div id="columna2"><label id="monto" name="monto"></label></div>
-					<div id="columna3"><label>Importe $</label></div>
-		  			<div id="columna4"><label id="importe" name="importe"></label></div>
+					<div id="columna3"><!-- <label>Importe $</label> --></div>
+		  			<div id="columna4"><!-- <label id="importe" name="importe"></label> --></div>
 		  		</div>
 
 		  		<div id="renglon">
 		  			<div id="columna1"><label>Total $</label></div>
-		  			<div id="columna2"><input type="text" id="efectivo" name="efectivo" size="10"></div>
+		  			<div id="columna2"><input type="text" id="efectivo" name="efectivo" size="10" readonly></div>
 		  			
-		  		</div>
+		  		</div> 
 				  <div id="renglon">
 					<div id="columna1"><label>Observaciones</label></div>
 					<div id="columna234"><textarea id="observaciones" name="observaciones" rows="2" cols="50"></textarea></div>
@@ -134,6 +134,16 @@
 	</div>
     </div>
 	</div>
-	 
+
+<script>
+	document.getElementById("hasta_ticket").addEventListener("blur", function() {
+  		//CONTROLAMOS QUE EL NUMERO DE TICKET SEA MAYOR AL DEL TICKET DESDE
+		if ( parseInt($("#hasta_ticket").val())<parseInt($("#desde_ticket").val()))
+			{
+				alert('El ultimo ticket no puede ser menor al primero');	
+				$("#hasta_ticket").val(0);		
+			}
+	});
+</script>
 </body>
 </html>
