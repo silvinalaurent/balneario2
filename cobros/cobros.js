@@ -37,7 +37,8 @@ function trae_cobros(tipooperacion,letras) {
                            {
                               var uncobro = cobros[i];
                               var fecha=convertDateFormat(uncobro.fecha);
-                              linea="<tr><td>" + uncobro.id+"</td><td>"+ fecha+"</td><td>"+uncobro.turno+"</td><td>"+uncobro.talonario+"</td><td>"+uncobro.ticket_desde+"</td><td>"+uncobro.ticket_hasta+"</td><td>"+uncobro.concepto+"</td><td>"+uncobro.monto+ "</td> <td>";
+                              //+uncobro.talonario+"</td><td>"
+                              linea="<tr><td>" + uncobro.id+"</td><td>"+ fecha+"</td><td>"+uncobro.turno+"</td><td>"+uncobro.ticket_desde+"</td><td>"+uncobro.ticket_hasta+"</td><td>"+uncobro.concepto+"</td><td>"+uncobro.monto+ "</td> <td>";
                              /*  if (usuario==7 || usuario==1) 
                               {//admin o anabella
                                 linea=linea+"<a href='#' onclick='borra_cobro("+uncobro.id+")'><i class=\"icon-trash\"></i></a> "
