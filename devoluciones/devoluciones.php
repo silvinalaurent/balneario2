@@ -22,8 +22,10 @@ if ($accion == 1) {
 	$query = "insert into devoluciones (fecha, idestadia,importe, motivo, idusuario) values ('$fecha','$idestadia','$importe','$motivo', '$usuario')";
 
 	$resultado = mysqli_query($con, $query) or die(mysqli_error($con));
+
 	if ($resultado) {
-		$json = json_encode(array("error" => 0));
+		$idInsertado = mysqli_insert_id($con); // obtiene el último ID generado
+		$json = json_encode(array("error" => 0, "id" => $idInsertado));
 	} else {
 		$json = json_encode(array("error" => 1, "valor" => $query));
 	}
@@ -96,6 +98,12 @@ if ($accion == 1) {
 					$fecha1 = $_POST["fecha1"];
 					$fecha2 = $_POST["fecha2"];
 					$json = queryToJson($con, "Select sum(importe) as total from devoluciones where devoluciones.fecha>='$fecha1' and devoluciones.fecha<='$fecha2'");
+				} else {
+					if ($operacion == 13) {
+						//para imprimir recibo de devolucion
+						$id = $_POST["caracteres"];
+						$json = queryToJson($con, "select devoluciones.*, CONCAT('Parcela:',estadias.idparcela,' ', turistas.apellido,' ', turistas.nombres,' de ',estadias.fecha_ingreso, ' a ', estadias.fecha_egreso, ' $ ', estadias.total) as datos_estadia from devoluciones left join estadias on devoluciones.idestadia= estadias.id left join turistas on estadias.idturista=turistas.id where devoluciones.id='$id'");
+					}
 				}
 			}
 		}

@@ -105,7 +105,7 @@ function trae_devoluciones_caja(tipooperacion,letras,usuario) {
             });
 };
 
-
+/* 
 function trae_devoluciones2(fecha1,fecha2) {
       //trae devoluciones entre fechas
       $("#tabladevoluciones").show(); 
@@ -224,7 +224,7 @@ function calcula_total_devoluciones(dia,tipooperacion) {
             });
         });
 };
-
+ */
 function borra_devolucion(id){
 
  		$.ajax({
@@ -260,7 +260,7 @@ function blanquea(){
     $("#motivo").val('');
     
   };
-
+ 
 function limpia_busqueda(){
   
     // limpiar formulario
@@ -291,10 +291,15 @@ function modifica_devolucion(devolucion){
 
 
 function guarda_devolucion() {
-  
-            if ($("#idestadia").val()!='' && $("#importe").val()!='')
-            //&& $("#fecha").val()!='' && $("#fecha").val()<=fechaHoy()
-              {
+            chequea_importe_devolucion();
+            var importe = parseFloat($("#importe").val()) || 0;
+
+            if ($("#idestadia").val()!='' && importe>0)
+            {
+            //confirmacion
+            if (confirm("¿Desea confirmar esta devolución? ")) {
+ 
+            
                 var datos = $("form").serialize();
                 var id= $("#iddevolucion").val();
                 //se evalua si se esta registrando un nuevo devolucion (1) o se esta modificando uno ya existente (2)
@@ -321,6 +326,8 @@ function guarda_devolucion() {
                                  
                               if (devoluciones["error"]==0) {
 
+                                  console.log('Devolucion ',devoluciones.id);
+                                  window.open("../devoluciones/recibo_devolucion.html?variable="+devoluciones.id);
                                   document.getElementById("cerrar-modal").checked =true;
                                   trae_devoluciones(0, "");
 
@@ -340,6 +347,7 @@ function guarda_devolucion() {
             }
             else
                 alert('Complete los datos correctamente, por favor');
+          }
 };
 
 function filtrar_devoluciones(texto) {
@@ -375,10 +383,43 @@ function chequea_importe_devolucion()
 {
   var importe_estadia=sessionStorage.getItem('importe_estadia');
   var importe_devolucion=$("#importe").val();
+  console.log("Estadia ", importe_estadia, " devolucion ", importe_devolucion);
+  // Convertir a número
+  importe_estadia = parseFloat(importe_estadia) || 0;
+  importe_devolucion = parseFloat(importe_devolucion) || 0;
+  
   if (importe_devolucion>importe_estadia)
   {
     alert("El importe de la devolución no puede superar el importe de la estadía");
     $("#importe").val(importe_estadia);
     
   }
+}
+
+function imprime_recibo_devolucion(id)
+{
+  $.ajax({
+              type: "POST",
+              url:"../devoluciones/devoluciones.php",
+              data: {accion:4, operacion:13, caracteres:id},
+              dataType: "json",
+              async: false,
+              success: function(devoluciones){
+                
+                if (devoluciones.error==undefined){
+                      var unadevolucion = devoluciones[0];
+                      
+                      var letras=numeroAPesos(Number(unadevolucion.importe));
+                      $("#importe_letras").text(letras);
+                      var fecha=convertDateFormat(unadevolucion.fecha);
+                      $("#fecha").text(fecha);
+                      $("#datos_estadia").text(unadevolucion.datos_estadia);
+                      $("#motivo").text(unadevolucion.motivo);
+                      $("#importe_numeros").text(unadevolucion.importe);
+                    } 
+              },
+              error: function (obj, error, objError){
+                  alert(error);//avisar que ocurrió un error
+              }
+    });
 }

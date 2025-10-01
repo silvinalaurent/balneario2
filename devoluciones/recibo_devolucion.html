@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recibo de Devolución</title>
+  <link rel="stylesheet" href="../css/estiloimp.css?v=12">
+  <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+  <script type="text/javascript" src="../js/funciones.js"></script>
+  <script type="text/javascript" src="../devoluciones/devoluciones.js"></script>
+  
+
+<script type="text/javascript"> 
+ 
+ $( document ).ready(function() {
+      
+      var iddevolucion = getParameterByName('variable');
+      
+      imprime_recibo_devolucion(iddevolucion);
+      
+    
+  });
+
+</script>
+
+</head>
+
+<body>
+  
+  <div id="recibo">
+
+  
+  <h3>BALNEARIO CAMPING SAN JOSE</h3>
+  <h4>Municipalidad de San José</h4>
+
+  <h2>R E C I B O</h2> <br><br>
+   
+  <span class="alineado-derecha">Fecha: <label id="fecha"></label></span>
+
+        Recibí de <label>Administración Balneario Camping San José</label><br>
+        la Suma de Pesos: <label id="importe_letras"></label><br>
+        <br>
+        Datos de la estadia:<label id="datos_estadia"></label><br><br>
+        Motivo: <label id="motivo"></label><br><br>
+        Son $: <label id="importe_numeros"></label><br>  
+        <br>
+        <br>
+          
+        <p style="text-align: center;">______________________________<br><br>
+             Recibi Conforme Firma y DNI</p>
+ 
+    
+</div>
+
+</body>
+</html>

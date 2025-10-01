@@ -141,3 +141,82 @@ function formatearFecha(fecha) {
       return o;
 
   };
+
+  function esFechaValida(fechaIngresada, dias) {
+  //cheque una fecha dada, contra la fecha actual, que no sea mas antigua que x cantidad de dias  
+  // fechaIngresada formato YYYY-MM-DD
+  const fecha = new Date(fechaIngresada);
+
+  // Fecha actual (sin horas/minutos/segundos)
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  // Fecha límite = hoy - 4 días
+  const limite = new Date(hoy);
+  limite.setDate(hoy.getDate() - dias);
+  console.log("Fecha ", fecha, " limite ", limite, " Hoy ", hoy);
+  // Controlar que no sea más antigua que el límite
+  return fecha >= limite && fecha <= hoy;
+}
+
+function numeroAPesos(num) {
+    const unidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
+    const decenas = ["", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+    const especiales = {
+        11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince",
+        16: "dieciséis", 17: "diecisiete", 18: "dieciocho", 19: "diecinueve"
+    };
+    const centenas = ["", "cien", "doscientos", "trescientos", "cuatrocientos", "quinientos",
+                      "seiscientos", "setecientos", "ochocientos", "novecientos"];
+
+    function convertirMenor1000(n) {
+        if (n === 0) return "";
+        if (n < 10) return unidades[n];
+        if (n > 10 && n < 20) return especiales[n];
+        if (n < 100) {
+            let d = Math.floor(n / 10);
+            let u = n % 10;
+            if (u === 0) return decenas[d];
+            if (d === 2) return "veinti" + unidades[u];
+            return decenas[d] + " y " + unidades[u];
+        }
+        let c = Math.floor(n / 100);
+        let resto = n % 100;
+        if (n === 100) return "cien";
+        return centenas[c] + (resto > 0 ? " " + convertirMenor1000(resto) : "");
+    }
+
+    function convertir(num) {
+        if (num === 0) return "cero";
+        if (num < 1000) return convertirMenor1000(num);
+
+        if (num < 1000000) {
+            let miles = Math.floor(num / 1000);
+            let resto = num % 1000;
+            let milesTexto = (miles === 1 ? "mil" : convertirMenor1000(miles) + " mil");
+            return milesTexto + (resto > 0 ? " " + convertirMenor1000(resto) : "");
+        }
+
+        if (num < 1000000000) {
+            let millones = Math.floor(num / 1000000);
+            let resto = num % 1000000;
+            let millonTexto = (millones === 1 ? "un millón" : convertir(millones) + " millones");
+            return millonTexto + (resto > 0 ? " " + convertir(resto) : "");
+        }
+
+        return "Número demasiado grande";
+    }
+
+    // separar parte entera y decimales
+    let partes = num.toFixed(2).split(".");
+    let entero = parseInt(partes[0], 10);
+    let centavos = partes[1];
+
+    let textoEntero = convertir(entero);
+
+    return (
+        textoEntero +
+        (entero === 1 ? " peso" : " pesos") +
+        (centavos !== "00" ? " con " + centavos + "/100" : "")
+    );
+}

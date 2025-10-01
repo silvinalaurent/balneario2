@@ -222,10 +222,23 @@ function busca_estadia(idestadia) {
                     if (estadias.length!=undefined)
                     {
                       var unaestadia = estadias[0];
-                      $("#textoestadia").text(unaestadia.id+'-'+"Parcela "+unaestadia.idparcela+" - "+unaestadia.apellido+" "+unaestadia.nombres+",  forma de pago: "+unaestadia.forma_pago);
-                      $("#importe").val(unaestadia.total);
-                      //sessionStorage.setItem('forma_pago_estadia', unaestadia.forma_pago);
-                      sessionStorage.setItem('importe_estadia', unaestadia.total);
+                      //controles
+                      //Controlar que el pago asociado tenga estado N: Normal
+                      if (unaestadia.estado=='N')
+                      {
+                        //Controlar que la estadia sea reciente (2/3 dias)
+                        if (esFechaValida(unaestadia.fecha_ingreso,3)) 
+                        {
+                          $("#textoestadia").text("Secuencia: "+unaestadia.id+"- Parcela "+unaestadia.idparcela+" - Turista "+unaestadia.apellido+" "+unaestadia.nombres+" - Forma de pago: "+unaestadia.forma_pago+ "\n Importe $ "+ unaestadia.total +" Fecha de ingreso: "+ convertDateFormat(unaestadia.fecha_ingreso)+ "  Fecha de egreso: "+ convertDateFormat(unaestadia.fecha_egreso));
+                          $("#importe").val(unaestadia.total);
+                          //sessionStorage.setItem('forma_pago_estadia', unaestadia.forma_pago);
+                          sessionStorage.setItem('importe_estadia', unaestadia.total);
+                        }
+                        else
+                          alert('No se puede realizar devolucion de esta estadia');
+                        }
+                      else
+                        alert('No se puede realizar devolucion de esta estadia');
                     }
                     else
                     {

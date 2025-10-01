@@ -128,3 +128,14 @@ table,tr,th,td {
 	padding-top: 20px;
 }
 
+.alineado-derecha
+{
+	text-align: right;
+}
+
+
+#recibo
+{
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 12pt; 
+}

@@ -178,7 +178,7 @@ if ($accion == 1) {
 						$json = queryToJson($con, "select estadias.*,turistas.apellido,turistas.nombres, turistas.nro_documento, tarifas.descripcion from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id WHERE 
 						estadias.patente like '%$patente%'
 							order by estadias.fecha_ingreso");
-					} elseif ($operacion == 17) {
+					} elseif ($operacion == 17) {//para devoluciones
 						$idestadia = $_POST["idestadia"];
 						$json = queryToJson($con, "select * from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id left join pagos on estadias.id=pagos.idestadia where estadias.id='$idestadia' ORDER BY fecha_ingreso");
 					} elseif ($operacion == 18) {
