@@ -25,11 +25,13 @@
 	</style>
 
 </head>
+
 <body>
 	<!-- MODAL RELOJ -->
 	<div class="fondo-modal horizontal-centro vertical-centro tiempo" >
 		<div class="reloj"></div>
 	</div>
+	
 	<script>
 
 		function traePagos(fdesde,fhasta,idusuario){
@@ -71,6 +73,85 @@
 				$(".tiempo").hide();
 			});
 	  	});
+
+		//agregado 6/10/25
+		<!-- MODAL CAMBIO A DÉBITO -->
+
 	</script>
+
+			<div id="modal-debito" class="fondo-modal" style="display:none;">
+		<div class="ventana-modal caja8 vertical-centro">
+			<div class="titulo-modal renglon centro">
+			<span class="tarjeta"></span> Registrar Pago con Débito
+			</div>
+
+			<div class="renglon">
+			<div class="caja5">
+				<label for="modal-lote">Lote</label>
+				<input type="text" id="modal-lote" class="campo-texto" placeholder="Número de lote">
+			</div>
+			<div class="caja5">
+				<label for="modal-cupon">Cupón</label>
+				<input type="text" id="modal-cupon" class="campo-texto" placeholder="Número de cupón">
+			</div>
+			</div>
+
+			<div class="renglon derecha" style="margin-top:15px;">
+			<rad-boton id="modal-guardar" title="Guardar cambios">
+				<span class="disquete"></span>Guardar
+			</rad-boton>
+			<rad-boton id="modal-cancelar" title="Cancelar">
+				<span class="cancelar"></span>Cancelar
+			</rad-boton>
+			</div>
+		</div>
+		</div>
+
+		<style>
+		/* Fondo oscuro translúcido */
+		#modal-debito.fondo-modal {
+			position: fixed;
+			top: 0; left: 0; right: 0; bottom: 0;
+			background-color: rgba(0,0,0,0.5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 2000;
+		}
+
+		/* Caja principal del modal */
+		#modal-debito .ventana-modal {
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 0 12px rgba(0,0,0,0.3);
+			padding: 20px;
+			width: 400px;
+			max-width: 90%;
+			animation: aparecer 0.3s ease;
+		}
+
+		.titulo-modal {
+			font-weight: bold;
+			font-size: 16px;
+			margin-bottom: 15px;
+			text-align: center;
+			border-bottom: 1px solid #ccc;
+			padding-bottom: 8px;
+		}
+
+		.campo-texto {
+			width: 100%;
+			padding: 6px;
+			font-size: 14px;
+			border: 1px solid #bbb;
+			border-radius: 5px;
+		}
+
+		@keyframes aparecer {
+			from { transform: scale(0.9); opacity: 0; }
+			to { transform: scale(1); opacity: 1; }
+		}
+		</style>
+
 </body>
 </html>

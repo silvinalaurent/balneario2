@@ -304,7 +304,7 @@ export class RADReporte extends PolymerElement {
   return nombre === "secuencia"; // o el nombre real de tu campo
   }
 
- cambiarPago(e) {
+ /*cambiarPago(e) {
     e.preventDefault();
     console.log(e);
     const id = e.currentTarget.dataset.id;
@@ -349,6 +349,91 @@ export class RADReporte extends PolymerElement {
         });
     }
     else alert('Forma de pago incorrecta');
+}*/
+cambiarPago(e) {
+  e.preventDefault();
+  const id = e.currentTarget.dataset.id;
+  const forma_actual = e.currentTarget.dataset.forma;
+
+  if (!id || !forma_actual) {
+    alert("No se encontró el dato de forma de pago");
+    return;
+  }
+
+  let opciones = [];
+  if (forma_actual === 'E') opciones = ['D', 'T'];
+  else if (forma_actual === 'D') opciones = ['E', 'T'];
+  else if (forma_actual === 'T') opciones = ['E', 'D'];
+
+  const nuevaForma = prompt(`Elija Nueva Forma de Pago: ${opciones.join(", ")}`).toUpperCase();
+
+  if (!nuevaForma || !opciones.includes(nuevaForma)) {
+    alert('Forma de pago incorrecta');
+    return;
+  }
+
+  // 💳 Si pasa de efectivo (E) a débito (D), abrir modal
+  if (forma_actual === 'E' && nuevaForma === 'D') {
+    this._abrirModalDebito(id, nuevaForma);
+    return;
+  }
+
+  // Caso normal (sin modal)
+  this._actualizarFormaPago(id, nuevaForma);
+}
+
+_abrirModalDebito(id, nuevaForma) {
+  const modal = document.getElementById("modal-debito");
+  modal.style.display = "flex";
+
+  const btnGuardar = document.getElementById("modal-guardar");
+  const btnCancelar = document.getElementById("modal-cancelar");
+
+  // Cancelar
+  btnCancelar.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  // Guardar
+  btnGuardar.onclick = () => {
+    const lote = document.getElementById("modal-lote").value.trim();
+    const cupon = document.getElementById("modal-cupon").value.trim();
+
+    if (!lote || !cupon) {
+      alert("Debe ingresar lote y cupón");
+      return;
+    }
+
+    modal.style.display = "none";
+    this._actualizarFormaPago(id, nuevaForma, lote, cupon);
+  };
+}
+
+_actualizarFormaPago(id, nuevaForma, lote = "", cupon = "") {
+  const params = new URLSearchParams();
+  params.append("id", id);
+  params.append("forma_pago", nuevaForma);
+  if (lote) params.append("lote", lote);
+  if (cupon) params.append("cupon", cupon);
+
+  fetch(`cambiar_forma_pago.php`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString()
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        alert("Forma de pago actualizada correctamente");
+        this._recargarComponente();
+      } else {
+        alert("Error: " + data.msg);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error en la solicitud");
+    });
 }
 _recargarComponente() {
   // Leer parámetros desde la URL
