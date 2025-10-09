@@ -18,8 +18,9 @@ if ($accion == 1) {
 	# agregar 
 
 	$_SESSION["accion"] = "ALTA";
-
-	$query = "insert into devoluciones (fecha, idestadia,importe, motivo, idusuario) values ('$fecha','$idestadia','$importe','$motivo', '$usuario')";
+	date_default_timezone_set('America/Argentina/Buenos_Aires');
+	$fechaHora = date("Y-m-d H:i:s"); // Formato: Año-Mes-Día Horas:Minutos:Segundos 
+	$query = "insert into devoluciones (fecha, idestadia,importe, motivo, idusuario,fecha_hora) values ('$fecha','$idestadia','$importe','$motivo', '$usuario','$fechaHora')";
 
 	$resultado = mysqli_query($con, $query) or die(mysqli_error($con));
 

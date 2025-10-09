@@ -51,7 +51,7 @@ if ($accion == 1) {
 	# estado es N si es Normal o E si es eliminado  	 	
 	$query = "insert into estadias (idparcela, nrocarpa, idsector, fecha_ingreso,fecha_egreso,importe,detalleadicional,adicional,detalleadicional2,adicional2,detalleadicional3,adicional3, cantidad_personas, estado, tipo_alojamiento, patente, idturista, total,idusuario,descuento, observaciones, discapacidad, mascotas, fecha) values ('$idparcela','$nrocarpa','$idsector','$fechad','$fechah','$importe','$detalleadicional','$adicional','$detalleadicional2','$adicional2','$detalleadicional3','$adicional3','$cantidad','N','$tarifa', '$patente', '$idturista','$total','$idusuario','$descuento','$observaciones', '$discapacidad', '$mascotas','$fechaHora');";
 
-	$query .= "insert into pagos (fecha, idestadia, forma_pago,lote,cupon,importe, idusuario, estado,fecha_hora) values ('$fecha',(select max(id) from estadias),'$forma_pago','$lote', '$cupon','$total','$idusuario','N','$fechaHora')";
+	$query .= "insert into pagos (fecha, idestadia, forma_pago,lote,cupon,importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',(select max(id) from estadias),'$forma_pago','$lote', '$cupon','$total','$idusuario','N','$fechaHora',0)";
 
 	if (mysqli_multi_query($con, $query)) {
 		$ultimoid = mysqli_insert_id($con);
@@ -178,7 +178,7 @@ if ($accion == 1) {
 						$json = queryToJson($con, "select estadias.*,turistas.apellido,turistas.nombres, turistas.nro_documento, tarifas.descripcion from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id WHERE 
 						estadias.patente like '%$patente%'
 							order by estadias.fecha_ingreso");
-					} elseif ($operacion == 17) {//para devoluciones
+					} elseif ($operacion == 17) { //para devoluciones
 						$idestadia = $_POST["idestadia"];
 						$json = queryToJson($con, "select * from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id left join pagos on estadias.id=pagos.idestadia where estadias.id='$idestadia' ORDER BY fecha_ingreso");
 					} elseif ($operacion == 18) {

@@ -124,6 +124,10 @@ export class RADReporte extends PolymerElement {
       }
 
       
+      :host tbody tr.modificado{
+        font-weight: bold;
+        background-color: #fffacd !important;
+      }
       /*Parche para evitar la duplicacion de los encabezados en las hojas posteriores*/
       thead, tfoot{
         display: table-row-group;
@@ -175,19 +179,21 @@ export class RADReporte extends PolymerElement {
             <template is="dom-repeat" items="{{ pagina.elementos }}" as="renglon">
               
               <template is="dom-if" if="{{!_esseparador(renglon)}}">
-                <tr>
+                  <tr class$="{{_esModificado(renglon)}}">
                   <template is="dom-repeat" items="{{ _toArray(renglon) }}" as="item">
                     <td align="{{alineacion(item.valor,item.nombre)}}">
                       <template is="dom-if" if="[[ _esSecuencia(item.nombre) ]]">
                        <div class="itemvalor">
                           [[decimales(item.valor,item.nombre)]]
-                          <a href="javascript:void(0)"
-                            on-click="cambiarPago"
-                            title="Cambiar Forma de Pago"
-                            data-id$="[[item.valor]]"
-                            data-forma$="[[renglon.forma]]">
-                           <span class="lapiz"></span>
-                          </a>
+                         
+                            <a href="javascript:void(0)"
+                              on-click="cambiarPago"
+                              title="Cambiar Forma de Pago"
+                              data-id$="[[item.valor]]"
+                              data-forma$="[[renglon.forma]]">
+                             <span class="lapiz"></span>
+                            </a>
+                         
                         </div>
                       </template>
                       <template is="dom-if" if="[[ !_esSecuencia(item.nombre) ]]">
@@ -298,58 +304,21 @@ export class RADReporte extends PolymerElement {
     });
 
   };
-  
+
+  //agregado 9/10
+  _esModificado(renglon) {
+    // Verifica si el campo "modificados" existe y tiene valor 1
+    if (renglon.modificado && renglon.modificado   == 1) {
+      return "modificado";
+    }
+    return "";
+  }
   //agregado 24/09/25 **************************************************************
   _esSecuencia(nombre) {
   return nombre === "secuencia"; // o el nombre real de tu campo
   }
 
- /*cambiarPago(e) {
-    e.preventDefault();
-    console.log(e);
-    const id = e.currentTarget.dataset.id;
-    console.log(id);
-    const forma_actual = e.currentTarget.dataset.forma;
-    console.log(forma_actual);
-    
-    
-
-    if (!id || !forma_actual) {
-        alert("No se encontró el dato de forma de pago");
-        return;
-    }
-
-    let opciones = [];
-    if (forma_actual === 'E') opciones = ['D', 'T'];
-    else if (forma_actual === 'D') opciones = ['E', 'T'];
-    else if (forma_actual === 'T') opciones = ['E', 'D'];
-
-    //const nuevaForma = prompt(`Forma de pago actual: ${forma_actual}.\nElija una nueva: ${opciones.join(", ")}\nE (Efectivo), D(Debito), T(Transferencia)`);
-
-    const nuevaForma = prompt(`ELija Nueva Forma de Pago: ${opciones.join(", ")} `).toUpperCase();
-
-    if (nuevaForma && opciones.includes(nuevaForma)) {
-        fetch(`cambiar_forma_pago.php`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `id=${encodeURIComponent(id)}&forma_pago=${encodeURIComponent(nuevaForma)}`
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === "ok") {
-                alert("Forma de pago actualizada correctamente");
-                this._recargarComponente();
-            } else {
-                alert("Error: " + data.msg);
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Error en la solicitud");
-        });
-    }
-    else alert('Forma de pago incorrecta');
-}*/
+ 
 cambiarPago(e) {
   e.preventDefault();
   const id = e.currentTarget.dataset.id;
@@ -371,13 +340,12 @@ cambiarPago(e) {
     alert('Forma de pago incorrecta');
     return;
   }
-
-  // 💳 Si pasa de efectivo (E) a débito (D), abrir modal
-  if (forma_actual === 'E' && nuevaForma === 'D') {
+  // 💳 Si pasa a débito (D), abrir modal
+  if (nuevaForma === 'D') {
     this._abrirModalDebito(id, nuevaForma);
     return;
   }
-
+  else
   // Caso normal (sin modal)
   this._actualizarFormaPago(id, nuevaForma);
 }
@@ -410,6 +378,7 @@ _abrirModalDebito(id, nuevaForma) {
 }
 
 _actualizarFormaPago(id, nuevaForma, lote = "", cupon = "") {
+  console.log("id ",id," forma ", nuevaForma, " lote ", lote, " cupon ",cupon);
   const params = new URLSearchParams();
   params.append("id", id);
   params.append("forma_pago", nuevaForma);
