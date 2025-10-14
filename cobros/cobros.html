@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
 	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="cobros.js?v=8.0"></script>
+	<script type="text/javascript" src="cobros.js?v=9.0"></script>
 	<script type="text/javascript" src="tipos_cobros.js?v=5.0"></script>
 	<script type="text/javascript" src="../js/funciones.js"> </script>
 	
@@ -53,53 +53,65 @@
 		  		<form id="form_cobro" name="form_cobro"  method="post" accept-charset="utf-8">
 		  		<input id="idcobro" name="idcobro" style="display:none" type="text" />
 				
-				<div id="renglon">
+				<div class="linea">
 		  			<div id="columna1"><label>Fecha</label></div>
 		  			<div id="columna2"><label id="fecha_cobro" name="fecha_cobro"></label></div>
-		  			<div id="columna3"><label>Turno</label></div>
+		  			<div id="columna3"></div>
 		  			<div id="columna4">
-		  				<select id="turno" name="turno">
+		  				<!-- <select id="turno" name="turno">
 		  						<option value="1">1 - Mañana</option>
 		  						<option value="2">2 - Tarde</option>
-		  				</select>
+		  				</select> -->
 		  			</div>
 		  		</div>
-				<!-- <div id="renglon">
+				<!-- <div class="linea">
 		  			<div id="columna1"><label>Talonario Nro.</label></div>
 		  			<div id="columna2"><input type="text" id="talonario_nro" name="talonario_nro"  size="10"></div>
 		  		</div> -->
 				
-		  		<div id="renglon">
-		  			<div id="columna1"><label>Desde Ticket</label></div>
-		  			<div id="columna2"><input type="number" id="desde_ticket" name="desde_ticket"  size="10" readonly></div>
-		  			<div id="columna3"><label>Hasta Ticket</label></div>
-		  			<div id="columna4"><input type="number" id="hasta_ticket" name="hasta_ticket"  size="10"></div>
-		  		</div>
-
-				<div id="renglon">
+				<div class="linea">
 		  			<div id="columna1"><label>Concepto</label></div>
-		  			<div id="columna2"><select type="text" id="tipo_cobro" name="tipo_cobro" onchange="calculamonto(this.value)"></select></div>
+		  			<div id="columna2"><select type="text" id="tipo_cobro" name="tipo_cobro" onchange="evaluaCobro(this.value)"></select></div>
 		  		</div>
 
-				<div id="renglon">
+				<div id="porTalonario" style="display: none;">
+					<div class="linea">
+						<div id="columna1"><label>Desde Ticket</label></div>
+						<div id="columna2"><input type="number" id="desde_ticket" name="desde_ticket"  size="10" readonly></div>
+						<div id="columna3"><label>Hasta Ticket</label></div>
+						<div id="columna4"><input type="number" id="hasta_ticket" name="hasta_ticket"  size="10" onchange=calculaMontoT()></div>
+					</div>
+				</div>
+
+				<div id="sinTalonario" style="display: none;">
+					<div class="linea">
+						<div id="columna1"><label>Cantidad</label></div>
+						<div id="columna2"><input type="number" id="cantidad" name="cantidad"  size="10" onchange=calculaMontoST(this.value)></div>
+						<div id="columna3"></div>
+						<div id="columna4"></div>
+					</div>
+				</div>
+
+				
+				<div class="linea">
 		  			<div id="columna1"><label>Monto $</label></div>
 		  			<div id="columna2"><label id="monto" name="monto"></label></div>
 					<div id="columna3"><!-- <label>Importe $</label> --></div>
 		  			<div id="columna4"><!-- <label id="importe" name="importe"></label> --></div>
 		  		</div>
 
-		  		<div id="renglon">
+		  		<div class="linea">
 		  			<div id="columna1"><label>Total $</label></div>
 		  			<div id="columna2"><input type="text" id="efectivo" name="efectivo" size="10" readonly></div>
 		  			
 		  		</div> 
-				  <div id="renglon">
+				  <div class="linea">
 					<div id="columna1"><label>Observaciones</label></div>
 					<div id="columna234"><textarea id="observaciones" name="observaciones" rows="2" cols="50"></textarea></div>
 					
 				</div>
 
-				<div id="renglon">
+				<div class="linea">
 					<div id="columna4"><input type="button" id="guardar" onclick="guarda_cobro()" value="Aceptar"></div>
 				</div>
 		  	
@@ -118,12 +130,13 @@
 			<thead>
 				<tr>
 					<th>Nro.</th>
-					<th>Fecha</th>					
-					<th>Turno</th>					
+					<th>Fecha</th>		
+					<th>Concepto</th>				
+					<!-- <th>Turno</th>					 -->
 					<!-- <th>Talonario</th>					 -->
 					<th>Desde Ticket</th>					
 					<th>Hasta Ticket</th>					
-					<th>Concepto</th>					
+									
 					<th>Monto</th>					
 					<th width="150px">Acciones</th>
 				</tr>

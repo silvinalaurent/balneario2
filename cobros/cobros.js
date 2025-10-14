@@ -1,5 +1,5 @@
 /*Version: 3.0*/
-function establece_turno()
+/* function establece_turno()
 {
   var today = new Date();
   // obtener la hora en la configuración regional de EE. UU.
@@ -9,15 +9,13 @@ function establece_turno()
     { 
       console.log("es menor de 14");
       $('#lturno').text('Mañana');
- 
     }
   else
     { 
       $('#lturno').text('Tarde');
-
     }
  }
-
+ */
 
 function trae_cobros(tipooperacion,letras) {
 	 	//por fecha
@@ -37,8 +35,10 @@ function trae_cobros(tipooperacion,letras) {
                            {
                               var uncobro = cobros[i];
                               var fecha=convertDateFormat(uncobro.fecha);
+                              var desde= uncobro.ticket_desde=='0' ? '-' : uncobro.ticket_desde;
+                              var hasta= uncobro.ticket_hasta=='0' ? '-' : uncobro.ticket_hasta;
                               //+uncobro.talonario+"</td><td>"
-                              linea="<tr><td>" + uncobro.id+"</td><td>"+ fecha+"</td><td>"+uncobro.turno+"</td><td>"+uncobro.ticket_desde+"</td><td>"+uncobro.ticket_hasta+"</td><td>"+uncobro.concepto+"</td><td>"+uncobro.monto+ "</td> <td>";
+                              linea="<tr><td>" + uncobro.id+"</td><td>"+ fecha+"</td><td>"+uncobro.concepto+"</td><td>"+desde+"</td><td>"+hasta+"</td><td>"+uncobro.monto+ "</td> <td>";
                              /*  if (usuario==7 || usuario==1) 
                               {//admin o anabella
                                 linea=linea+"<a href='#' onclick='borra_cobro("+uncobro.id+")'><i class=\"icon-trash\"></i></a> "
@@ -155,18 +155,23 @@ function blanquea_cobro(){
     //$("#lturno").text('');
     $("#tipo_cobro").val('');
     $("#monto").text('');
-    $("#talonario").val('');
-    $("#ticket_desde").val('');
-    $("#ticket_hasta").val('');
+    $("#ticket_desde").val('0');
+    $("#ticket_hasta").val('0');
+    $("#cantidad").val('0');
     $("#observaciones").val('');
     $("#efectivo").val('');
     
   };
 
-function limpia_busqueda(){
-  
-    // limpiar formulario
-    //$("#buscatipocobro").val('');
+
+function limpia_calculos(){
+      // al cambiar el tipo de cobro
+    $("#monto").text('');
+    $("#ticket_desde").val('0');
+    $("#ticket_hasta").val('0');
+    $("#cantidad").val('0');
+    $("#observaciones").val('');
+    $("#efectivo").val('');
    };
 
 function agrega_cobro(d){
@@ -176,9 +181,7 @@ function agrega_cobro(d){
     var fechahoy=armaFecha2(hoy);
     $("#fecha_cobro").text(fechahoy);
     $("#tipo_cobro").focus();
-    ultimoticket().then(function(ultimo) {
-         $("#desde_ticket").val(parseInt(ultimo)+1);
-});
+    
 }
 
 /* 
@@ -238,7 +241,7 @@ function guarda_cobro() {
             let datos_enviados=false;
             var usuario=sessionStorage.getItem('Usuario');
             
-            if (($("#turno").val()!='') &&  ($("#efectivo").val()!='') && ($("#tipo_cobro").val()!='') && !datos_enviados )
+            if (($("#efectivo").val()!='') && ($("#tipo_cobro").val()!='') && !datos_enviados )
               {
                 datos_enviados=true;
                 var datos = $("form").serialize();
@@ -261,16 +264,10 @@ function guarda_cobro() {
                           success: function(cobro){
                                         if (cobro["error"]==0) {
                                            document.getElementById("cerrar-modal").checked =true;
-/*
-                                           //imprime pago
-                                           var idcobro= ultimocobro().then(r =>{
-                                              console.log("id Cobro ",r);
-                                              window.open("../cobros/imprimecobro.html?variable="+r,"_blank") 
-                                           
-                                            }).catch(() => {
-                                                    console.log('Algo salió mal');
-                                            });  
-*/
+                                           if ($("#tipo_cobro").val()!=12) 
+                                           {//se imprime comprobante para los demas cobros que no sean parrilla
+                                             window.open("../cobros/imprimecobro.html?variable="+cobro["ultimoid"],"_blank"); 
+                                           }
                                            trae_cobros(0, "");
                                         } 
                                         else{
@@ -300,31 +297,60 @@ function busca_cobros(){
 };
 
 
-function calculamonto(tipo_cobro)
+function evaluaCobro(tipo_cobro)
+//agregar que se blanque el formulario al cambio tipo de cobro
 {
+  limpia_calculos();
   var importe=obtiene_monto_tipo(tipo_cobro).then(r =>{
-  // controlar que haya valores de tickets
-        var monto= r;
-        $("#monto").text(monto);
-        var cantidad=0;
-        var hasta=parseInt($("#hasta_ticket").val());
-        var desde=parseInt($("#desde_ticket").val());
-        cantidad=hasta-desde+1;
-        var importe=cantidad*monto;
-        $("#importe").text(importe);
-        $("#efectivo").val(importe);
-        $("#debito").val(0);
-
-
-  }).catch(() => {
-                  console.log('Algo salió mal');
-                 });  
-                                                
+    var monto= r;
+    $("#monto").text(monto);
+    if (tipo_cobro=="12") //Parrillas 
+      {
+        //Por talonario
+        ultimoticket().then(function(ultimo) {
+         $("#desde_ticket").val(parseInt(ultimo)+1);
+        });
+        document.getElementById('porTalonario').style.display = 'block';
+        document.getElementById('sinTalonario').style.display = 'none';
+       
+      }
+      else
+      {
+        //Sin talonario emite comprobante y calcula por cantidad       
+        document.getElementById('sinTalonario').style.display = 'block';
+        document.getElementById('porTalonario').style.display = 'none'; 
+      }
+      }).catch(() => {
+                  console.log('Algo salió mal con el cobro');
+     });  
 }
+
+function calculaMontoT() 
+{
+      
+      var cantidad=0;
+      var monto = parseFloat($("#monto").text());
+      var hasta=parseInt($("#hasta_ticket").val());
+      var desde=parseInt($("#desde_ticket").val());
+      cantidad=hasta-desde+1;
+      var importe=cantidad*monto;
+      $("#efectivo").val(importe.toFixed(2));
+ 
+}
+function calculaMontoST(cantidad) 
+{
+      
+      if (cantidad >0)
+      {
+      var monto = parseFloat($("#monto").text());
+      var importe=cantidad*monto;
+      $("#efectivo").val(importe.toFixed(2));
+    }
+  }
 
 
 function imprime_cobro(idcobro) {
-      //primero busca los datos del cboro
+      //primero busca los datos del cobro
       $.ajax({
                       type: "POST",
                       url:"../cobros/cobros.php",
@@ -334,41 +360,38 @@ function imprime_cobro(idcobro) {
                       success: function(cobros){
  
                               var uncobro = cobros[0];
+                              console.log(uncobro);
                               var fecha=convertDateFormat(uncobro.fecha);
-                              if (uncobro.turno== '1')
-                                { 
-                                  var turno='1- Mañana';
-                                }
-                              else
-                                { 
-                                  var turno='2- Tarde';
-                                }
-                              
-                              var detalle='Talonario: '+uncobro.talonario+' Tickets: '+uncobro.ticket_desde+ '-' +uncobro.ticket_hasta;
+                                                           
+                              var detalle=''';
 
                               if (uncobro.observaciones != '')
                                 {
                                   detalle=detalle+'  '+uncobro.observaciones;
-                                } return
+                                } 
+                              var fecha_hora_impresion=fecha_hora_actual();
                               //original
                               console.log(uncobro.id);
+                              document.getElementById("secuencia").textContent=uncobro.idpago;
                               document.getElementById("idcobro").textContent=uncobro.id;
-                              document.getElementById("fecha").textContent=fecha;
-                              document.getElementById("turno").textContent=turno;
-                              document.getElementById("concepto").textContent=uncobro.concepto;
+                              document.getElementById("fecha").innerText=fecha;
+                              
+                              document.getElementById("concepto").innerText=uncobro.concepto;
                               document.getElementById("usuario").textContent=uncobro.usuario;
                               document.getElementById("observaciones").textContent=detalle;
                               document.getElementById("total").textContent=uncobro.monto;
+                              document.getElementById("fecha_hora").textContent=fecha_hora_impresion;
                               
                               //duplicado
+                              document.getElementById("secuenciad").textContent=uncobro.idpago;
                                document.getElementById("idcobrod").textContent=uncobro.id;
                               document.getElementById("fechad").textContent=fecha;
-                              document.getElementById("turnod").textContent=turno;
+                              
                               document.getElementById("conceptod").textContent=uncobro.concepto;
                               document.getElementById("usuariod").textContent=uncobro.usuario;
                               document.getElementById("observacionesd").textContent=detalle;
                               document.getElementById("totald").textContent=uncobro.monto;
-                              
+                              document.getElementById("fecha_horad").textContent=fecha_hora_impresion;
                               
                               
                       },
@@ -424,8 +447,9 @@ function ultimoticket() {
           
           resolve(0);
         } else {
-          
-          resolve(response[0].ultimo);
+          var ultimo = response[0].ultimo || response[0].ultimo_ticket || 0;
+          resolve(parseInt(ultimo) || 0);  
+         
         }
       },
       error: function(xhr, status, error) {

@@ -220,3 +220,16 @@ function numeroAPesos(num) {
         (centavos !== "00" ? " con " + centavos + "/100" : "")
     );
 }
+
+
+function fecha_hora_actual()
+{
+  const fechaActual = new Date();
+  const formatoArgentina = fechaActual.toLocaleString('es-AR', {
+                                dateStyle: 'short', // Formato de fecha (puede ser 'full', 'long', 'medium', 'short')
+                                timeStyle: 'short', // Formato de hora (puede ser 'full', 'long', 'medium', 'short')
+                                timeZone: 'America/Argentina/Buenos_Aires', // Asegura que respete el huso horario argentino
+                              });
+  return formatoArgentina;
+
+}

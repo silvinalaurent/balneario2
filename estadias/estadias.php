@@ -51,7 +51,7 @@ if ($accion == 1) {
 	# estado es N si es Normal o E si es eliminado  	 	
 	$query = "insert into estadias (idparcela, nrocarpa, idsector, fecha_ingreso,fecha_egreso,importe,detalleadicional,adicional,detalleadicional2,adicional2,detalleadicional3,adicional3, cantidad_personas, estado, tipo_alojamiento, patente, idturista, total,idusuario,descuento, observaciones, discapacidad, mascotas, fecha) values ('$idparcela','$nrocarpa','$idsector','$fechad','$fechah','$importe','$detalleadicional','$adicional','$detalleadicional2','$adicional2','$detalleadicional3','$adicional3','$cantidad','N','$tarifa', '$patente', '$idturista','$total','$idusuario','$descuento','$observaciones', '$discapacidad', '$mascotas','$fechaHora');";
 
-	$query .= "insert into pagos (fecha, idestadia, forma_pago,lote,cupon,importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',(select max(id) from estadias),'$forma_pago','$lote', '$cupon','$total','$idusuario','N','$fechaHora',0)";
+	$query .= "insert into pagos (fecha, idestadia,idcobro, forma_pago,lote,cupon,importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',(select max(id) from estadias),0,'$forma_pago','$lote', '$cupon','$total','$idusuario','N','$fechaHora',0)";
 
 	if (mysqli_multi_query($con, $query)) {
 		$ultimoid = mysqli_insert_id($con);
