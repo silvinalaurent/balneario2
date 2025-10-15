@@ -363,7 +363,7 @@ function imprime_cobro(idcobro) {
                               console.log(uncobro);
                               var fecha=convertDateFormat(uncobro.fecha);
                                                            
-                              var detalle=''';
+                              var detalle='';
 
                               if (uncobro.observaciones != '')
                                 {

@@ -185,7 +185,7 @@ export class RADReporte extends PolymerElement {
                       <template is="dom-if" if="[[ _esSecuencia(item.nombre) ]]">
                        <div class="itemvalor">
                           [[decimales(item.valor,item.nombre)]]
-                         
+                          <template is="dom-if" if="[[ !_esModificadoBool(renglon) ]]">                         
                             <a href="javascript:void(0)"
                               on-click="cambiarPago"
                               title="Cambiar Forma de Pago"
@@ -193,7 +193,7 @@ export class RADReporte extends PolymerElement {
                               data-forma$="[[renglon.forma]]">
                              <span class="lapiz"></span>
                             </a>
-                         
+                          </template>
                         </div>
                       </template>
                       <template is="dom-if" if="[[ !_esSecuencia(item.nombre) ]]">
@@ -313,6 +313,10 @@ export class RADReporte extends PolymerElement {
     }
     return "";
   }
+  //agregado 15/10
+  _esModificadoBool(renglon) {
+  return renglon.modificado && renglon.modificado == 1;
+}
   //agregado 24/09/25 **************************************************************
   _esSecuencia(nombre) {
   return nombre === "secuencia"; // o el nombre real de tu campo
@@ -439,7 +443,11 @@ _recargarComponente() {
 }
 
   _toArray(obj) {
-      return Object.keys(obj).map(function(key) {
+
+      return Object.keys(obj)
+       .filter(key => key !== "modificado")   // <-- excluir aquí
+      .map(function(key) {
+        
           return {
             nombre:key,
             valor:obj[key]
