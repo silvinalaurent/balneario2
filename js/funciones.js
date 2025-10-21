@@ -60,6 +60,20 @@ function formatearFecha(fecha) {
     return hoy;
   }
 
+  function diaSiguiente(elemento){
+    //pone fecha actual en imput tipo date
+    const hoy = new Date();
+    // Crear una nueva fecha sumando 1 día
+    const manana = new Date(hoy);
+    manana.setDate(hoy.getDate() + 1);
+    a = manana.getFullYear();
+    m = manana.getMonth() + 1;
+    d = manana.getDate();
+
+    const fechaFormateada = manana.toISOString().split('T')[0];
+    document.getElementById("fechah").value = fechaFormateada;
+    
+  }
   ////////////////////////////////////////////////
     function replaceAll( text, busca, reemplaza ){
       while (text.toString().indexOf(busca) != -1)

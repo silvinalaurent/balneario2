@@ -35,6 +35,28 @@ body
     font-size: 12px;
 }
 
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  font-weight: bold; 
+  /* Relleno de Color Suave */
+  background-color: #add5f5; /* Lila muy claro */
+  /* Indicador Visual y Accesibilidad */
+  outline: none; 
+  border-color: #130188; 
+  box-shadow: 0 0 5px rgba(106, 152, 250, 0.4) inset; 
+  /* Suavidad */
+  transition: all 0.3s ease; /* Transición para todos los cambios */
+}
+
+input[readonly] {
+  border: none;
+  font-weight: bold; 
+  background-color: transparent;   /* Fondo transparente para que se vea como texto de la página */
+  padding: 5px 0;                  /* Relleno vertical para dar espacio al borde */
+}
+
 /*Caracteristicas Encabezado*/
 
 header {
@@ -1309,3 +1331,22 @@ label {font-weight: bold}
 		height: auto;
 	}	
 }*/
+
+
+/* Estilo para la unidad MES */
+.tarifa-mes {
+  background-color: #A0FFA0; /* Un verde claro */
+  color: #106010; /* Un verde oscuro para el texto */
+  font-weight: bold;
+}
+
+/* Estilo para la unidad DIA (ejemplo) */
+.tarifa-dia {
+  background-color: #FFFFA0; /* Un amarillo claro */
+  color: #606010; /* Un color más oscuro para el texto */
+}
+
+/* Estilo por defecto o para otras unidades (ejemplo) */
+.tarifa-otros {
+  background-color: #F0F0F0; /* Gris claro */
+}

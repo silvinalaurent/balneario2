@@ -312,6 +312,7 @@ function evaluaCobro(tipo_cobro)
         });
         document.getElementById('porTalonario').style.display = 'block';
         document.getElementById('sinTalonario').style.display = 'none';
+        $("#hasta_ticket").focus();
        
       }
       else
@@ -319,6 +320,8 @@ function evaluaCobro(tipo_cobro)
         //Sin talonario emite comprobante y calcula por cantidad       
         document.getElementById('sinTalonario').style.display = 'block';
         document.getElementById('porTalonario').style.display = 'none'; 
+         $("#cantidad").focus();
+        
       }
       }).catch(() => {
                   console.log('Algo salió mal con el cobro');

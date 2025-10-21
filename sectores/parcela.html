@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="../js/funciones.js"></script>
 	<script type="text/javascript" src="../sectores/sectores.js?v=3.0"></script>
 	<script type="text/javascript" src="../sectores/parcelas.js?v=13.0"></script>
-	<script type="text/javascript" src="../tarifas/tarifas.js?v=3.0"></script>
+	<script type="text/javascript" src="../tarifas/tarifas.js?v=11.0"></script>
 	<script type="text/javascript" src="../turistas/turistas.js?v=11.0"></script>
 	<script type="text/javascript" src="../turistas/acompanantes.js?v=3.0"></script>
 	<script type="text/javascript" src="../ciudades/ciudades.js?v=3.0"></script>
@@ -152,20 +152,6 @@
 				  			
 				  		</div>
 						<div id="renglon">
-				  			<div id="columna1"><label>Fecha Desde</label></div>
-				  			<div id="columna2"><input type="date" id="fechad" name="fechad" onchange="calcula_dias()"></div>
-				  			<div id="columna3"><label>Fecha Hasta</label></div>
-				  			<div id="columna4"><input type="date" id="fechah" name="fechah" onchange="calcula_dias()"></div>
-				  		</div>
-						
-						<div id="nomodifica">
-							<div id="renglon">
-								<div id="columna1"><label>Dias</label></div>
-					  			<div id="columna2"><label id="dias" name="dias"></label></div>
-					  			<div id="columna3"><label>Nro. de personas</label></div>
-					  			<div id="columna4"><input type="number"  id="cantidad" name="cantidad" value="1" min="1" onchange="calculaestadia()"></div>
-					  		</div>
-							<div id="renglon">
 					  			<div id="columna1"><label>Tipo</label></div>
 					  			<div id="columna2"><select id="listadotarifas" name="listadotarifas" onchange="eligetarifa(this.value);"></select></div>
 					  			<div id="columna3"><label>Importe $</label></div>
@@ -173,6 +159,22 @@
 					  				<input type="text" id="importedias" name="importedias" readonly="readonly" size="10">
 						  			</div>
 					  		</div>
+						<div id="renglon">
+				  			<div id="columna1"><label>Fecha Desde</label></div>
+				  			<div id="columna2"><input type="date" id="fechad" name="fechad" onchange="calcula_dias()"></div>
+				  			<div id="columna3"><label>Fecha Hasta</label></div>
+				  			<div id="columna4"><input type="date" id="fechah" name="fechah" onchange="calcula_dias()"></div>
+				  		</div>
+						
+						<div id="nomodifica">
+
+							<div id="renglon">
+								<div id="columna1"><label>Dias</label></div>
+					  			<div id="columna2"><label id="dias" name="dias"></label></div>
+					  			<div id="columna3"><label>Nro. de personas</label></div>
+					  			<div id="columna4"><input type="number"  id="cantidad" name="cantidad" value="1" min="1" onchange="calculaestadia()"></div>
+					  		</div>
+							
 					  		<!-- datos primer adicional -->
 					  		<!-- <div id="renglon">
 					  			<div id="columna1"><label>Adicional 1</label></div>
