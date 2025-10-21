@@ -57,7 +57,7 @@ if ($accion == 1) {
 			$operacion = $_POST["operacion"];
 
 			if ($operacion == 0) {
-				$json = queryToJson($con, "select * from tarifas where baja=0 order by descripcion");
+				$json = queryToJson($con, "select * from tarifas where baja=0 order by unidad, descripcion");
 			} else
 					if ($operacion == 1) {
 				$caracteres = $_POST["caracteres"];

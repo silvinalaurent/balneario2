@@ -51,11 +51,22 @@ function lista_tarifas(nombreselector) {
                       dataType: "json",
                       async: true,
                       success: function(tarifas){
- 
+                          var claseEstilo;
+
+                           
                           for (var i in tarifas){
                               var unatarifa = tarifas[i];
-                              
-                              $("#"+nombreselector).append('<option value="'+unatarifa.id+'">'+unatarifa.descripcion+" - $ "+unatarifa.tarifa+'</option>');
+                              //mostra difrentes colores segun la unidad de la tarifa Diaria/Diaria por persona/Mensual
+                               // 1. Determinar la clase CSS a aplicar
+                            if (unatarifa.unidad == 'MES') {
+                                claseEstilo = 'tarifa-mes';
+                            } else if (unatarifa.unidad == 'DIA') {
+                                claseEstilo = 'tarifa-dia';
+                            } else {
+                                // Estilo por defecto para cualquier otra unidad (Diaria por persona, etc.)
+                                claseEstilo = 'tarifa-otros';
+                            }      
+                              $("#"+nombreselector).append('<option value="'+unatarifa.id+ '" class="' + claseEstilo +'">'+unatarifa.descripcion+" - $ "+unatarifa.tarifa+'</option>');
                                
                           }; 
                       },
@@ -64,7 +75,7 @@ function lista_tarifas(nombreselector) {
                       }
             });
 };
-
+ 
 
 function eligetarifa(idtarifa){
       $.ajax({
@@ -74,8 +85,23 @@ function eligetarifa(idtarifa){
                       dataType: "json",
                       async: true,
                       success: function(tarifas){
- 
+                              //modificado 14-10-25 
                               var unatarifa = tarifas[0];
+                              var unidadactual=localStorage.getItem("unidad_tarifa");
+                              //si pasa de una tarifa mensual a una tarifa dia o persona dia, debe refrescarse a la fecha a una cercana/ 1 dia mas
+                              if ((unidadactual=='MES') && (unatarifa.unidad=='DIA'))
+                              {
+                                    console.log('paso de mes a dia');
+                                   //como la fecha esta corrida un mes, hay que retrocederla
+                                   //permitir cambiarla quiar readonly
+                                   document.getElementById("fechah").readOnly = false;
+                                   //deberia blanquear dias
+                                   diaSiguiente("fechah");
+                                   //y recalcular dias
+                                   
+                                   calcula_dias();
+                              }
+                              
                               localStorage.setItem("unidad_tarifa", unatarifa.unidad);
                               localStorage.setItem("importe_tarifa", unatarifa.tarifa);
                               $("#importe").val(unatarifa.tarifa);
