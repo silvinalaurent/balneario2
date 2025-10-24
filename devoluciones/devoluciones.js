@@ -260,6 +260,14 @@ function blanquea(){
     $("#motivo").val('');
     
   };
+
+function limpia_devolucion()
+{
+  $("#idestadia").val('0');
+  $("#textoestadia").text('');
+  $("#importe").val(0); 
+  $("#idestadia").focus();
+}
  
 function limpia_busqueda(){
   

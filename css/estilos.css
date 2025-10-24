@@ -40,12 +40,11 @@ select:focus,
 textarea:focus,
 button:focus {
   font-weight: bold; 
-  /* Relleno de Color Suave */
-  background-color: #add5f5; /* Lila muy claro */
+  background-color: #d6e0e9; 
   /* Indicador Visual y Accesibilidad */
   outline: none; 
-  border-color: #130188; 
-  box-shadow: 0 0 5px rgba(106, 152, 250, 0.4) inset; 
+  border-color: #050322; 
+  box-shadow: 0 0 5px rgba(151, 177, 235, 0.4) inset; 
   /* Suavidad */
   transition: all 0.3s ease; /* Transición para todos los cambios */
 }
@@ -932,6 +931,12 @@ a:visited{
 	color: green;
 }
 
+.destacado
+{
+	font-weight: 600px;
+	
+	color: green;
+}
 .vencido
 {
 	font-weight: 600px;
@@ -957,6 +962,17 @@ a:visited{
 {
 	grid-column: 2;
 	grid-row: 1;
+}
+
+
+.compartido {
+  display: flex; /* Habilita el modo Flexbox */
+  
+  /* Distribuye los elementos para que haya espacio igual entre ellos */
+  justify-content: space-between; 
+  
+  /* O puedes usar 'gap' para una separación uniforme entre ítems (más simple) */
+  /* gap: 20px; */
 }
 
 #renglon
@@ -1280,7 +1296,11 @@ float:left;
 	height: auto;
 }
 
-label {font-weight: bold}
+label {
+	font-weight: bold;
+    vertical-align: top;
+
+}
 /*
 .formularios
 {

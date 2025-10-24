@@ -4,22 +4,22 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Parcela</title>
-	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
+	<link rel="stylesheet" href="../css/estilos.css?v=2.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
 	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
 	<script type="text/javascript" src="../js/sistema.js?v=5.0"></script>
 	<script type="text/javascript" src="../js/funciones.js"></script>
 	<script type="text/javascript" src="../sectores/sectores.js?v=3.0"></script>
 	<script type="text/javascript" src="../sectores/parcelas.js?v=13.0"></script>
-	<script type="text/javascript" src="../tarifas/tarifas.js?v=11.0"></script>
+	<script type="text/javascript" src="../tarifas/tarifas.js?v=12.0"></script>
 	<script type="text/javascript" src="../turistas/turistas.js?v=11.0"></script>
 	<script type="text/javascript" src="../turistas/acompanantes.js?v=3.0"></script>
 	<script type="text/javascript" src="../ciudades/ciudades.js?v=3.0"></script>
 	<script type="text/javascript" src="../ciudades/provincias.js?v=3.0"></script>
 	<script type="text/javascript" src="../ciudades/paises.js?v=3.0"></script>
-	<script type="text/javascript" src="../estadias/estadias.js?v=17.0"></script>
+	<script type="text/javascript" src="../estadias/estadias.js?v=18.0"></script>
 	<script type="text/javascript" src="../caja/caja.js?v=3.0"></script>
-	<script type="text/javascript" src="../adicionales/adicionales.js?v=3.0"></script>
+	<!-- <script type="text/javascript" src="../adicionales/adicionales.js?v=3.0"></script> -->
 	<script type="text/javascript" src="../descuentos/descuentos.js?v=3.0"></script>
 
 	<script type="text/javascript">	
@@ -34,14 +34,15 @@
 	 $( document ).ready(function() {
 			localStorage.setItem("unidad_tarifa", '');
 	 		var idparcela = getParameterByName('variable');
+			
 	 		document.getElementById("numeroparcela").textContent=idparcela;
 	 		$("#idparcela").val(idparcela);
-	 		lista_tarifas("listadotarifas");
+			lista_tarifas("listadotarifas");
 	 		lista_sectores("listasectores");
 	 		lista_provincias("provincia1");
 			lista_paises("pais");
-			lista_adicionales("detalleadicional");
-	 		lista_adicionales("detalleadicional2");
+			//lista_adicionales("detalleadicional");
+	 		//lista_adicionales("detalleadicional2");
 	 		lista_descuentos("descuento");
 			
 	 		//poner fecha actual en fechad
@@ -80,7 +81,7 @@
 	 			{
 	 				$('#suma_estadia').show();
 	 			}
-	
+			
 	    });      
 	
 		
@@ -155,8 +156,7 @@
 					  			<div id="columna1"><label>Tipo</label></div>
 					  			<div id="columna2"><select id="listadotarifas" name="listadotarifas" onchange="eligetarifa(this.value);"></select></div>
 					  			<div id="columna3"><label>Importe $</label></div>
-					  			<div id="columna4"><input type="text" id="importe" name="importe" readonly="readonly" size="10" onchange="calculaestadia();"><ins></ins>
-					  				<input type="text" id="importedias" name="importedias" readonly="readonly" size="10">
+					  			<div id="columna4"><input type="text" id="importe" name="importe" readonly="readonly" size="10" onchange="calculaestadia();">
 						  			</div>
 					  		</div>
 						<div id="renglon">
@@ -170,7 +170,8 @@
 
 							<div id="renglon">
 								<div id="columna1"><label>Dias</label></div>
-					  			<div id="columna2"><label id="dias" name="dias"></label></div>
+					  			<div id="columna2" class="compartido"><label id="dias" name="dias"></label>  <ins></ins>
+					  				<label id="importecalculado" name="importe calculado">   Importe   $   </label> <input class="destacado" type="text" id="importedias" name="importedias" readonly="readonly" size="10"></div>
 					  			<div id="columna3"><label>Nro. de personas</label></div>
 					  			<div id="columna4"><input type="number"  id="cantidad" name="cantidad" value="1" min="1" onchange="calculaestadia()"></div>
 					  		</div>
@@ -196,7 +197,7 @@
 					  		<!-- datos tercer adicional -->
 					  		<div id="renglon">
 					  			<div id="columna1"><label>Adicional</label></div>
-					  			<div id="columna2"><input type="text" id="detalleadicional3" name="detalleadicional3" size="40"></div>
+					  			<div id="columna2"><input type="text" id="detalleadicional3" name="detalleadicional3" placeholder="Ingrese detalle de adicional..." size="40"></div>
 					  			<div id="columna3"><label>Importe Adic. $</label></div>
 					  			<div id="columna4"><input type="text" id="adicional3" name="adicional3" size="10" onchange="calculaestadia()"></div>
 								
@@ -211,29 +212,6 @@
 					  			<div id="columna4"><label id="montodescuento" name="montodescuento" class="resaltado"></label></div>
 					  		</div>
 							
-							<div id="renglon">
-					  			<div id="columna1"><label>Total</label></div>
-					  			<div id="columna2"><label id="total" name="total" class="resaltado"></label></div>
-					  			<div id="columna3"><label for="forma_pago">Forma de Pago</label></div>
-				  				<div id="columna4">
-					  			<select id="forma_pago" onchange="datos_pago(this.value)">
-					  				<option value="E">EFECTIVO</option>
-					  				<option value="D">DEBITO</option>
-									<option value="T">TRANSFERENCIA</option>
-				  				</select>
-			  					</div>
-							</div>
-							
-							<div id="renglon" name="datos_debito" style="display: none;">
-								<div id="columna1"></div>
-								<div id="columna2"></div>
-								<div id="columna3"><label for="lote">Lote</label></div>
-								<div id="columna4">
-									<input type="number" id="lote" name="lote" size="5" >
-									<label for="cupon">Cupon</label>
-									<input type="number" id="cupon" name="cupon" size="10" >
-								</div>
-					  		</div>
 					  		<div id="renglon">
 					  			<div id="columna1"><label>Patente</label></div>
 					  			<div id="columna2"><input type="text" id="patente" name="patente" size="12" onblur="formatea_patente(this.value)"></div>
@@ -252,9 +230,34 @@
 					  		<div id="renglondoble">
 					  			<div id="columna1"><label>Observaciones</label></div>
 					  			<div id="columna234"><textarea id="observaciones" name="observaciones" cols="100" rows="3"></textarea></div>
-					  			
+					  		
+								
 			  			</div>
-							
+						<br>
+						<div id="renglon">
+					  			<div id="columna1"><label>Total</label></div>
+					  			<div id="columna2"><label id="total" name="total" class="resaltado"></label></div>
+					  			<div id="columna3"><label for="forma_pago">Forma de Pago</label></div>
+				  				<div id="columna4">
+					  			<select id="forma_pago" onchange="datos_pago(this.value)">
+					  				<option value="E">EFECTIVO</option>
+					  				<option value="D">DEBITO</option>
+									<option value="T">TRANSFERENCIA</option>
+				  				</select>
+			  					</div>
+							</div>
+
+							<div id="renglon" name="datos_debito" style="display: none;">
+								<div id="columna1"></div>
+								<div id="columna2"></div>
+								<div id="columna3"><label for="lote">Lote</label></div>
+								<div id="columna4">
+									<input type="number" id="lote" name="lote" size="5" >
+									<label for="cupon">Cupon</label>
+									<input type="number" id="cupon" name="cupon" size="10" >
+								</div>
+					  		</div>
+						<br>	
 							<div class="cuadro2">
 								<h3>Visitantes</h3> 
 									<div class="contenido">

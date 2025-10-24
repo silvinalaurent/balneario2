@@ -268,43 +268,52 @@ export class RADReporte extends PolymerElement {
     };
   };
 
-  ready(){
-    super.ready();
-    this.fecha = hoy();
-    var totaltemp=[];
+ready(){
+  super.ready();
+  this.fecha = hoy();
+  var totaltemp=[];
 
-    // genera paginas con elementos y totales
-    for (var i = 0; i <= (this.elementos.length / this.elementosxpagina) ; i++) {
-      var desde = i*this.elementosxpagina;
-      var elementostemp = this.elementos.slice(desde,desde+this.elementosxpagina);
-      //totales por pagina
-      for(var z in elementostemp){
-        var totalpagina = []
-        var elementotemp = elementostemp[z];
-        for(var y in elementotemp){
-          if(elementostemp[z].reportetipo!="separador"){
-            if(this.totales.indexOf(y)>=0){
-              totaltemp[y] = totaltemp[y]==undefined?0.00:totaltemp[y];
-              totaltemp[y]+=parseFloat(elementotemp[y]);
-            }else{
-              totaltemp[y]="";
-            };
+  // genera paginas con elementos y totales
+  for (var i = 0; i <= (this.elementos.length / this.elementosxpagina) ; i++) {
+    var desde = i*this.elementosxpagina;
+    var elementostemp = this.elementos.slice(desde,desde+this.elementosxpagina);
+    
+    //totales por pagina
+    for(var z in elementostemp){
+      var totalpagina = []
+      var elementotemp = elementostemp[z];
+      
+      // Usar las mismas claves que _toArray (excluir "modificado")
+      var keysVisibles = Object.keys(elementotemp).filter(key => key !== "modificado");
+      
+      for(var y of keysVisibles){
+        if(elementostemp[z].reportetipo!="separador"){
+          if(this.totales.indexOf(y)>=0){
+            totaltemp[y] = totaltemp[y]==undefined?0.00:totaltemp[y];
+            totaltemp[y]+=parseFloat(elementotemp[y]);
+          }else{
+            totaltemp[y]="";
           };
         };
-        for(var x in totaltemp){
-          totalpagina.push(parseFloat(totaltemp[x]).toFixed(2));
-        };
       };
-      this.push("paginas",{elementos:elementostemp,totales:totalpagina});
+      
+      totalpagina = [];
+      for(var x of keysVisibles){
+        if(totaltemp[x] !== undefined && totaltemp[x] !== ""){
+          totalpagina.push(parseFloat(totaltemp[x]).toFixed(2));
+        } else {
+          totalpagina.push("");
+        }
+      }
     };
-    
-    afterNextRender(this, () => {
-      var prueba = this.shadowRoot.querySelectorAll(".renglon .caja6 .titulo");
-      console.log(prueba);
-    });
-
+    this.push("paginas",{elementos:elementostemp,totales:totalpagina});
   };
-
+  
+  afterNextRender(this, () => {
+    var prueba = this.shadowRoot.querySelectorAll(".renglon .caja6 .titulo");
+    console.log(prueba);
+  });
+}
   //agregado 9/10
   _esModificado(renglon) {
     // Verifica si el campo "modificados" existe y tiene valor 1

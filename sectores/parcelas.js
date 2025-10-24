@@ -204,9 +204,7 @@ function calcula_dias() {
 function calculaestadia()
 
 {
-  console.log("CALCULA COSTO ESTADIA");
   const unidad_tarifa = localStorage.getItem("unidad_tarifa");
-
   var dias= document.getElementById("dias").textContent;
   if (dias=='') {dias=0};
   var tarifa= document.getElementById("importe").value;
@@ -220,65 +218,51 @@ function calculaestadia()
   */ 
   var adicional=0;
   var adicional2=0;
- var adicional3= document.getElementById("adicional3").value;
+  var adicional3= document.getElementById("adicional3").value;
   if (adicional3=='') {adicional3=0};
-    
   var importe_estadia=0;
-  
   if (unidad_tarifa=='DIA')
   {
-    console.log("unidad dia");
-    importe_estadia=parseFloat(tarifa)*parseInt(dias);
+     importe_estadia=parseFloat(tarifa)*parseInt(dias);
   }
   else  
   {
     if (unidad_tarifa=='PERSONA-DIA')
     //si el tipo de alojamiento elegido es uno que tiene unidad de cobro por dia por persona
       {
-        console.log("unidad persona dia");
         var personas= parseInt(document.getElementById("cantidad").value);
         if (personas >=0)
         {
-
           importe_estadia= parseFloat(tarifa)*parseInt(dias)*personas;  
         }
       }
     else
     {
       if (unidad_tarifa=='MES')
-        
         //si el tipo de alojamiento elegido es uno que tiene unidad de cobro por mes
         {
-          console.log("unidad mes");
           importe_estadia= parseFloat(tarifa);
           //si es por mes la fecha de egreso se puede calcular sumando un mes a fecha de ingreso
           let fecha_ingreso= document.getElementById('fechad').value;
           let fecha_egreso = new Date(fecha_ingreso); // 10 de junio de 2024
           // Incrementar un mes
           fecha_egreso.setMonth(fecha_egreso.getMonth() + 1);
-          
           let fechaFormateada = armaFecha(fecha_egreso);
           document.getElementById("fechah").value = fechaFormateada;
           //calcula_dias();
         }
     }
   }
-  console.log("Importe estadia ",importe_estadia);
   document.getElementById("importedias").value=importe_estadia;
   //document.getElementById("adicionaldias").value= parseFloat(adicional)*parseInt(dias);
   //document.getElementById("adicional2dias").value= parseFloat(adicional2)*parseInt(dias);
-  
   var totalestadia= importe_estadia+parseInt(dias)*parseFloat(adicional)+parseInt(dias)*parseFloat(adicional2)+parseFloat(adicional3);
   var montodescuento=0;
 
   montodescuento= totalestadia * parseFloat(descuento)/100;
-  console.log('Descuento ',descuento, ' montodescuento ',montodescuento);
-  
-
   
   totalestadia= totalestadia - montodescuento;
   
-
   document.getElementById("montodescuento").textContent=montodescuento;
   document.getElementById("total").textContent=totalestadia;
 }; 

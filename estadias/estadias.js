@@ -209,6 +209,8 @@ function lista_estadias(nombreselector) {
 
 
 function busca_estadia(idestadia) {
+  if (idestadia!='0')
+  {
   if (sin_devolucion(idestadia))
   {
       $.ajax({
@@ -227,6 +229,7 @@ function busca_estadia(idestadia) {
                       if (unaestadia.estado=='N')
                       {
                         //Controlar que la estadia sea reciente (2/3 dias)
+                        //O podria chequear si la estadia esta activa si no lo esta 
                         if (esFechaValida(unaestadia.fecha_ingreso,3)) 
                         {
                           $("#textoestadia").text("Secuencia: "+unaestadia.id+"- Parcela "+unaestadia.idparcela+" - Turista "+unaestadia.apellido+" "+unaestadia.nombres+" - Forma de pago: "+unaestadia.forma_pago+ "\n Importe $ "+ unaestadia.total +" Fecha de ingreso: "+ convertDateFormat(unaestadia.fecha_ingreso)+ "  Fecha de egreso: "+ convertDateFormat(unaestadia.fecha_egreso));
@@ -236,17 +239,18 @@ function busca_estadia(idestadia) {
                         }
                         else
                           alert('No se puede realizar devolucion de esta estadia');
+                          limpia_devolucion();
                         }
                       else
+                      {
                         alert('No se puede realizar devolucion de esta estadia');
+                        limpia_devolucion();
+                        }
                     }
                     else
                     {
                       alert("No existe una estadia "+idestadia+", por favor introduzca nuevamente el dato");
-                      $("#idestadia").val('');
-                      $("#textoestadia").text('');
-                      $("#importe").val(0); 
-                      $("#fecha").focus();
+                      limpia_devolucion();
                     }
               },
               error: function (obj, error, objError){
@@ -260,6 +264,7 @@ function busca_estadia(idestadia) {
       $("#idestadia").val('');
       $("#idestadia").focus;
     }
+  }  
 };
 
 function busca_estadias() {
@@ -643,7 +648,8 @@ function agrega_estadia(parcela)
     blanquea_formulario();
     $("#numeroparcela2").val(parcela);
     $("#idparcela").val(parcela);
-    $('#nrocarpa').focus();
+    $("#nrocarpa").val(parcela);
+    $('#listadotarifas').focus();
 };
 
 
@@ -654,9 +660,7 @@ function chequea_estadia()
    var fechah=$("#fechah").val();
    if (fechah >= fechad)
    { 
-      
       calcula_dias()
-
    }
    else
       alert("Por favor, corrija las fechas");
@@ -729,14 +733,9 @@ function envio_mail_estadia(idestadia, idturista)
                 },
                 error: function (obj, error, objError){
                     alert(error);//avisar que ocurrió un error
-                    
           }
-
       });
-
   }
-  
-
 }
 
 function guarda_estadia()

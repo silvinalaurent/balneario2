@@ -88,6 +88,17 @@ function eligetarifa(idtarifa){
                               //modificado 14-10-25 
                               var unatarifa = tarifas[0];
                               var unidadactual=localStorage.getItem("unidad_tarifa");
+                              const inputFecha = $("#fechah");
+                              if (unatarifa.unidad=="MES")
+                              {
+                                    $("#dias").text('30');//la cantidad de dias es 30
+                                    inputFecha.prop("readonly", true);
+                                    $("#cantidad").focus();
+                              }
+                              else{
+                                    inputFecha.prop("readonly", false);
+                                    $("#fechah").focus();
+                              }
                               //si pasa de una tarifa mensual a una tarifa dia o persona dia, debe refrescarse a la fecha a una cercana/ 1 dia mas
                               if ((unidadactual=='MES') && (unatarifa.unidad=='DIA'))
                               {
@@ -97,11 +108,8 @@ function eligetarifa(idtarifa){
                                    document.getElementById("fechah").readOnly = false;
                                    //deberia blanquear dias
                                    diaSiguiente("fechah");
-                                   //y recalcular dias
-                                   
-                                   calcula_dias();
+                                   $("#dias").text('1');//la cantidad de dias por defecto es 1, debera corregirla el usuario en fechah
                               }
-                              
                               localStorage.setItem("unidad_tarifa", unatarifa.unidad);
                               localStorage.setItem("importe_tarifa", unatarifa.tarifa);
                               $("#importe").val(unatarifa.tarifa);
