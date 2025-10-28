@@ -103,7 +103,7 @@ if ($accion == 1) {
 					if ($operacion == 13) {
 						//para imprimir recibo de devolucion
 						$id = $_POST["caracteres"];
-						$json = queryToJson($con, "select devoluciones.*, CONCAT('Parcela:',estadias.idparcela,' ', turistas.apellido,' ', turistas.nombres,' de ',estadias.fecha_ingreso, ' a ', estadias.fecha_egreso, ' $ ', estadias.total) as datos_estadia from devoluciones left join estadias on devoluciones.idestadia= estadias.id left join turistas on estadias.idturista=turistas.id where devoluciones.id='$id'");
+						$json = queryToJson($con, "select devoluciones.*, CONCAT(' Nro:',estadias.id,' ','Parcela:',estadias.idparcela,' ', turistas.apellido,' ', turistas.nombres,' de ',estadias.fecha_ingreso, ' a ', estadias.fecha_egreso, ' $ ', estadias.total) as datos_estadia from devoluciones left join estadias on devoluciones.idestadia= estadias.id left join turistas on estadias.idturista=turistas.id where devoluciones.id='$id'");
 					}
 				}
 			}

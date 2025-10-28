@@ -208,64 +208,6 @@ function lista_estadias(nombreselector) {
 
 
 
-function busca_estadia(idestadia) {
-  if (idestadia!='0')
-  {
-  if (sin_devolucion(idestadia))
-  {
-      $.ajax({
-              type: "POST",
-              url:"../estadias/estadias.php",
-              data: {accion:4, operacion:17, idestadia:idestadia},
-              dataType: "json",
-              async: false,
-              success: function(estadias){
-                  
-                    if (estadias.length!=undefined)
-                    {
-                      var unaestadia = estadias[0];
-                      //controles
-                      //Controlar que el pago asociado tenga estado N: Normal
-                      if (unaestadia.estado=='N')
-                      {
-                        //Controlar que la estadia sea reciente (2/3 dias)
-                        //O podria chequear si la estadia esta activa si no lo esta 
-                        if (esFechaValida(unaestadia.fecha_ingreso,3)) 
-                        {
-                          $("#textoestadia").text("Secuencia: "+unaestadia.id+"- Parcela "+unaestadia.idparcela+" - Turista "+unaestadia.apellido+" "+unaestadia.nombres+" - Forma de pago: "+unaestadia.forma_pago+ "\n Importe $ "+ unaestadia.total +" Fecha de ingreso: "+ convertDateFormat(unaestadia.fecha_ingreso)+ "  Fecha de egreso: "+ convertDateFormat(unaestadia.fecha_egreso));
-                          $("#importe").val(unaestadia.total);
-                          //sessionStorage.setItem('forma_pago_estadia', unaestadia.forma_pago);
-                          sessionStorage.setItem('importe_estadia', unaestadia.total);
-                        }
-                        else
-                          alert('No se puede realizar devolucion de esta estadia');
-                          limpia_devolucion();
-                        }
-                      else
-                      {
-                        alert('No se puede realizar devolucion de esta estadia');
-                        limpia_devolucion();
-                        }
-                    }
-                    else
-                    {
-                      alert("No existe una estadia "+idestadia+", por favor introduzca nuevamente el dato");
-                      limpia_devolucion();
-                    }
-              },
-              error: function (obj, error, objError){
-                  alert(error);//avisar que ocurrió un error
-              }
-    });
-  }
-  else
-    {
-      alert("Esta estadia ya tiene devolucion hecha");
-      $("#idestadia").val('');
-      $("#idestadia").focus;
-    }
-  }  
-};
 
 function busca_estadias() {
       // busca estadias para listado de estadias

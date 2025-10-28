@@ -263,10 +263,14 @@ function blanquea(){
 
 function limpia_devolucion()
 {
-  $("#idestadia").val('0');
+  $("#idestadia").val('');
   $("#textoestadia").text('');
   $("#importe").val(0); 
-  $("#idestadia").focus();
+
+  setTimeout(() => {
+      $("#idestadia").focus();
+    }, 50); // Un retardo de 0ms (o un poco más como 50ms si 0 no funciona)
+  
 }
  
 function limpia_busqueda(){
@@ -353,9 +357,9 @@ function guarda_devolucion() {
 
                     });
             }
-            else
-                alert('Complete los datos correctamente, por favor');
           }
+          else
+                alert('Complete los datos correctamente, por favor');
 };
 
 function filtrar_devoluciones(texto) {
@@ -364,7 +368,6 @@ function filtrar_devoluciones(texto) {
 
 function sin_devolucion(idestadia){
   //se controla que no se haya hecho ya una devolucion
-
   var resp=true;
   $.ajax({
     type: "POST",
@@ -385,6 +388,69 @@ function sin_devolucion(idestadia){
     }); 
   return resp; 
   };
+
+function busca_estadia(idestadia) {
+  if (idestadia!='')
+  {
+  if (sin_devolucion(idestadia))
+  {
+      $.ajax({
+              type: "POST",
+              url:"../estadias/estadias.php",
+              data: {accion:4, operacion:17, idestadia:idestadia},
+              dataType: "json",
+              async: false,
+              success: function(estadias){
+                  
+                    if (estadias.length!=undefined)
+                    {
+                      var unaestadia = estadias[0];
+                      //controles
+                      //Controlar que el pago asociado tenga estado N: Normal
+                      if (unaestadia.estado=='N')
+                      {
+                        console.log('pago en estado normal');
+                        //Controlar que la estadia sea reciente (2/3 dias)
+                        //O podria chequear si la estadia esta activa si no lo esta 
+                        if (esFechaValida(unaestadia.fecha_ingreso,3)) 
+                        {
+                          console.log('fecha valida de estadia');
+                          $("#textoestadia").text("Secuencia: "+unaestadia.id+"- Parcela "+unaestadia.idparcela+" - Turista "+unaestadia.apellido+" "+unaestadia.nombres+" - Forma de pago: "+unaestadia.forma_pago+ "\n Importe $ "+ unaestadia.total +" Fecha de ingreso: "+ convertDateFormat(unaestadia.fecha_ingreso)+ "  Fecha de egreso: "+ convertDateFormat(unaestadia.fecha_egreso));
+                          $("#importe").val(unaestadia.total);
+                          //sessionStorage.setItem('forma_pago_estadia', unaestadia.forma_pago);
+                          sessionStorage.setItem('importe_estadia', unaestadia.total);
+                        }
+                        else
+                        {
+                          alert('No se puede realizar devolucion de esta estadia');
+                          limpia_devolucion();
+                        }
+                      }
+                      else
+                      {
+                        alert('No se puede realizar devolucion de esta estadia');
+                        limpia_devolucion();
+                        }
+                    }
+                    else
+                    {
+                      alert("No existe una estadia "+idestadia+", por favor introduzca nuevamente el dato");
+                      limpia_devolucion();
+                    }
+              },
+              error: function (obj, error, objError){
+                  alert(error);//avisar que ocurrió un error
+              }
+    });
+  }
+  else
+    {
+      alert("Esta estadia ya tiene devolucion hecha");
+      limpia_devolucion();
+    }
+  }  
+};
+
   
 function chequea_importe_devolucion()
 //se controla que no se cargue un importe mayor al de la estadia

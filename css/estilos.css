@@ -1370,3 +1370,17 @@ label {
 .tarifa-otros {
   background-color: #F0F0F0; /* Gris claro */
 }
+
+
+.renglon
+{
+	display: grid;
+	grid-template-columns: 15% 35% 15% 35% ;
+	grid-template-rows: auto;
+	height: 3em;
+}
+
+#textoestadia{
+height: 1em;
+}
+	
