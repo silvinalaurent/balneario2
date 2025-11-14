@@ -27,7 +27,7 @@ function trae_tarifas(tipooperacion,letras) {
                            if (i >= 0)
                            {
         							        var unatarifa = tarifas[i];
-                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
+                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+unatarifa.id+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
 
       							       } 
         							 
@@ -78,6 +78,8 @@ function lista_tarifas(nombreselector) {
  
 
 function eligetarifa(idtarifa){
+    //hay que modificar para obtener el precio que corresponde al periodo actual
+
       $.ajax({
                       type: "POST",
                       url:"../tarifas/tarifas.php",
@@ -108,6 +110,7 @@ function eligetarifa(idtarifa){
                                    document.getElementById("fechah").readOnly = false;
                                    //deberia blanquear dias
                                    diaSiguiente("fechah");
+                                   document.getElementById("fechah").value = diaSiguiente;
                                    $("#dias").text('1');//la cantidad de dias por defecto es 1, debera corregirla el usuario en fechah
                               }
                               localStorage.setItem("unidad_tarifa", unatarifa.unidad);
@@ -153,6 +156,7 @@ function blanquea_formulario(){
    
     // limpiar formulario
     $("#descripcion").val('');
+    $("#unidad").val('DIA');
     $("#precio").val('');
     
   };
@@ -177,6 +181,7 @@ function modifica_tarifa(tarifa){
     blanquea_formulario();
     $("#idtarifa").val((tarifa.id).toString());
     $("#descripcion").val(tarifa.descripcion);
+    $("#unidad").val(tarifa.unidad);
     $("#precio").val(tarifa.tarifa);
     document.getElementById("mostrar-modal").checked =true;
 };
@@ -243,3 +248,98 @@ function filtrar(texto) {
 };
 
 
+function precios_tarifa(idtarifa)
+{
+        
+    $("#idtarifaprecio").val(idtarifa);
+    // deberia mostrar descripcion de la tarifa
+    // precio actual y vencimiento
+    //la fecha de inicio deberia ser el dia despues del la fultima fecha de fin
+    //y la fecha de fin 6 meses
+
+    $("#fecha_inicio").val('2025-07-01');
+    $("#fecha_fin").val('2025-12-31');
+
+    //buscarultimoprecio(idtarifa);
+    document.getElementById("mostrar-modal2").checked =true;    
+
+};
+
+
+function buscarultimoprecio(idtarifa)
+{
+      $.ajax({
+                      type: "POST",
+                      url:"../tarifas/precios.php",
+                      data: {accion:4, operacion:1, caracteres:idtarifa},
+                      dataType: "json",
+                      async: true,
+                      success: function(precio){
+                              //evalua si encontro algun precio para esa tarifa
+                              if (Object.keys(precio).length === 0) {
+                                    console.log("El JSON está vacío");
+                            } else {
+                                console.log("El JSON tiene datos");
+                                var unprecio = precio[0];
+                                 $("#idtarifa").val(idtarifa);
+                                 $("#fecha_inicio").val(diaSiguienteFecha(precio.fecha_fin));
+
+                            }   
+                      
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                      }
+            });
+  };
+
+
+
+function guarda_precio() {
+            
+        //controlar que la fecha de fin no sea inferior a la fecha de inicio
+
+            if ( $("#precio").val()!='')
+            {
+                var datos = $("#form_precio").serialize();
+                
+                var ac=1;
+                 		
+                               
+                datos = datos + "&accion="+ac;
+                
+
+                $.ajax({      
+                          type: "post",
+                          url:"precios.php",
+                          data:datos,
+                          dataType: "json",
+                          async: true,
+                    
+                          success: function(tarifas){
+                                 
+                                        if (tarifas["error"]==0) {
+
+                                           document.getElementById("cerrar-modal2").checked =true;
+
+                                         
+                                           //$("#modal").hide();
+                                           //trae_tarifas(0, "");
+
+                                        } 
+                                        else{
+                                            alert(tarifas["valor"]);
+                                            
+                                        };                  
+                          },
+                    
+                          error: function (obj, error, objError){
+                              alert(error);//avisar que ocurrió un error
+                              
+                          }
+
+                    });
+            }
+            else
+                alert('Complete el nombre por favor');
+};

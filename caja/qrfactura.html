@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Visualizacion de QRFactura para Cobro en Caja</title>
+
+	<link rel="stylesheet" href="css/framesp.css">
+
+	<style>
+		
+		*{
+			margin:0;
+			padding:0;
+			box-sizing: content-box;
+		}
+
+		iframe {
+			width: 100vw;
+			height: 100vh;
+		}
+
+		#qrfactura{
+			background-color: white;
+			position: fixed;
+			top: calc(50vh - 100px);
+			left: calc(50vw - 100px);
+			box-shadow: 0 0 20px 20px white;
+			z-index: 10000;
+		}
+
+		#textoqr{
+			background-color: white;
+			position: fixed;
+			top: calc(43vh - 100px);
+			font-size: 28px;
+			font-family: "arial";
+			box-shadow: 0 0 20px 20px white;
+			z-index: 10000;
+		}
+
+	</style>
+</head>
+<body>
+	<!-- <input type="button" id="botonpantallacompleta" value="pantalla completa" onclick="fullscreen()">
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br> -->
+	<iframe src="https://www.youtube.com/embed?listType=playlist&list=PLmZfvE26HV6zESKmXD7gJUMN2JyiR56KK&autoplay=1&loop=1&mute=1&controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+	</iframe>
+	<div class="renglon horizontal-centro">
+		<div class="caja10 horizontal-centro texto-centro">
+			<div id="textoqr"></div>
+		</div>
+		<div class="caja10 horizontal-centro">
+			<div id="qrfactura"></div>
+		</div>
+	</div>
+</body>
+<script src="js/jquery-3.1.0.min.js"></script>
+<script type='text/javascript' src="js/jquery.qrcode-0.10.1.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-database.js"></script>
+
+
+
+<script>
+	function fullscreen() {
+		document.documentElement.webkitRequestFullScreen();
+	}
+
+	// Your web app's Firebase configuration
+	var config = {
+	    "apiKey": "AIzaSyB2aVF_nUpK0HQSSwt3KwaEmtN3H9kz5T0",
+	    "authDomain": "msjrealtime-a8d98.firebaseapp.com",
+	    "databaseURL": "https://msjrealtime-a8d98.firebaseio.com",
+	    "projectId": "msjrealtime-a8d98",
+	    "storageBucket": "msjrealtime-a8d98.appspot.com",
+	    "messagingSenderId": "1072585235140",
+	    "appId": "1:1072585235140:web:e9b75a6a151aa51d754791"
+	}
+
+	firebase.initializeApp(config);
+	var realtime = firebase.database();
+
+	var nrocaja = '';
+	if(localStorage.getItem("_nrocaja")){
+		var nrocaja = localStorage.getItem("_nrocaja");
+	};
+
+	caja = prompt("Ingrese Nro. de Caja:",nrocaja);
+	localStorage.setItem("_nrocaja",caja);
+	caja = "caja"+caja;
+
+	$("#textoqr").hide();
+	$("#qrfactura").hide();
+	var contenedorqr = realtime.ref("qrfactura/"+caja+"/");
+	contenedorqr.on("value",function(s){
+		var qr = s.val();
+		console.log(qr);
+		//for(var x in qr){
+			total = parseFloat(qr.qr.substr(99,parseInt(qr.qr.substr(97,2))));
+			$("#qrfactura").qrcode({
+				"render": "image",
+			    "size": 200,
+			    "color": "#3a3",
+				"text":qr.qr
+			});
+			$("#qrfactura").show();
+			$("#textoqr").append(`
+				Cobro por $${total}
+			`);
+			$("#textoqr").show();
+
+			window.setTimeout(function(){
+				contenedorqr.set({"qr":{}});
+				$("#qrfactura").hide();
+				$("#qrfactura").html("");
+				$("#textoqr").hide();
+				$("#textoqr").html("");
+			},20000)
+		//};
+	});
+
+
+</script>
+00
+</html>

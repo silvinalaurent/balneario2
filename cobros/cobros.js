@@ -264,7 +264,7 @@ function guarda_cobro() {
                           success: function(cobro){
                                         if (cobro["error"]==0) {
                                            document.getElementById("cerrar-modal").checked =true;
-                                           if ($("#tipo_cobro").val()!=12) 
+                                           if ($("#tipo_cobro").val()!=12)//para online es 10
                                            {//se imprime comprobante para los demas cobros que no sean parrilla
                                              window.open("../cobros/imprimecobro.html?variable="+cobro["ultimoid"],"_blank"); 
                                            }

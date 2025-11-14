@@ -7,8 +7,9 @@
 	<title>Tarifas</title>
 	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
-	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
 	<script type="text/javascript" src="tarifas.js?v=3.0"></script>
+	<script type="text/javascript" src="../js/funciones.js?v=3.0"></script>
 	
 
 
@@ -51,11 +52,21 @@
 			  			<div id="columna1"><label>Descripcion</label></div>
 			  			<div id="columna2"><input type="text" id="descripcion" name="descripcion" value="" size="50"></div>
 			  		</div>
-			  		<div id="renglon">
+					<div id="renglon">
+			  			<div id="columna1"><label>Unidad</label></div>
+			  			<div id="columna2">
+							<select id="unidad" name="unidad">
+								<option	value="DIA">DIA</option>	
+								<option	value="PERSONA-DIA">PERSONA-DIA</option>	
+								<option	value="MES">MES</option>	
+							</select>
+						</div>
+					</div>
+					<!-- <div id="renglon">
 			  			<div id="columna1"><label>Tarifa</label></div>
-			  			<div id="columna2"><input type="text" id="precio" name="precio" value=""></div>
+			  			<div id="columna2"><input type="text" id="precio" name="precio" value="0"></div>
 			  			</div>
-					
+					 -->
 			  		<div id="renglon">
 						<div id="columna4"><input type="button" id="guardar" onclick="guarda_tarifa()" value="Aceptar"></div>
 					</div>
@@ -64,6 +75,47 @@
 		</div>		
 					  	
 
+
+
+				
+		<input id="mostrar-modal2" name="modal" type="radio" /> 
+	  	
+			
+		<div id="modal">
+				<input id="cerrar-modal2" name="modal" type="radio" /> 
+				<label for="cerrar-modal2"> X </label> 
+			  	<div id="precio_tarifa">
+			  		<h2>Precio de Tarifas</h2>
+			
+			  		<form id="form_precio" name="form_precio"  method="post" accept-charset="utf-8">
+					<input id="idtarifaprecio" name="idtarifaprecio" style="display:none" type="text" />
+			  		<input id="idprecio" name="idprecio" style="display:none" type="text" />
+					
+					<!-- <div id="renglon">
+			  			<div id="columna1"><label>Descripcion</label></div>
+			  		</div> -->
+					<div id="renglon">
+			  			<div id="columna1"><label>Inicio</label></div>
+			  			<div id="columna2">
+							<input type="date" id="fecha_inicio" name="fecha_inicio">
+						</div>
+						<div id="columna3"><label>Fin</label></div>
+			  			<div id="columna4">
+							<input type="date" id="fecha_fin" name="fecha_fin">
+						</div>
+					</div>
+					<div id="renglon">
+			  			<div id="columna1"><label>Precio</label></div>
+			  			<div id="columna2"><input type="text" id="precio" name="precio" value="0"></div>
+			  			</div>
+					
+			  		<div id="renglon">
+						<div id="columna4"><input type="button" id="guardar" onclick="guarda_precio()" value="Aceptar"></div>
+					</div>
+			 	 	</form>
+				</div>
+		</div>		
+					  	
 		<div class="tablas">
 				
 			<table id="tabla" name="tabla" class="tabla">
