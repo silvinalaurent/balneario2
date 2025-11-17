@@ -63,16 +63,17 @@ if ($accion == 1) {
 			$operacion = $_POST["operacion"];
 
 			if ($operacion == 0) {
-				$json = queryToJson($con, "select * from tarifas  where baja=0 order by unidad, descripcion");
-				//select * from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where baja=0 and  CURDATE() between fecha_inicio and fecha_fin order by unidad, descripcion"
+				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin order by tarifas.unidad, tarifas.descripcion");
+
+				//"select * from tarifas  where baja=0 order by unidad, descripcion"
 			} else
 					if ($operacion == 1) {
 				$caracteres = $_POST["caracteres"];
-				$json = queryToJson($con, "select * from tarifas where id = '$caracteres'");
+				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin and tarifas.id = '$caracteres'");
 			} else {
 				$caracteres = $_POST["caracteres"];
 
-				$json = queryToJson($con, "select * from tarifas where descripcion LIKE '%$caracteres%'  ORDER BY descripcion");
+				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin and descripcion LIKE '%$caracteres%'  ORDER BY descripcion");
 			}
 		}
 	}
