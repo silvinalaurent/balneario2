@@ -10,10 +10,9 @@ function convertDateFormat(string) {
   
 
 function trae_tarifas(tipooperacion,letras) {
-	 		
-	 		$("#tabla tbody").html("");
-	    
-   		$.ajax({
+	 	//para Tarifas.html	
+	 	$("#tabla tbody").html("");
+	    $.ajax({
                   
                       type: "POST",
                       url:"tarifas.php",
@@ -43,6 +42,7 @@ function trae_tarifas(tipooperacion,letras) {
 };
 
 function lista_tarifas(nombreselector) {
+    //trae las tarifas actuales
       $("#"+nombreselector).append('<option value="0">Ninguno</option>');
       $.ajax({
                       type: "POST",
