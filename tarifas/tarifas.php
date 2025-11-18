@@ -63,7 +63,7 @@ if ($accion == 1) {
 			$operacion = $_POST["operacion"];
 
 			if ($operacion == 0) {
-				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin order by tarifas.unidad, tarifas.descripcion");
+				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa, fecha_inicio, fecha_fin from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin order by tarifas.unidad, tarifas.descripcion");
 
 				//"select * from tarifas  where baja=0 order by unidad, descripcion"
 			} else

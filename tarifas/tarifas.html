@@ -23,7 +23,7 @@
 
 
 <body>
-	<div id="generalchico">
+	<div id="general">
 		<h2>Tarifas</h2>
 		
 			
@@ -91,9 +91,10 @@
 					<input id="idtarifaprecio" name="idtarifaprecio" style="display:none" type="text" />
 			  		<input id="idprecio" name="idprecio" style="display:none" type="text" />
 					
-					<!-- <div id="renglon">
-			  			<div id="columna1"><label>Descripcion</label></div>
-			  		</div> -->
+					<div id="renglon">
+			  			<div id="columna1">Datos de la tarifa</div>
+						<div id="columna234"><label id="descripcion_tarifa" style="width: 150px;"></label></div>
+			  		</div> 
 					<div id="renglon">
 			  			<div id="columna1"><label>Inicio</label></div>
 			  			<div id="columna2">
@@ -123,7 +124,9 @@
 					<tr>
 						<th width="60%">Descripcion</th>					
 						<th>Unidad</th>
-						<th>Tarifa</th>					
+						<th>Tarifa</th>		
+						<th>Fecha Inicio</th>		
+						<th>Fecha Fin</th>					
 						<th>Acciones</th>
 					</tr>
 				</thead>

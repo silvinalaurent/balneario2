@@ -5,8 +5,6 @@ function convertDateFormat(string) {
   return info[2] + '/' + info[1] + '/' + info[0];
 };
 
-
-
   
 
 function trae_tarifas(tipooperacion,letras) {
@@ -26,7 +24,7 @@ function trae_tarifas(tipooperacion,letras) {
                            if (i >= 0)
                            {
         							        var unatarifa = tarifas[i];
-                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+unatarifa.id+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
+                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td>"+unatarifa.fecha_inicio+ "</td><td>"+unatarifa.fecha_fin+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+JSON.stringify(unatarifa)+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
 
       							       } 
         							 
@@ -248,17 +246,39 @@ function filtrar(texto) {
 };
 
 
-function precios_tarifa(idtarifa)
+function precios_tarifa(tarifa)
 {
-        
-    $("#idtarifaprecio").val(idtarifa);
+    console.log(tarifa);    
+    $("#idtarifaprecio").val(tarifa.idtarifa);
     // deberia mostrar descripcion de la tarifa
     // precio actual y vencimiento
     //la fecha de inicio deberia ser el dia despues del la fultima fecha de fin
     //y la fecha de fin 6 meses
+    $("#descripcion_tarifa").html(tarifa.descripcion+', $' +tarifa.tarifa+' '+tarifa.unidad+' '+ tarifa.fecha_inicio + ' '+tarifa.fecha_fin);
+    //calcular nuevas fechas
+    //obtener el semestre ultimo y calcular el nuevo
 
-    $("#fecha_inicio").val('2025-07-01');
-    $("#fecha_fin").val('2025-12-31');
+    let fecha = new Date(tarifa.fecha_fin);
+    let anio = fecha.getFullYear();
+    let mes = fecha.getMonth() + 1; // Suma 1 porque los meses van de 0 (enero) a 11 (diciembre)
+    let dia = fecha.getDate();
+
+    if (mes>=7) {
+        //segundo semestre, se disponen las fechas para el siguiente semestre de principio de año
+        anio=anio+1;
+        var fecha_inicio=anio+'-01-01';
+        var fecha_fin= anio+'-06-30';
+    }
+    else
+    {
+        //primer semestre, se disponen las fechas para siguiente de semestre de la segunda parte del año
+        var fecha_inicio=anio+'-07-01';
+        var fecha_fin= anio+'-12-31';
+    }
+
+
+    $("#fecha_inicio").val(fecha_inicio);
+    $("#fecha_fin").val(fecha_fin);
 
     //buscarultimoprecio(idtarifa);
     document.getElementById("mostrar-modal2").checked =true;    
