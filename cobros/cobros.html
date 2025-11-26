@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
 	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="cobros.js?v=10.0"></script>
+	<script type="text/javascript" src="cobros.js?v=11.0"></script>
 	<script type="text/javascript" src="tipos_cobros.js?v=6.0"></script>
 	<script type="text/javascript" src="../js/funciones.js?v=2.0"> </script>
 	
@@ -86,7 +86,7 @@
 				<div id="sinTalonario" style="display: none;">
 					<div class="linea">
 						<div id="columna1"><label>Cantidad</label></div>
-						<div id="columna2"><input type="number" id="cantidad" name="cantidad"  size="10" onchange=calculaMontoST(this.value)></div>
+						<div id="columna2"><input type="number" id="cantidad" name="cantidad" min="1" size="5" onchange=calculaMontoST(this.value)></div>
 						<div id="columna3"></div>
 						<div id="columna4"></div>
 					</div>

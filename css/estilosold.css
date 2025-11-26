@@ -394,9 +394,9 @@ footer .contenedor {
 .cuadro2
 {
 	background-color: var(--colormasclaro);
-	width: 90%;
+	width: 9d0%;
 	padding: 10px;
-	margin-bottom:  20px;
+	margin-bottom: : 20px;
 	margin-top: 10px;
 	margin-left: 20px;
 	margin-right: 20px;
@@ -1384,3 +1384,119 @@ label {
 height: 1em;
 }
 	
+
+
+/* --- INICIO DE NUEVO CODIGO PARA MODALES --- */
+
+/* 1. Diseño base compartido (para no repetir código) */
+.ventana-modal {
+  opacity: .99;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  position: fixed;
+  top: -300vh; /* Oculto por defecto arriba */
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  transition: all .5s;
+  z-index: 50;
+  line-height: 3.5em;
+}
+
+/* Centrado de texto genérico dentro del modal */
+.ventana-modal p {
+  width: 60%;
+  height: 40%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+/* 2. Botones para ABRIR (Labels +) */
+#mostrar-modal, #mostrar-modal2, #mostrar-modal3 {
+  display: none; /* Ocultar los radio buttons */
+}
+
+#mostrar-modal + label, #mostrar-modal2 + label, #mostrar-modal3 + label {
+  display: table;
+  margin: auto; 
+  color: #000;
+  font-size: 16pt;
+  line-height: 2em; /* Ajustado para el + */
+  text-transform: uppercase;
+  cursor: pointer;
+}
+/* Ajuste especifico para modal2 y 3 si el line-height era distinto */
+#mostrar-modal2 + label, #mostrar-modal3 + label {
+    line-height: 1em; 
+}
+
+/* 3. Botones para CERRAR (Labels X) */
+#cerrar-modal, #cerrar-modal2, #cerrar-modal3 {
+  display: none; /* Ocultar los radio buttons */
+}
+
+/* Estilo del botón X */
+#cerrar-modal + label, #cerrar-modal2 + label, #cerrar-modal3 + label {
+  position: absolute;
+  top: 1em;
+  right: 2em;
+  z-index: 100;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  background: tomato;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  border-radius: 50%;
+  transition: all .5s;
+}
+
+/* MOSTRAR EL BOTON DE CERRAR SOLO SI ESTA ABIERTO EL MODAL CORRESPONDIENTE */
+#mostrar-modal:checked ~ #cerrar-modal + label,
+#mostrar-modal2:checked ~ #cerrar-modal2 + label,
+#mostrar-modal3:checked ~ #cerrar-modal3 + label {
+  display: block;
+}
+
+
+/* --- 4. LOGICA DE APERTURA Y CIERRE (LO IMPORTANTE) --- */
+
+/* === MODAL 1: TARIFAS === */
+/* Abrir */
+#mostrar-modal:checked ~ #modal-tarifa {
+  top: 0px;
+}
+/* Cerrar */
+#cerrar-modal:checked ~ #modal-tarifa {
+  top: -300vh;
+}
+
+/* === MODAL 2: PRECIOS === */
+/* Abrir */
+#mostrar-modal2:checked ~ #modal-precio {
+  top: 0px;
+}
+/* Cerrar */
+#cerrar-modal2:checked ~ #modal-precio {
+  top: -300vh;
+}
+
+/* === MODAL 3: EGRESO (Si lo usas, recuerda cambiar el ID en el HTML a id="modal-egreso") === */
+/* Abrir */
+#mostrar-modal3:checked ~ #modal-egreso {
+  top: 0px;
+}
+/* Cerrar */
+#cerrar-modal3:checked ~ #modal-egreso {
+  top: -300vh;
+}
+
+/* --- FIN DE NUEVO CODIGO PARA MODALES --- */

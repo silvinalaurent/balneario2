@@ -72,8 +72,16 @@ function formatearFecha(fecha) {
 
     const fechaFormateada = manana.toISOString().split('T')[0];
     document.getElementById("fechah").value = fechaFormateada;
-    
+    //acoplamiento arreglar  
   }
+
+function diaSiguienteFecha(fecha){
+    //aumenta en un dia la fecha recibida
+    const fechatratada = new Date(fecha);
+    fechatratada.setDate(hoy.getDate() + 1);
+    return fechatratada;
+  }
+
   ////////////////////////////////////////////////
     function replaceAll( text, busca, reemplaza ){
       while (text.toString().indexOf(busca) != -1)

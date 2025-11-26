@@ -91,7 +91,7 @@ function muestra_estadias(fecha) {
   var cantidadg=0;//cantidad de guardas
   var cantidadt=0;//cantidad total
   var parcela=0;
-
+//incorporar control de horario 10:00 18:00
   $.ajax({
                   type: "POST",
                   url:"../estadias/estadias.php",
@@ -151,6 +151,9 @@ function muestra_estadias(fecha) {
                                   //estadia vencida
                                   document.getElementById(unaestadia.idparcela).style.backgroundColor="#A349A4";
                                   cantidada=cantidada+1;//cuenta vencidos
+                                   //agregar si tiene media estadia paga
+                                   //chequear horario
+
 
                                 }
                             }
