@@ -1,12 +1,5 @@
 /*Version: 3.0*/
 
-function convertDateFormat(string) {
-  var info = string.split('-');
-  return info[2] + '/' + info[1] + '/' + info[0];
-};
-
-  
-
 function trae_tarifas(tipooperacion,letras) {
 	 	//para Tarifas.html	
 	 	$("#tabla tbody").html("");
@@ -16,15 +9,20 @@ function trae_tarifas(tipooperacion,letras) {
                       url:"tarifas.php",
                       data: {accion:4, operacion:tipooperacion, caracteres:letras},
                       dataType: "json",
-                      async: true,
+                      async: false,
                       success: function(tarifas){
- 
-        							    for (var i in tarifas){
-        					     
+						 for (var i in tarifas){
                            if (i >= 0)
                            {
-        							        var unatarifa = tarifas[i];
-                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td>"+unatarifa.fecha_inicio+ "</td><td>"+unatarifa.fecha_fin+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+JSON.stringify(unatarifa)+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
+        				    var unatarifa = tarifas[i];
+
+                            var fecha_inicio='';
+                            if (unatarifa.fecha_inicio!=null) { 
+                                fecha_inicio=convertDateFormat(unatarifa.fecha_inicio);}
+                            var fecha_fin='';
+                            if (unatarifa.fecha_fin!=null) {
+                                fecha_fin=convertDateFormat(unatarifa.fecha_fin);}
+                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td>"+fecha_inicio+ "</td><td>"+fecha_fin+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+JSON.stringify(unatarifa)+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
 
       							       } 
         							 
@@ -123,19 +121,15 @@ function eligetarifa(idtarifa){
   };
 
 function borra_tarifa(id){
-
  		$.ajax({
-                  
                       type: "POST",
                       url:"tarifas.php",
                       data: {accion:3, codigo:id},
                       dataType: "json",
                       async: true,
                       success: function(tarifas){
- 							            if (tarifas.error == 0){
+ 					     if (tarifas.error == 0){
                             trae_tarifas(0,"");
-                            
-       
                           }
                           else{
                             alert(tarifas.valor);
@@ -145,13 +139,11 @@ function borra_tarifa(id){
                       error: function (obj, error, objError){
                           alert(error);//avisar que ocurrió un error
                       }
-
             });
 };	
 
 
 function blanquea_formulario(){
-   
     // limpiar formulario
     $("#descripcion").val('');
     $("#unidad").val('DIA');
@@ -160,22 +152,20 @@ function blanquea_formulario(){
   };
 
 function limpia_busqueda(){
-  
     // limpiar formulario
     $("#buscadescripcion").val('');
-   };
+};
 
 function agrega_tarifa(d){
     blanquea_formulario();
     $("#descripcion").focus();
     $("#idtarifa").val('0');
-    //setTimeout(function() {initialize();}, 2000);  
+   
 };
 
 
 function modifica_tarifa(tarifa){
-   //ver forma de mostrar modal, como si se hubiera  presionado sobre agregar tarifa, evento css
-    
+   
     blanquea_formulario();
     $("#idtarifa").val((tarifa.id).toString());
     $("#descripcion").val(tarifa.descripcion);
@@ -218,11 +208,14 @@ function guarda_tarifa() {
                                         if (tarifas["error"]==0) {
 
                                            document.getElementById("cerrar-modal").checked =true;
-
-                                         
-                                           //$("#modal").hide();
-                                           trae_tarifas(0, "");
-
+                                           if (ac==1){
+                                                console.log(tarifas["data"])
+                                                precios_tarifa(tarifas["data"]);
+                                            }
+                                           else
+                                             trae_tarifas(0, "");
+                                           
+   
                                         } 
                                         else{
                                             alert(tarifas["valor"]);
@@ -236,6 +229,7 @@ function guarda_tarifa() {
                           }
 
                     });
+                      
             }
             else
                 alert('Complete el nombre por favor');
@@ -248,13 +242,13 @@ function filtrar(texto) {
 
 function precios_tarifa(tarifa)
 {
-    console.log(tarifa);    
-    $("#idtarifaprecio").val(tarifa.idtarifa);
-    // deberia mostrar descripcion de la tarifa
-    // precio actual y vencimiento
-    //la fecha de inicio deberia ser el dia despues del la fultima fecha de fin
-    //y la fecha de fin 6 meses
-    $("#descripcion_tarifa").html(tarifa.descripcion+', $' +tarifa.tarifa+' '+tarifa.unidad+' '+ tarifa.fecha_inicio + ' '+tarifa.fecha_fin);
+    console.log(tarifa);
+    console.log(tarifa.id);
+    $("#idtarifaprecio").val(tarifa.id);
+    var descripcion_tarifa=tarifa.descripcion+', $' +tarifa.tarifa+' '+tarifa.unidad+' ';
+    if (tarifa.fecha_inicio!=null)
+            descripcion_tarifa=descripcion_tarifa+tarifa.fecha_inicio + ' '+tarifa.fecha_fin;
+    $("#descripcion_tarifa").html(descripcion_tarifa);
     //calcular nuevas fechas
     //obtener el semestre ultimo y calcular el nuevo
 
@@ -281,7 +275,7 @@ function precios_tarifa(tarifa)
     $("#fecha_fin").val(fecha_fin);
 
     //buscarultimoprecio(idtarifa);
-    document.getElementById("mostrar-modal2").checked =true;    
+    document.getElementById("mostrar-modal3").checked =true;    
 
 };
 
@@ -322,13 +316,8 @@ function guarda_precio() {
             if ( $("#precio").val()!='')
             {
                 var datos = $("#form_precio").serialize();
-                
                 var ac=1;
-                 		
-                               
                 datos = datos + "&accion="+ac;
-                
-
                 $.ajax({      
                           type: "post",
                           url:"precios.php",
@@ -340,12 +329,9 @@ function guarda_precio() {
                                  
                                         if (tarifas["error"]==0) {
 
-                                           document.getElementById("cerrar-modal2").checked =true;
-
-                                         
-                                           //$("#modal").hide();
-                                           //trae_tarifas(0, "");
-
+                                           document.getElementById("cerrar-modal3").checked =true;
+                                           trae_tarifas(0, "");
+                            
                                         } 
                                         else{
                                             alert(tarifas["valor"]);

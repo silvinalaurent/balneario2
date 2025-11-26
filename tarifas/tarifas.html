@@ -35,55 +35,13 @@
 				
 			</div>
 		</form>	
-			
-		<input id="mostrar-modal" name="modal" type="radio" /> 
-	  	<label for="mostrar-modal" onclick="agrega_tarifa()"><h3>+</h3></label>
-			
-		<div id="modal">
-				<input id="cerrar-modal" name="modal" type="radio" /> 
-				<label for="cerrar-modal"> X </label> 
-			  	<div id="tarifa">
-			  		<h2>Tarifas</h2>
-			
-			  		<form id="form_tarifa" name="form_tarifa"  method="post" accept-charset="utf-8">
-			  		<input id="idtarifa" name="idtarifa" style="display:none" type="text" />
-					
-					<div id="renglon">
-			  			<div id="columna1"><label>Descripcion</label></div>
-			  			<div id="columna2"><input type="text" id="descripcion" name="descripcion" value="" size="50"></div>
-			  		</div>
-					<div id="renglon">
-			  			<div id="columna1"><label>Unidad</label></div>
-			  			<div id="columna2">
-							<select id="unidad" name="unidad">
-								<option	value="DIA">DIA</option>	
-								<option	value="PERSONA-DIA">PERSONA-DIA</option>	
-								<option	value="MES">MES</option>	
-							</select>
-						</div>
-					</div>
-					<!-- <div id="renglon">
-			  			<div id="columna1"><label>Tarifa</label></div>
-			  			<div id="columna2"><input type="text" id="precio" name="precio" value="0"></div>
-			  			</div>
-					 -->
-			  		<div id="renglon">
-						<div id="columna4"><input type="button" id="guardar" onclick="guarda_tarifa()" value="Aceptar"></div>
-					</div>
-			 	 	</form>
-				</div>
-		</div>		
-					  	
-
-
-
+		
+		
+		<input id="mostrar-modal3" name="modal" type="radio" /> 
 				
-		<input id="mostrar-modal2" name="modal" type="radio" /> 
-	  	
-			
 		<div id="modal">
-				<input id="cerrar-modal2" name="modal" type="radio" /> 
-				<label for="cerrar-modal2"> X </label> 
+				<input id="cerrar-modal3" name="modal" type="radio" /> 
+				<label for="cerrar-modal3"> X </label> 
 			  	<div id="precio_tarifa">
 			  		<h2>Precio de Tarifas</h2>
 			
@@ -116,6 +74,50 @@
 			 	 	</form>
 				</div>
 		</div>		
+		
+		<div>
+			<input id="mostrar-modal" name="modal" type="radio" /> 
+			<label for="mostrar-modal" onclick="agrega_tarifa()"><h3>+</h3></label>
+				
+			<div id="modal">
+					<input id="cerrar-modal" name="modal" type="radio" /> 
+					<label for="cerrar-modal"> X </label> 
+					<div id="tarifa">
+						<h2>Tarifas</h2>
+				
+						<form id="form_tarifa" name="form_tarifa"  method="post" accept-charset="utf-8">
+						<input id="idtarifa" name="idtarifa" style="display:none" type="text" />
+						
+						<div id="renglon">
+							<div id="columna1"><label>Descripcion</label></div>
+							<div id="columna2"><input type="text" id="descripcion" name="descripcion" value="" size="50"></div>
+						</div>
+						<div id="renglon">
+							<div id="columna1"><label>Unidad</label></div>
+							<div id="columna2">
+								<select id="unidad" name="unidad">
+									<option	value="DIA">DIA</option>	
+									<option	value="PERSONA-DIA">PERSONA-DIA</option>	
+									<option	value="MES">MES</option>	
+								</select>
+							</div>
+						</div>
+						<!-- <div id="renglon">
+							<div id="columna1"><label>Tarifa</label></div>
+							<div id="columna2"><input type="text" id="precio" name="precio" value="0"></div>
+							</div>
+						-->
+						<div id="renglon">
+							<div id="columna4"><input type="button" id="guardar" onclick="guarda_tarifa()" value="Aceptar"></div>
+						</div>
+						</form>
+					</div>
+			</div>		
+					  	
+
+		</div>
+
+				
 					  	
 		<div class="tablas">
 				
