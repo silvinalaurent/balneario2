@@ -9,6 +9,7 @@
   --colorocupado: #FA161B;
   --colorrodado: #8e2a1f;
   --colorvencido: #A349A4;
+  --colorvencehoy: #f107f5;
   --colorguarda: #FF8000;
 
 }
@@ -1178,6 +1179,14 @@ a:visited{
 	border: none;
 }
 
+.estilovencehoy
+{ 
+	height: 25px;
+	width: 25px;
+	text-align: center;
+	background-color: var(--colorvencehoy);
+	border: none;
+}
 .estiloinvitado
 { 
 	height: 25px;

@@ -9,7 +9,7 @@ function trae_tarifas(tipooperacion,letras) {
                       url:"tarifas.php",
                       data: {accion:4, operacion:tipooperacion, caracteres:letras},
                       dataType: "json",
-                      async: false,
+                      async: true,
                       success: function(tarifas){
 						 for (var i in tarifas){
                            if (i >= 0)

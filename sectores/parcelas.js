@@ -87,11 +87,13 @@ function muestra_estadias(fecha) {
   var cantidadc=0;//cantidad de carpas
   var cantidadr=0;//cantidad de motorhome/trailer/casilla
   var cantidada=0;//cantidad vencidos
+  var cantidadvh=0;//cantidad vence hoy
   var cantidadi=0;//cantidad de invitados
   var cantidadg=0;//cantidad de guardas
   var cantidadt=0;//cantidad total
   var parcela=0;
 //incorporar control de horario 10:00 18:00
+//estabelcer si tiene media estadia
   $.ajax({
                   type: "POST",
                   url:"../estadias/estadias.php",
@@ -147,12 +149,47 @@ function muestra_estadias(fecha) {
                                   }
                                 }
                                 else 
-                                {
-                                  //estadia vencida
-                                  document.getElementById(unaestadia.idparcela).style.backgroundColor="#A349A4";
-                                  cantidada=cantidada+1;//cuenta vencidos
-                                   //agregar si tiene media estadia paga
-                                   //chequear horario
+                                {// vence hoy
+                                  //hay que tomar en cuenta la hora
+                                  if (unaestadia.fecha_egreso == fecha)  
+                                  {
+                                    let ahora = new Date();
+                                    let hora = ahora.getHours();      // 0–23
+                                    if (hora<10) {
+                                        //no vencio aun, pero vence hoy
+                                        document.getElementById(unaestadia.idparcela).style.backgroundColor="#f107f5";
+                                              cantidadvh=cantidadvh+1;//cuenta vencidos
+                                    } 
+                                    else{
+                                      //chequear si tiene media estadia
+                                      if (unaestadia.adicional3=='MEDIA ESTADIA')
+                                        {
+                                            if (hora<18)
+                                            {
+                                            //no vencio aun, pero vence hoy
+                                              document.getElementById(unaestadia.idparcela).style.backgroundColor="#f107f5";
+                                              cantidadvh=cantidadvh+1;//cuenta vencidos
+                                            }
+                                            else
+                                            {
+                                              //vencida
+                                              document.getElementById(unaestadia.idparcela).style.backgroundColor="#A349A4";
+                                              cantidada=cantidada+1;//cuenta vencidos
+                                            }        
+                                        } 
+                                      else
+                                        {
+                                          //vencida
+                                          document.getElementById(unaestadia.idparcela).style.backgroundColor="#A349A4";
+                                          cantidada=cantidada+1;//cuenta vencidos
+                                        }   
+                                    }
+                                  }
+                                  else
+                                  {//estadia vencida 
+                                    document.getElementById(unaestadia.idparcela).style.backgroundColor="#A349A4";
+                                    cantidada=cantidada+1;//cuenta vencidos
+                                  }
 
 
                                 }
@@ -166,6 +203,7 @@ function muestra_estadias(fecha) {
                       $("#vencidos").text(cantidada);
                       $("#invitados").text(cantidadi);
                       $("#guardas").text(cantidadg);
+                      $("#vencehoy").text(cantidadvh);
                     }; 
                   },
                   error: function (obj, error, objError){

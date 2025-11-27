@@ -31,6 +31,7 @@
 		    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 		}
 		
+	
 	 $( document ).ready(function() {
 			localStorage.setItem("unidad_tarifa", '');
 	 		var idparcela = getParameterByName('variable');
@@ -195,11 +196,19 @@
 					  			</div>
 					  		</div> -->
 					  		<!-- datos tercer adicional -->
+							 <div id="renglon">
+					  			<div id="columna1"><input type="checkbox" name="mediaestadia" id="mediaestadia"></div>
+					  			<div id="columna2"><label for="mediaestadia">MEDIA ESTADIA</label></div>
+					  			<div id="columna3"></div>
+					  			<div id="columna4"></div>
+								
+					  		</div>
 					  		<div id="renglon">
-					  			<div id="columna1"><label>Adicional</label></div>
+					  			<div id="columna1">
+									<label>Adicional</label></div>
 					  			<div id="columna2"><input type="text" id="detalleadicional3" name="detalleadicional3" placeholder="Ingrese detalle de adicional..." size="40"></div>
 					  			<div id="columna3"><label>Importe Adic. $</label></div>
-					  			<div id="columna4"><input type="text" id="adicional3" name="adicional3" size="10" value="MEDIA ESTADIA" onchange="calculaestadia()"></div>
+					  			<div id="columna4"><input type="text" id="adicional3" name="adicional3" size="10"  onchange="calculaestadia()"></div>
 								
 					  		</div>
 					  		<div id="renglon">
@@ -403,6 +412,23 @@
 					};
 	            });
 
+
+document.getElementById("mediaestadia").addEventListener("change", function() {
+    if (this.checked) {
+        //ponemos el texto media estadia en adicional 3 y calculamos la mitad de un dia
+		var importe=parseFloat($("#importe").val())/2;
+		$("#detalleadicional3").val('MEDIA ESTADIA');
+		$("#adicional3").val(importe);
+		$("#observaciones").val('Vale hasta las 18 hs');
+
+    } else {
+        //limpiamos el texto de adicional 3 y eliminamos el importe
+		$("detalleadicional3").val('');
+		$("#adicional3").val(0);
+		$("#observaciones").val('');
+    }
+	calculaestadia();
+});
 </script>
 
 </body>
