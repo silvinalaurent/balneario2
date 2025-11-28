@@ -155,14 +155,16 @@ function muestra_estadias(fecha) {
                                   {
                                     let ahora = new Date();
                                     let hora = ahora.getHours();      // 0–23
+                                    
                                     if (hora<10) {
                                         //no vencio aun, pero vence hoy
+                                    
                                         document.getElementById(unaestadia.idparcela).style.backgroundColor="#f107f5";
                                               cantidadvh=cantidadvh+1;//cuenta vencidos
                                     } 
                                     else{
                                       //chequear si tiene media estadia
-                                      if (unaestadia.adicional3=='MEDIA ESTADIA')
+                                      if (unaestadia.detalleadicional3=='MEDIA ESTADIA')
                                         {
                                             if (hora<18)
                                             {
@@ -196,8 +198,7 @@ function muestra_estadias(fecha) {
                             }
                           parcela=unaestadia.idparcela;
                       };
-                      //console.log("cantidad total ",cantidadt)
-                      //console.log("Carpas ",cantidadc,' Reservas', cantidadr,' Vencidos', cantidada);
+                      
                       $("#carpas").text(cantidadc);
                       $("#rodados").text(cantidadr);
                       $("#vencidos").text(cantidada);
@@ -418,11 +419,8 @@ if ((parcela >=1) && (parcela <= 500))
                       async: true,
                       success: function(parcelas){
                           unaparcela = parcelas[0];
-                          console.log(unaparcela);
-                          if (unaparcela.estado == "L"){
-                            console.log("la parcela esta disponible");
-                            
-                            resolve(true);
+                           if (unaparcela.estado == "L"){
+                             resolve(true);
                           }      
                           else 
                             resolve(false);
@@ -441,7 +439,6 @@ else
 
 function limpia_parcelas(){
       var hoy = new Date().toISOString();
-      console.log("hoy ", hoy);
       var contador=0;
       var liberados=0;
       $.ajax({
@@ -456,7 +453,6 @@ function limpia_parcelas(){
                                 if (unaparcela.estado=='O')
                                 {           
                                     var parcela=unaparcela.numero;
-                                    console.log("Parcela ",parcela);
                                     contador=contador+1;
                                     $.ajax({
                                           type: "POST",
@@ -482,7 +478,7 @@ function limpia_parcelas(){
                                 }        
                               
                           }; 
-                          console.log("Estadias total ",contador, " liberados ", liberados);
+                          
                           
                       },
 
@@ -513,14 +509,11 @@ function guarda_parcela(numero) {
                           dataType: "json",
                           async: true,
                           success: function(parcelas){
-                                 
                                         if (parcelas["error"]==0) {
-
                                             console.log("parcela creada ", numero);
                                         } 
                                         else{
                                             alert(sectores["valor"]);
-                                            
                                         };                  
                           },
                           error: function (obj, error, objError){
@@ -532,7 +525,6 @@ function guarda_parcela(numero) {
 
 function datos_pago(forma_pago)
 {
-  console.log(forma_pago);
   if (forma_pago=='D'){
     $("div[name='datos_debito']").show();
   }
