@@ -31,7 +31,9 @@ function trae_estadias(tipooperacion,letras,bandera){
                               var unaestadia = estadias[i];
                               var fechad = convertDateFormat(unaestadia.fecha_ingreso);
                               var fechah = convertDateFormat(unaestadia.fecha_egreso);
-                              var fila= "<tr><td>" +unaestadia.id+"</td><td>"+ unaestadia.idparcela + "</td><td>"+unaestadia.nrocarpa+"</td><td>"+unaestadia.apellido+" "+unaestadia.nombres+"</td><td>"+fechad+"</td><td>"+fechah+"</td><td>"+unaestadia.descripcion+"</td><td>"+unaestadia.patente+"</td>";
+                              var telefono = '';
+                              if (unaestadia.movil!='') {telefono=unaestadia.movil}
+                              var fila= "<tr><td>" +unaestadia.id+"</td><td>"+ unaestadia.idparcela + "</td><td>"+unaestadia.nrocarpa+"</td><td>"+unaestadia.apellido+" "+unaestadia.nombres+" "+telefono+"</td><td>"+fechad+"</td><td>"+fechah+"</td><td>"+unaestadia.descripcion+"</td><td>"+unaestadia.patente+"</td>";
 
                               if ((bandera=="E") || (bandera=="L"))  //si la llamada es de estadias se muestra el total, si es para el listado de carpas activas no
                               {
@@ -48,7 +50,12 @@ function trae_estadias(tipooperacion,letras,bandera){
                                  //14/01/25 se agrega que permita imprimir el comprobante   
                                  if (unaestadia.estado=='N')
                                  {
-                                  fila= fila + "<td> <a href='#' title='Imprimir' onclick='imprimir_estadia("+unaestadia.id+")'><i class=\"icon-print\"> </i></a>&nbsp;&nbsp;&nbsp;<a href='#' title='CheckOUT' onclick='checkout_estadia("+unaestadia.id+","+unaestadia.idparcela+")'><i class=\"icon-logout\"></i></a>&nbsp;&nbsp;&nbsp;<a href='#' title='Extiende estadia' onclick='extiende_estadia("+JSON.stringify(unaestadia)+")'>+</a>";
+                                  fila= fila + "<td>";
+                                  if (telefono!='')
+                                  {
+                                    fila=fila+"<a href='https://wa.me/"+telefono+"?text=Hola%20,%20hoy%20vence%20la%20estadia' target='_blank'><img src='../img/whatsapp.png' style='width:25px; vertical-align:middle;'>&nbsp;&nbsp;&nbsp;</a>";
+                                  }
+                                  fila= fila + "<a href='#' title='Imprimir' onclick='imprimir_estadia("+unaestadia.id+")'><i class=\"icon-print\"> </i></a>&nbsp;&nbsp;&nbsp;<a href='#' title='CheckOUT' onclick='checkout_estadia("+unaestadia.id+","+unaestadia.idparcela+")'><i class=\"icon-logout\"></i></a>&nbsp;&nbsp;&nbsp;<a href='#' title='Extiende estadia' onclick='extiende_estadia("+JSON.stringify(unaestadia)+")'>+</a>";
                                   
                                   //si usuario es de anabella o administrador
                                   //permitir editar

@@ -116,7 +116,7 @@ if ($accion == 1) {
 					} elseif ($operacion == 3) {
 						//busqueda por numero de parcela, de estadias activas
 						$caracteres = $_POST["caracteres"];
-						$json = queryToJson($con, "select estadias.*, turistas.apellido, turistas.nombres, tarifas.descripcion from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id WHERE estadias.idparcela='$caracteres' and (estado='N') ORDER BY fecha_ingreso");
+						$json = queryToJson($con, "select estadias.*, turistas.apellido, turistas.nombres, turistas.movil,tarifas.descripcion from estadias left join turistas on estadias.idturista=turistas.id left join tarifas on estadias.tipo_alojamiento=tarifas.id WHERE estadias.idparcela='$caracteres' and (estado='N') ORDER BY fecha_ingreso");
 						// or estadias.fecha_egreso>=CURDATE() si pongo eso no deja cargar otra estadia en el lugar
 					} elseif ($operacion == 4) {
 						$estadia = $_POST["caracteres"];
