@@ -77,22 +77,19 @@ if ($accion == 1) {
 		if ($accion == 4) {
 			# listar
 			$operacion = $_POST["operacion"];
-
+			$consulta = "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa, fecha_inicio, fecha_fin from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin";
 			if ($operacion == 0) {
-				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa, fecha_inicio, fecha_fin from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin order by tarifas.unidad, tarifas.descripcion");
-				//SELECT t.id, t.descripcion, t.unidad, p.precio as tarifa, p.fecha_inicio, p.fecha_fin FROM tarifas as t left JOIN tarifas_precios as p ON p.idtarifa = t.id WHERE p.fecha_inicio = ( SELECT MAX(p2.fecha_inicio) FROM tarifas_precios p2 WHERE p2.idtarifa = t.id );
-
-				//"select * from tarifas  where baja=0 order by unidad, descripcion");
-				//"
+				//Para listado en Tarifas.html
+				$consulta = $consulta . " order by tarifas.unidad, tarifas.descripcion";
 			} else
-					if ($operacion == 1) {
+					if ($operacion == 1) { //para el precio de la estadia segun tarifa elegida
 				$caracteres = $_POST["caracteres"];
-				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas.tarifa  from tarifas where  tarifas.id = '$caracteres'");
+				$consulta = $consulta . " and tarifas.id = '$caracteres'";
 			} else {
-				$caracteres = $_POST["caracteres"];
-
-				$json = queryToJson($con, "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin and descripcion LIKE '%$caracteres%'  ORDER BY descripcion");
+				$caracteres = $_POST["caracteres"]; //para busqueda por descripcion
+				$consulta = $consulta . " and descripcion LIKE '%$caracteres%'  ORDER BY descripcion";
 			}
+			$json = queryToJson($con, $consulta);
 		}
 	}
 
