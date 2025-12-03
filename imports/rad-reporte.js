@@ -193,6 +193,13 @@ export class RADReporte extends PolymerElement {
                               data-forma$="[[renglon.forma]]">
                              <span class="lapiz"></span>
                             </a>
+                            <a href="javascript:void(0)"
+                              on-click="anularPago"
+                              title="Anular Pago"
+                              data-id$="[[item.valor]]">
+                              <span class="cancelar"></span>
+                              
+                            </a>
                           </template>
                         </div>
                       </template>
@@ -417,6 +424,56 @@ _actualizarFormaPago(id, nuevaForma, lote = "", cupon = "") {
       alert("Error en la solicitud");
     });
 }
+
+anularPago(e) {
+  //al anular pago hay que anular la estadia tambien!!!
+  e.preventDefault();
+
+  const id = e.currentTarget.dataset.id;
+
+  if (!id) {
+    alert("No se encontró el ID del pago");
+    return;
+  }
+
+  const confirma = confirm("¿Seguro que quiere ANULAR este pago?");
+  if (!confirma) return;
+
+  const params = new URLSearchParams();
+  params.append("idpago", id);
+
+  fetch("anular_pago.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString()
+  })
+  .then(res => res.text())
+.then(txt => {
+  console.log("=== RESPUESTA RAW PHP ===");
+  console.log(txt);
+
+  let data;
+  try {
+    data = JSON.parse(txt);   // convertir a JSON
+  } catch (e) {
+    throw new Error("Respuesta no es JSON válido");
+  }
+
+  return data;  // 🔥 IMPORTANTE: devolvemos el JSON para el siguiente then
+})
+.then(data => {
+  if (data.status === "ok") {
+    alert("Pago anulado correctamente");
+    this._recargarComponente();
+  } else {
+    alert("Error: " + data.mensaje);
+  }
+})  .catch(err => {
+      console.error(err);
+      alert("Error en la solicitud");
+    });
+}
+
 _recargarComponente() {
   // Leer parámetros desde la URL
   const params = new URLSearchParams(window.location.search);

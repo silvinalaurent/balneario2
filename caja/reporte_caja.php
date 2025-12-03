@@ -12,8 +12,8 @@ $idusuario = isset($_POST["idusuario"]) ? $_POST["idusuario"] : 0;
 /*
 $consulta = "SELECT pagos.id as secuencia, pagos.forma_pago as forma,pagos.fecha_hora as fpago, pagos.idestadia as estadia, pagos.modificado as modificado, concat(estadias.fecha_ingreso,' / ',estadias.fecha_egreso) as fechas,case when pagos.idestadia > 0 then concat(turistas.apellido,' ',turistas.nombres) else 'COBROS EXTRAS' end as turista,estadias.idparcela as parcela , estadias.cantidad_personas, CASE WHEN pagos.forma_pago='E' then pagos.importe else 0.00 end as efectivo, CASE WHEN pagos.forma_pago='D' then pagos.importe else 0.00 end as debito, CASE WHEN pagos.forma_pago='T' then pagos.importe else 0.00 end as transferencia, CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe end as devoluciones, CASE WHEN pagos.forma_pago='E' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_efectivo, CASE WHEN pagos.forma_pago='D' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_debito, CASE WHEN pagos.forma_pago='T' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_transferencia, pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) as total_general, usuarios.usuario FROM `pagos` left join devoluciones on pagos.idestadia = devoluciones.idestadia left join usuarios on pagos.idusuario = usuarios.id left join estadias on pagos.idestadia = estadias.id left join turistas on estadias.idturista = turistas.id where pagos.estado = 'N' and pagos.fecha >= '$fdesde' and pagos.fecha <= '$fhasta' ";
 */
-
-$consulta="(
+// 02/10 se agrego que se puedan ver pagos anulados y que no sumen
+$consulta = "(
 -- PAGOS NORMALES
 SELECT 
     pagos.id AS secuencia,
@@ -28,22 +28,68 @@ SELECT
     END AS turista,
     estadias.idparcela AS parcela,
     estadias.cantidad_personas,
-    CASE WHEN pagos.forma_pago = 'E' THEN pagos.importe ELSE 0.00 END AS efectivo,
-    CASE WHEN pagos.forma_pago = 'D' THEN pagos.importe ELSE 0.00 END AS debito,
-    CASE WHEN pagos.forma_pago = 'T' THEN pagos.importe ELSE 0.00 END AS transferencia,
-    CASE WHEN ISNULL(devoluciones.importe) THEN 0.00 ELSE devoluciones.importe END AS devoluciones,
-    CASE WHEN pagos.forma_pago = 'E' THEN pagos.importe - IFNULL(devoluciones.importe,0) ELSE 0.00 END AS total_efectivo,
-    CASE WHEN pagos.forma_pago = 'D' THEN pagos.importe - IFNULL(devoluciones.importe,0) ELSE 0.00 END AS total_debito,
-    CASE WHEN pagos.forma_pago = 'T' THEN pagos.importe - IFNULL(devoluciones.importe,0) ELSE 0.00 END AS total_transferencia,
-    pagos.importe - IFNULL(devoluciones.importe,0) AS total_general,
+
+    -- NO SUMAR ANULADOS
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'E' 
+        THEN pagos.importe 
+        ELSE 0.00 
+    END AS efectivo,
+
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'D' 
+        THEN pagos.importe 
+        ELSE 0.00 
+    END AS debito,
+
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'T' 
+        THEN pagos.importe 
+        ELSE 0.00 
+    END AS transferencia,
+
+    CASE 
+        WHEN pagos.estado = 'N' 
+        THEN IFNULL(devoluciones.importe,0) 
+        ELSE 0.00 
+    END AS devoluciones,
+
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'E'
+        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
+        ELSE 0.00 
+    END AS total_efectivo,
+
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'D'
+        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
+        ELSE 0.00 
+    END AS total_debito,
+
+    CASE 
+        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'T'
+        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
+        ELSE 0.00 
+    END AS total_transferencia,
+
+    -- TOTAL GENERAL SOLO DE LOS NO ANULADOS
+    CASE
+        WHEN pagos.estado = 'N'
+        THEN pagos.importe - IFNULL(devoluciones.importe,0)
+        ELSE 0.00
+    END AS total_general,
+
     usuarios.usuario
+
 FROM pagos
 LEFT JOIN devoluciones ON pagos.idestadia = devoluciones.idestadia
 LEFT JOIN usuarios ON pagos.idusuario = usuarios.id
 LEFT JOIN estadias ON pagos.idestadia = estadias.id
 LEFT JOIN turistas ON estadias.idturista = turistas.id
-WHERE pagos.estado = 'N'
+
+WHERE pagos.estado IN ('N','A')
   AND pagos.fecha BETWEEN '$fdesde' AND '$fhasta'
+
 )
 
 UNION ALL
