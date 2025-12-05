@@ -226,7 +226,22 @@ if ($accion == 1) {
 							$json = queryToJson($con, $consulta);
 						};
 					};
-				};
+				}
+				else
+					if ($accion == 7)
+					{
+						# poner finalizado a la estadia
+						$estadia = $_POST["estadia"];
+						$query = "update estadias set estado='A' where id='$estadia'";
+
+						$resultado = mysqli_query($con, $query) or die(mysqli_error($con));
+
+						if ($resultado) {
+							$json = json_encode(array("error" => 0));
+						} else {
+							$json = json_encode(array("error" => 1, "valor" => "No se pudo modificar.-"));
+						};
+					}
 			};
 		};
 	};

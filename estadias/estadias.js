@@ -1037,7 +1037,30 @@ function formatea_patente(patente){
 function anular_estadia(idestadia)
 {
   //anular estadia y liberar parcela
-  console.log("Se cambia estado de estadia a anulado ",idestadia );
+  //console.log("Se cambia estado de estadia a anulado ",idestadia );
+  if (idestadia!=0)
+  {
+  $.ajax({
+                      type: "POST",
+                      url:"../estadias/estadias.php",
+                      data: {accion:7, estadia:idestadia},
+                      dataType: "json",
+                      async: false,
+                      success: function(estadias){
+                          if (estadias.error == 0){
+                            //trae_estadias(3,idparcela,"P");
+                            console.log('Estadia anulada');
+                          }
+                          else{
+                            alert(estadias.valor);
+                          }
+              
+                      },
+                      error: function (obj, error, objError){
+                          alert(error);//avisar que ocurrió un error
+                      }
+            });
+  }
  // cambiar estado de parcela
 
 }
