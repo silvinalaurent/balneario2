@@ -21,6 +21,7 @@ SELECT
     pagos.fecha_hora AS fpago,
     pagos.idestadia AS estadia,
     pagos.modificado AS modificado,
+    pagos.estado as estado,
     CONCAT(estadias.fecha_ingreso, ' / ', estadias.fecha_egreso) AS fechas,
     CASE 
         WHEN pagos.idestadia > 0 THEN CONCAT(turistas.apellido, ' ', turistas.nombres)
@@ -31,19 +32,19 @@ SELECT
 
     -- NO SUMAR ANULADOS
     CASE 
-        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'E' 
+        WHEN pagos.forma_pago = 'E' 
         THEN pagos.importe 
         ELSE 0.00 
     END AS efectivo,
 
     CASE 
-        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'D' 
+        WHEN pagos.forma_pago = 'D' 
         THEN pagos.importe 
         ELSE 0.00 
     END AS debito,
 
     CASE 
-        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'T' 
+        WHEN pagos.forma_pago = 'T' 
         THEN pagos.importe 
         ELSE 0.00 
     END AS transferencia,
@@ -102,6 +103,7 @@ SELECT
     devoluciones.fecha_hora AS fpago,
     devoluciones.idestadia AS estadia,
     NULL AS modificado,  -- no existe en devoluciones
+    NULL AS estado,
     CONCAT(estadias.fecha_ingreso, ' / ', estadias.fecha_egreso) AS fechas,
     CASE 
         WHEN devoluciones.idestadia > 0 THEN CONCAT(turistas.apellido, ' ', turistas.nombres)

@@ -664,4 +664,3 @@ function imprimereporte(fdesde,fhasta,usuario){
 
 
 
-

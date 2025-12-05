@@ -1033,3 +1033,11 @@ function formatea_patente(patente){
   let resultado = patente.replace(/\s+/g, '').toUpperCase();
   $("#patente").val(resultado);
 }
+
+function anular_estadia(idestadia)
+{
+  //anular estadia y liberar parcela
+  console.log("Se cambia estado de estadia a anulado ",idestadia );
+ // cambiar estado de parcela
+
+}

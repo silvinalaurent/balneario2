@@ -123,7 +123,9 @@ export class RADReporte extends PolymerElement {
         outline: 1px solid gray;
       }
 
-      
+      :host .cancelar {
+        color: red !important;
+      }      
       :host tbody tr.modificado{
         font-weight: bold;
         background-color: #fffacd !important;
@@ -145,8 +147,13 @@ export class RADReporte extends PolymerElement {
         :host span,:host input[type=checkbox], :host rad-boton,:host rad-boton-excel{
           display:none;
         }
-      
+
       }
+        :host tbody tr.anulado {
+            opacity: 0.5;
+            background-color: #f8d7da !important;
+            text-decoration: line-through;
+          }
     </style>
     <div class="renglon horizontal-centro">
       <rad-boton on-click="_imprimir" title="Imprime Reporte"><span class="impresora"></span></rad-boton>
@@ -179,27 +186,32 @@ export class RADReporte extends PolymerElement {
             <template is="dom-repeat" items="{{ pagina.elementos }}" as="renglon">
               
               <template is="dom-if" if="{{!_esseparador(renglon)}}">
-                  <tr class$="{{_esModificado(renglon)}}">
+                  
+                  <tr class$="{{_claseRenglon(renglon)}}">
                   <template is="dom-repeat" items="{{ _toArray(renglon) }}" as="item">
                     <td align="{{alineacion(item.valor,item.nombre)}}">
                       <template is="dom-if" if="[[ _esSecuencia(item.nombre) ]]">
                        <div class="itemvalor">
                           [[decimales(item.valor,item.nombre)]]
-                          <template is="dom-if" if="[[ !_esModificadoBool(renglon) ]]">                         
-                            <a href="javascript:void(0)"
-                              on-click="cambiarPago"
-                              title="Cambiar Forma de Pago"
-                              data-id$="[[item.valor]]"
-                              data-forma$="[[renglon.forma]]">
-                             <span class="lapiz"></span>
-                            </a>
-                            <a href="javascript:void(0)"
-                              on-click="anularPago"
-                              title="Anular Pago"
-                              data-id$="[[item.valor]]">
-                              <span class="cancelar"></span>
-                              
-                            </a>
+                          <template is="dom-if" if="[[_puedeCambiarForma(renglon)]]">
+                              <a href="javascript:void(0)"
+                                on-click="cambiarPago"
+                                title="Cambiar Forma de Pago"
+                                data-id$="[[item.valor]]"
+                                data-forma$="[[renglon.forma]]">
+                                <span class="lapiz"></span>
+                              </a>
+                          </template>
+
+                          <!-- Botón ANULAR → siempre que NO esté anulado -->
+                          <template is="dom-if" if="[[_puedeAnular(renglon)]]">
+                              <a href="javascript:void(0)"
+                                on-click="anularPago"
+                                title="Anular Pago"
+                                data-id$="[[item.valor]]"
+                                data-estadia$="[[renglon.estadia]]">
+                                <span class="cancelar"></span>
+                              </a>
                           </template>
                         </div>
                       </template>
@@ -321,24 +333,34 @@ ready(){
     console.log(prueba);
   });
 }
-  //agregado 9/10
-  _esModificado(renglon) {
-    // Verifica si el campo "modificados" existe y tiene valor 1
-    if (renglon.modificado && renglon.modificado   == 1) {
-      return "modificado";
-    }
-    return "";
-  }
-  //agregado 15/10
-  _esModificadoBool(renglon) {
-  return renglon.modificado && renglon.modificado == 1;
+ 
+
+_claseRenglon(r) {
+  let clases = "";
+
+  if (r.modificado == 1) clases += " modificado";
+  if (r.estado == 'A') clases += " anulado";
+
+  return clases.trim();
 }
   //agregado 24/09/25 **************************************************************
   _esSecuencia(nombre) {
-  return nombre === "secuencia"; // o el nombre real de tu campo
+  return nombre === "secuencia";
   }
 
- 
+//agrega do 04/12/25
+// Permite cambiar la forma: NO si está anulado o ya modificado
+_puedeCambiarForma(r) {
+  if (!r) return false;
+  // Normaliza valores (acepta "1", 1, true)
+  const mod = (r.modificado === true) || (String(r.modificado) === '1') || (r.modificado === 1);
+  return r.estado !== 'A' && !mod;
+}
+// Permite anular: si querés permitir siempre que exista un pago y no esté ya anulado:
+_puedeAnular(r) {
+  if (!r) return false;
+  return r.estado !== 'A';
+}
 cambiarPago(e) {
   e.preventDefault();
   const id = e.currentTarget.dataset.id;
@@ -428,43 +450,38 @@ _actualizarFormaPago(id, nuevaForma, lote = "", cupon = "") {
 anularPago(e) {
   //al anular pago hay que anular la estadia tambien!!!
   e.preventDefault();
-
+  console.log(e);
   const id = e.currentTarget.dataset.id;
-
+  const estadia = e.currentTarget.dataset.estadia;
   if (!id) {
     alert("No se encontró el ID del pago");
     return;
   }
-
   const confirma = confirm("¿Seguro que quiere ANULAR este pago?");
   if (!confirma) return;
-
   const params = new URLSearchParams();
   params.append("idpago", id);
-
   fetch("anular_pago.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString()
   })
   .then(res => res.text())
-.then(txt => {
-  console.log("=== RESPUESTA RAW PHP ===");
-  console.log(txt);
-
-  let data;
-  try {
-    data = JSON.parse(txt);   // convertir a JSON
-  } catch (e) {
-    throw new Error("Respuesta no es JSON válido");
-  }
-
-  return data;  // 🔥 IMPORTANTE: devolvemos el JSON para el siguiente then
-})
+  .then(txt => {
+    let data;
+    try {
+      data = JSON.parse(txt);   // convertir a JSON
+    } catch (e) {
+      throw new Error("Respuesta no es JSON válido");
+    }
+    return data;  // 🔥 IMPORTANTE: devolvemos el JSON para el siguiente then
+  })
 .then(data => {
   if (data.status === "ok") {
+    
     alert("Pago anulado correctamente");
     this._recargarComponente();
+    anular_estadia(estadia);
   } else {
     alert("Error: " + data.mensaje);
   }
