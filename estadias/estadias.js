@@ -129,6 +129,7 @@ function traeEstadias() {
     dataType: "json",
     async: false,
     success: function(estadias){
+      cantidadestadias = estadias.length;
 	    for(var i in estadias){
         if(i >= 0){
           var unaestadia = estadias[i];
@@ -177,6 +178,7 @@ function traeEstadias() {
           cantidadcarpas += 1;
         };
       };
+     
     }
   });
 
@@ -693,7 +695,7 @@ function guarda_estadia()
   //controlo que la parcela en el input numeroparcela2 sea distinta a la parcela en el input oculto idparcela
   //22/02/21 confirmar si la parcela no tiene una estadia actual o una reserva para esos dias
   //13/11/2024 cada tanto se guarda dos o tres veces una estadia
-  //04/12/2024 se garego control de llamama al ajax para resolver que no se repitan
+  //04/12/2024 se agrego control de llamada al ajax para resolver que no se repitan
   //10/01/2025 se guarda estadia con valor Nan puede ser porque no se controla que la fecha de finalizacion no sea nula
   //13/01/2025 se pregunta si se quiere imprimir, si tiene mail se envia por mail
 
@@ -756,7 +758,8 @@ function guarda_estadia()
            
            var cantidad=$("#cantidad").val()
            //controles antes de grabar
-           if (($("#listadotarifas").val()!=null) && (turista!='') && (parcela>0) && (cantidad!='') && !datos_enviados && 
+           
+           if (($("#listadotarifas").val()!="0")  && (turista!='') && (parcela>0) && (cantidad!='') && !datos_enviados && 
            ($("#fechad").val()!=null) && ($("#fechah").val()!=null) && ($("#fechad").val()<=$("#fechah").val()))
            {
              if ($("#forma_pago").val()=='D' && ($("#lote").val()=='' || $("#cupon").val()==''))
