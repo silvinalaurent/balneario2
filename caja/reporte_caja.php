@@ -9,19 +9,18 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
 $fdesde = $_POST["fdesde"];
 $fhasta = $_POST["fhasta"];
 $idusuario = isset($_POST["idusuario"]) ? $_POST["idusuario"] : 0;
-/*
-$consulta = "SELECT pagos.id as secuencia, pagos.forma_pago as forma,pagos.fecha_hora as fpago, pagos.idestadia as estadia, pagos.modificado as modificado, concat(estadias.fecha_ingreso,' / ',estadias.fecha_egreso) as fechas,case when pagos.idestadia > 0 then concat(turistas.apellido,' ',turistas.nombres) else 'COBROS EXTRAS' end as turista,estadias.idparcela as parcela , estadias.cantidad_personas, CASE WHEN pagos.forma_pago='E' then pagos.importe else 0.00 end as efectivo, CASE WHEN pagos.forma_pago='D' then pagos.importe else 0.00 end as debito, CASE WHEN pagos.forma_pago='T' then pagos.importe else 0.00 end as transferencia, CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe end as devoluciones, CASE WHEN pagos.forma_pago='E' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_efectivo, CASE WHEN pagos.forma_pago='D' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_debito, CASE WHEN pagos.forma_pago='T' then pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) else 0.00 end as total_transferencia, pagos.importe-(CASE WHEN isnull(devoluciones.importe) then 0.00 else devoluciones.importe END) as total_general, usuarios.usuario FROM `pagos` left join devoluciones on pagos.idestadia = devoluciones.idestadia left join usuarios on pagos.idusuario = usuarios.id left join estadias on pagos.idestadia = estadias.id left join turistas on estadias.idturista = turistas.id where pagos.estado = 'N' and pagos.fecha >= '$fdesde' and pagos.fecha <= '$fhasta' ";
-*/
-// 02/10 se agrego que se puedan ver pagos anulados y que no sumen
+
+// 02/12 se agrego que se puedan ver pagos anulados y que no sumen
+$condUsuario = ($idusuario > 0) ? " AND pagos.idusuario = $idusuario" : "";
 $consulta = "(
 -- PAGOS NORMALES
 SELECT 
     pagos.id AS secuencia,
     pagos.forma_pago AS forma,
+    pagos.estado as estado,
     pagos.fecha_hora AS fpago,
     pagos.idestadia AS estadia,
     pagos.modificado AS modificado,
-    pagos.estado as estado,
     CONCAT(estadias.fecha_ingreso, ' / ', estadias.fecha_egreso) AS fechas,
     CASE 
         WHEN pagos.idestadia > 0 THEN CONCAT(turistas.apellido, ' ', turistas.nombres)
@@ -88,11 +87,8 @@ LEFT JOIN usuarios ON pagos.idusuario = usuarios.id
 LEFT JOIN estadias ON pagos.idestadia = estadias.id
 LEFT JOIN turistas ON estadias.idturista = turistas.id
 
-WHERE pagos.estado IN ('N','A')
-  AND pagos.fecha BETWEEN '$fdesde' AND '$fhasta'
-
+WHERE pagos.fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario  
 )
-
 UNION ALL
 
 (
@@ -129,12 +125,10 @@ WHERE devoluciones.fecha BETWEEN '$fdesde' AND '$fhasta'
         SELECT DISTINCT idestadia FROM pagos
         WHERE fecha BETWEEN '$fdesde' AND '$fhasta'
     )
-);";
+)
+order by secuencia;";
 
-/*
-$consulta .= $idusuario > 0 ? " and pagos.idusuario = $idusuario" : "";
-$consulta .= " order by pagos.id;";
-*/
+
 $json = queryToJson($con, $consulta);
 
 

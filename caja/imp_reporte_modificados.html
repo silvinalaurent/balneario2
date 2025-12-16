@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Reporte de Modificados - Balneario Camping de San José</title>
+	<link rel="shortcut icon" href="../../img/impresora.ico"/>
+
+
+	<link rel="stylesheet" href="../css/framesp.css">
+	<link rel="stylesheet" href="../css/iconos.css">
+	<link rel="stylesheet" href="../css/comprobantes.css">
+	
+	<script type='text/javascript' src='../js/jquery-3.1.0.min.js'></script>
+	<script type='text/javascript' src='../js/funciones.js?v=2'></script>
+	
+	<script type="module" src="../imports/rad-reporte.js"></script>
+	<script type="module" src="../imports/rad-boton.js"></script>
+	<!-- <script type="module" src="../../imports/rad-panel.js"></script>
+	 -->
+	<style>
+		tbody tr:hover{
+			outline:1px solid gray;
+		}
+		@media print {
+			span{
+				display: none
+			}
+		}
+		@media print {
+			rad-boton{
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- MODAL RELOJ -->
+	<div class="fondo-modal horizontal-centro vertical-centro tiempo" >
+		<div class="reloj"></div>
+	</div>
+
+
+	<script>
+
+		function traeModificados(fecha,idusuario){
+			var diferido = $.Deferred();
+
+			$.ajax({
+				url:"reporte_modificados.php",
+				type:"POST",
+				dataType:'json',
+				data:{
+					fecha:fecha,
+					idusuario:idusuario
+				},
+				success:function(data){
+					diferido.resolve(data);
+				}
+			});
+			
+			return diferido.promise();
+
+		};
+		
+	  	$(document).ready(function(){
+		  	var GET = leerGET();
+			
+		  	var fecha = GET["fecha"];
+		  	var idusuario = GET["idusuario"];
+
+		  	$(".tiempo").show();
+		    traeModificados(fecha,idusuario).then((data)=>{
+		    	$("body").append('<rad-reporte nombre="reportetotal" logo="../img/marcasanjose.png" titulo="Reporte de Modificados Camping de '+fecha+' "encabezados=\'["Fecha","Pago","Detalle","Usuario"]\' totales=\'["total"]\' elementosxpagina=58 orientacion="horizontal"  elementos=\''+JSON.stringify(data)+'\'> </rad-reporte>');
+				$(".tiempo").hide();
+			});
+	  	});
+	</script>
+</body>
+</html>

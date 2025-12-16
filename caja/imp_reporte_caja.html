@@ -70,7 +70,7 @@
 		    		data[x].cantidad_personas = data[x].cantidad_personas==null?0:data[x].cantidad_personas;
 		    	};
 				//24/09/25 se agrego forma de pago
-				$("body").append('<rad-reporte nombre="reportetotal" logo="../img/marcasanjose.png" titulo="Reporte de Caja desde el '+fdesde+' hasta el '+fhasta+' "encabezados=\'["Secuencia","F.Pago","Fecha - Hora","Estadia","Estado","Ingreso/Egreso","Turista","Parcela","Personas","$Efectivo","$Debito","$Transf.","($Devoluciones)","$Tot.Efect","$Tot.Debito","$Tot.Transf.","$Tot.General","Usuario"]\' totales=\'["cantidad_personas","efectivo","debito","transferencia","devoluciones","total_efectivo","total_debito","total_transferencia","total_general"]\' elementosxpagina=58 orientacion="horizontal"  elementos=\''+JSON.stringify(data)+'\'> </rad-reporte>');
+				$("body").append('<rad-reporte nombre="reportetotal" logo="../img/marcasanjose.png" titulo="Reporte de Camping desde el '+fdesde+' hasta el '+fhasta+' "encabezados=\'["Secuencia","F.P.","Est.","Fecha - Hora","Estadia","Ingreso/Egreso","Turista","Parcela","Cant.","$Efectivo","$Debito","$Transf.","($Devoluciones)","$Tot.Efect","$Tot.Debito","$Tot.Transf.","$Tot.General","Usuario"]\' totales=\'["cantidad_personas","efectivo","debito","transferencia","devoluciones","total_efectivo","total_debito","total_transferencia","total_general"]\' elementosxpagina=58 orientacion="horizontal"  elementos=\''+JSON.stringify(data)+'\'> </rad-reporte>');
 				$(".tiempo").hide();
 			});
 	  	});

@@ -664,3 +664,11 @@ function imprimereporte(fdesde,fhasta,usuario){
 
 
 
+
+
+function imprimereportemodificados(fecha,usuario){
+
+  window.open("imp_reporte_modificados.html?fecha="+fecha+"&idusuario="+usuario);
+  
+}
+
