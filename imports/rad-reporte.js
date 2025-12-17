@@ -450,17 +450,29 @@ _actualizarFormaPago(id, nuevaForma, lote = "", cupon = "") {
 anularPago(e) {
   //al anular pago hay que anular la estadia tambien!!!
   e.preventDefault();
-  console.log(e);
   const id = e.currentTarget.dataset.id;
   const estadia = e.currentTarget.dataset.estadia;
+  console.log("secuencia ",id);
   if (!id) {
     alert("No se encontró el ID del pago");
     return;
   }
+  
+  let motivo = prompt("Ingrese el motivo de la anulación:");
+  if (motivo === null) return;           // canceló
+  motivo = motivo.trim();
+
+  if (motivo === "") {
+    alert("Debe ingresar un motivo");
+    return;
+  }
+
   const confirma = confirm("¿Seguro que quiere ANULAR este pago?");
   if (!confirma) return;
   const params = new URLSearchParams();
   params.append("idpago", id);
+  params.append("motivo", motivo);
+
   fetch("anular_pago.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

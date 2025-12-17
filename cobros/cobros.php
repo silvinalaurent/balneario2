@@ -14,9 +14,9 @@ if ($accion == 1) {
 
 	$_SESSION["accion"] = "ALTA";
 
-	$turno = 0;//$_POST['turno'];
+	$turno = 0; //$_POST['turno'];
 	$id_tipocobro = $_POST['tipo_cobro'];
-	$talonario = 0;//(!empty($_POST['talonario_nro'])) ? $_POST['talonario_nro'] : 0;
+	$talonario = 0; //(!empty($_POST['talonario_nro'])) ? $_POST['talonario_nro'] : 0;
 	$desde_ticket = (!empty($_POST['desde_ticket'])) ? $_POST['desde_ticket'] : 0;
 	$hasta_ticket = (!empty($_POST['hasta_ticket'])) ? $_POST['hasta_ticket'] : 0;
 	$monto = $_POST['efectivo'];
@@ -27,7 +27,7 @@ if ($accion == 1) {
 	date_default_timezone_set('America/Argentina/Buenos_Aires');
 	$fecha = date("Y-m-d");
 	$fechaHora = date("Y-m-d H:i:s"); // Formato: Año-Mes-Día Horas:Minutos:Segundos 	 
-/*
+	/*
 	$query = "insert into cobros (fecha,id_tipocobro,turno,talonario,ticket_desde,ticket_hasta,monto,observaciones,idusuario,fecha_hora) values ('$fecha','$id_tipocobro','$turno','$talonario','$desde_ticket','$hasta_ticket','$monto','$observaciones','$idusuario','$fechaHora');";
 
 	$query .= "insert into pagos (fecha,idestadia, forma_pago, lote, cupon, importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',0,'E',0,0,'$monto','$idusuario','N','$fechaHora',0);";
@@ -52,7 +52,7 @@ if ($accion == 1) {
 			$resultado = mysqli_query($con, "SELECT MAX(id) as ultimoid FROM cobros");
 			$fila = mysqli_fetch_assoc($resultado);
 			$ultimoid = $fila['ultimoid'];
-			
+
 			$json = json_encode(array("error" => 0, "ultimoid" => $ultimoid));
 		} else {
 			$json = json_encode(array("error" => 1, "valor" => "Error al insertar pago: " . mysqli_error($con)));
@@ -139,7 +139,8 @@ if ($accion == 1) {
 						} else
 													if ($operacion == 8) {
 							//ultimo ticket cargado		
-							$json = queryToJson($con, "SELECT MAX(ticket_hasta) AS ultimo_ticket FROM cobros WHERE ticket_hasta IS NOT NULL");
+							// $json = queryToJson($con, "SELECT MAX(ticket_hasta) AS ultimo_ticket FROM cobros WHERE ticket_hasta IS NOT NULL");
+							$json = queryToJson($con, "SELECT ticket_hasta AS ultimo_ticket FROM cobros ORDER BY FECHA DESC LIMIT 1");
 						}
 					}
 		}
