@@ -140,7 +140,7 @@ if ($accion == 1) {
 													if ($operacion == 8) {
 							//ultimo ticket cargado		
 							// $json = queryToJson($con, "SELECT MAX(ticket_hasta) AS ultimo_ticket FROM cobros WHERE ticket_hasta IS NOT NULL");
-							$json = queryToJson($con, "SELECT ticket_hasta AS ultimo_ticket FROM cobros ORDER BY FECHA DESC LIMIT 1");
+							$json = queryToJson($con, "SELECT ticket_hasta as ultimo_ticket FROM cobros ORDER BY fecha_hora DESC, id DESC LIMIT 1");
 						}
 					}
 		}
