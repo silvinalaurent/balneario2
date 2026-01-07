@@ -87,7 +87,7 @@ LEFT JOIN usuarios ON pagos.idusuario = usuarios.id
 LEFT JOIN estadias ON pagos.idestadia = estadias.id
 LEFT JOIN turistas ON estadias.idturista = turistas.id
 
-WHERE pagos.fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario  
+WHERE pagos.fecha BETWEEN '$fdesde' AND '$fhasta' and devoluciones.fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario  
 )
 UNION ALL
 
