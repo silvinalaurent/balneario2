@@ -89,6 +89,16 @@ LEFT JOIN turistas ON estadias.idturista = turistas.id
 
 WHERE pagos.fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario  
 )
+
+order by secuencia;";
+
+
+$json = queryToJson($con, $consulta);
+
+
+echo $json;
+
+/* la estaba utilizando para devoluciones de otro dia
 UNION ALL
 
 (
@@ -126,10 +136,4 @@ WHERE devoluciones.fecha BETWEEN '$fdesde' AND '$fhasta'
         WHERE fecha BETWEEN '$fdesde' AND '$fhasta'
     )
 )
-order by secuencia;";
-
-
-$json = queryToJson($con, $consulta);
-
-
-echo $json;
+*/
