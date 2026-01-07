@@ -82,7 +82,7 @@ SELECT
     usuarios.usuario
 
 FROM pagos
-LEFT JOIN devoluciones ON pagos.idestadia = devoluciones.idestadia AND devoluciones.fecha=pagos.fecha
+LEFT JOIN devoluciones ON pagos.idestadia = devoluciones.idestadia 
 LEFT JOIN usuarios ON pagos.idusuario = usuarios.id
 LEFT JOIN estadias ON pagos.idestadia = estadias.id
 LEFT JOIN turistas ON estadias.idturista = turistas.id
