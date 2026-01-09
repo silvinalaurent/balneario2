@@ -55,20 +55,25 @@ SELECT
     END AS devoluciones,
 
     CASE 
-        WHEN pagos.estado = 'N' AND pagos.forma_pago = 'E'
-        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
-        ELSE 0.00 
+    WHEN pagos.estado = 'N'
+    THEN 
+        CASE 
+            WHEN pagos.forma_pago = 'E'
+            THEN pagos.importe - IFNULL(devoluciones.importe,0)
+            ELSE -IFNULL(devoluciones.importe,0)
+        END
+    ELSE 0.00
     END AS total_efectivo,
 
     CASE 
         WHEN pagos.estado = 'N' AND pagos.forma_pago = 'D'
-        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
+        THEN pagos.importe
         ELSE 0.00 
     END AS total_debito,
 
     CASE 
         WHEN pagos.estado = 'N' AND pagos.forma_pago = 'T'
-        THEN pagos.importe - IFNULL(devoluciones.importe,0) 
+        THEN pagos.importe
         ELSE 0.00 
     END AS total_transferencia,
 
