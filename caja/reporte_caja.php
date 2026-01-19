@@ -87,23 +87,13 @@ SELECT
     usuarios.usuario
 
 FROM pagos
-LEFT JOIN devoluciones ON pagos.idestadia = devoluciones.idestadia 
+LEFT JOIN devoluciones ON pagos.idestadia = devoluciones.idestadia AND devoluciones.fecha=pagos.fecha
 LEFT JOIN usuarios ON pagos.idusuario = usuarios.id
 LEFT JOIN estadias ON pagos.idestadia = estadias.id
 LEFT JOIN turistas ON estadias.idturista = turistas.id
 
 WHERE pagos.fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario  
 )
-
-order by secuencia;";
-
-
-$json = queryToJson($con, $consulta);
-
-
-echo $json;
-
-/* la estaba utilizando para devoluciones de otro dia
 UNION ALL
 
 (
@@ -138,7 +128,14 @@ LEFT JOIN usuarios ON devoluciones.idusuario = usuarios.id
 WHERE devoluciones.fecha BETWEEN '$fdesde' AND '$fhasta'
     AND devoluciones.idestadia NOT IN (
         SELECT DISTINCT idestadia FROM pagos
-        WHERE fecha BETWEEN '$fdesde' AND '$fhasta'
+        WHERE fecha BETWEEN '$fdesde' AND '$fhasta' $condUsuario 
     )
 )
-*/
+
+order by secuencia;";
+
+
+$json = queryToJson($con, $consulta);
+
+
+echo $json;
