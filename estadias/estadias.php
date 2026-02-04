@@ -202,6 +202,7 @@ if ($accion == 1) {
 						$idparcela = isset($_POST["idparcela"]) ? $_POST["idparcela"] : "";
 						$nrocarpa = isset($_POST["nrocarpa"]) ? $_POST["nrocarpa"] : "";
 						$patente = isset($_POST["patente"]) ? str_replace(" ", "", $_POST["patente"]) : "";
+						$observaciones = isset($_POST["observaciones"]) ? $_POST["observaciones"] : "";
 						$fdesde = isset($_POST["fdesde"]) ? str_replace("-", "", $_POST["fdesde"]) : "";
 						$fhasta = isset($_POST["fhasta"]) ? str_replace("-", "", $_POST["fhasta"]) : "";
 						$estado = isset($_POST["estado"]) ? $_POST["estado"] : "";
@@ -213,6 +214,7 @@ if ($accion == 1) {
 						$filtro .= ($idparcela != "" ? ($filtro != "" ? " and " : "") . "estadias.idparcela = $idparcela" : "");
 						$filtro .= ($nrocarpa != "" ? ($filtro != "" ? " and " : "") . "estadias.nrocarpa = $nrocarpa" : "");
 						$filtro .= ($patente != "" ? ($filtro != "" ? " and " : "") . "replace(estadias.patente,' ','') like '%$patente%'" : "");
+						$filtro .= ($observaciones != "" ? ($filtro != "" ? " and " : "") . "replace(estadias.observaciones,' ','') like '%$observaciones%'" : "");
 						$filtro .= ($fdesde != "" ? ($filtro != "" ? " and " : "") . "estadias.fecha_ingreso >='$fdesde'" : "");
 						$filtro .= ($fhasta != "" ? ($filtro != "" ? " and " : "") . "estadias.fecha_egreso <='$fhasta'" : "");
 						$filtro .= ($telefono != "" ? ($filtro != "" ? " and " : "") . "replace(turistas.movil,' ','') like '%$telefono%'" : "");
@@ -226,22 +228,20 @@ if ($accion == 1) {
 							$json = queryToJson($con, $consulta);
 						};
 					};
+				} else
+					if ($accion == 7) {
+					# poner finalizado a la estadia
+					$estadia = $_POST["estadia"];
+					$query = "update estadias set estado='A' where id='$estadia'";
+
+					$resultado = mysqli_query($con, $query) or die(mysqli_error($con));
+
+					if ($resultado) {
+						$json = json_encode(array("error" => 0));
+					} else {
+						$json = json_encode(array("error" => 1, "valor" => "No se pudo modificar.-"));
+					};
 				}
-				else
-					if ($accion == 7)
-					{
-						# poner finalizado a la estadia
-						$estadia = $_POST["estadia"];
-						$query = "update estadias set estado='A' where id='$estadia'";
-
-						$resultado = mysqli_query($con, $query) or die(mysqli_error($con));
-
-						if ($resultado) {
-							$json = json_encode(array("error" => 0));
-						} else {
-							$json = json_encode(array("error" => 1, "valor" => "No se pudo modificar.-"));
-						};
-					}
 			};
 		};
 	};

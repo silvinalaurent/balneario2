@@ -162,7 +162,11 @@ function traeEstadias() {
               <td>
                 ${unaestadia.patente}
               </td>
+               <td>
+                ${unaestadia.observaciones}
+              </td>
               <td>
+
                 ${unaestadia.total}
               </td>
               <td>
