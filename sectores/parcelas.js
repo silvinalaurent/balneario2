@@ -217,28 +217,42 @@ function muestra_estadias(fecha) {
 
 function calcula_dias() {
   //04/12/24 tendria que chequear que no guarden estadias de fechas posteriores a la actual
-   var fechad=$("#fechad").val();
-   var fechah=$("#fechah").val();
-   if (fechah!='')
-    {
-    if (fechah > fechad)
-    { 
-      var fechad1= new Date(fechad);
-      var fechah1= new Date(fechah);
-      
-      var fechaDesde=fechad1.getTime();
-      var fechaHasta=fechah1.getTime();
+  //contemplamos si el tipo de guarda es mensual
+   const unidad_tarifa = localStorage.getItem("unidad_tarifa");
+   if (unidad_tarifa=='DIA')
+   {
+      var fechad=$("#fechad").val();
+      var fechah=$("#fechah").val();
+      if (fechah!='')
+        {
+        if (fechah > fechad)
+        { 
+          var fechad1= new Date(fechad);
+          var fechah1= new Date(fechah);
+          
+          var fechaDesde=fechad1.getTime();
+          var fechaHasta=fechah1.getTime();
 
-      var diff = fechaHasta - fechaDesde;
+          var diff = fechaHasta - fechaDesde;
 
-      var dias=diff/(1000*60*60*24);
+          var dias=diff/(1000*60*60*24);
 
-      $("#dias").text(dias);
-      calculaestadia();
+
+          $("#dias").text(dias);
+
+          calculaestadia();
+        }
+        else
+          alert("Por favor, corrija las fechas");
+        }
     }
     else
-      alert("Por favor, corrija las fechas");
-    }
+        if (unidad_tarifa=="MES")
+        {
+          $("#dias").text(30);
+
+          calculaestadia();
+        }
 };
 
 
@@ -283,6 +297,7 @@ function calculaestadia()
       if (unidad_tarifa=='MES')
         //si el tipo de alojamiento elegido es uno que tiene unidad de cobro por mes
         {
+          /*
           importe_estadia= parseFloat(tarifa);
           //si es por mes la fecha de egreso se puede calcular sumando un mes a fecha de ingreso
           let fecha_ingreso= document.getElementById('fechad').value;
@@ -292,8 +307,28 @@ function calculaestadia()
           let fechaFormateada = armaFecha(fecha_egreso);
           document.getElementById("fechah").value = fechaFormateada;
           //calcula_dias();
+*/
+           importe_estadia = parseFloat(tarifa);
+
+            let fecha_ingreso = document.getElementById('fechad').value;
+            console.log(fecha_ingreso);
+            // separar la fecha
+            let partes = fecha_ingreso.split("-");
+            let dia = partes[2];
+            let mes = partes[1] - 1; // los meses en JS van de 0 a 11
+            let anio = partes[0];
+
+            let fecha_egreso = new Date(anio, mes, dia);
+            console.log(fecha_egreso);
+            // sumar un mes
+            fecha_egreso.setMonth(fecha_egreso.getMonth() + 1);
+            console.log(fecha_egreso);
+            let fechaFormateada = armaFecha(fecha_egreso);
+            console.log(fechaFormateada);
+            document.getElementById("fechah").value = fechaFormateada;
+          }
         }
-    }
+    
   }
   document.getElementById("importedias").value=importe_estadia;
   //document.getElementById("adicionaldias").value= parseFloat(adicional)*parseInt(dias);

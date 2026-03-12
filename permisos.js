@@ -105,7 +105,46 @@ function lista_menues() {
                       async: true,
                       success: function(menues){
  
-                          for (var i in menues){
+                            const padres = data.filter(m => m.padre === "0");
+
+                            // agrupar hijos por padre
+                            const hijosPorPadre = {};
+
+                            data.forEach(menu => {
+                                if (menu.padre !== "0") {
+                                    if (!hijosPorPadre[menu.padre]) {
+                                        hijosPorPadre[menu.padre] = [];
+                                    }
+                                    hijosPorPadre[menu.padre].push(menu);
+                                }
+                            });
+
+                            const contenedor = document.getElementById("contenedor-menues");
+
+                            padres.forEach(padre => {
+
+                                // título del padre
+                                const divPadre = document.createElement("div");
+                                divPadre.className = "menu-padre";
+                                divPadre.textContent = padre.titulo;
+                                contenedor.appendChild(divPadre);
+
+                                // hijos
+                                const hijos = hijosPorPadre[padre.id];
+                                if (hijos) {
+                                    const ul = document.createElement("ul");
+                                    ul.className = "menu-hijos";
+
+                                    hijos.forEach(hijo => {
+                                        const li = document.createElement("li");
+                                        li.textContent = hijo.titulo;
+                                        ul.appendChild(li);
+                                    });
+
+                                    contenedor.appendChild(ul);
+                                }
+                            });
+ /*                       for (var i in menues){
                        
                            if (i >= 0)
                            {
@@ -114,7 +153,7 @@ function lista_menues() {
 
                            } 
                        
-                          }; 
+                          }; */
                           
                       },
                       error: function (obj, error, objError){
