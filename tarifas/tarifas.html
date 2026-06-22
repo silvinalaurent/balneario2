@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
 	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="tarifas.js?v=3.0"></script>
+	<script type="text/javascript" src="tarifas.js?v=4.0"></script>
 	<script type="text/javascript" src="../js/funciones.js?v=3.0"></script>
 	
 
@@ -32,6 +32,13 @@
 				<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
 				<div id="columna1fila2"><label>Descripcion</label>
 				<input type="search" name="buscatarifa" id="buscatarifa" size="50" onkeyup="filtrar(this.value);"></div>
+				<button type="button"
+        onclick="abrirGeneradorPeriodos()">
+    Nuevo Período Tarifario
+</button>
+				<a href="#" onclick="abrirGeneradorPeriodos()">
+    Nuevo Período Tarifario
+</a>
 				
 			</div>
 		</form>	
@@ -75,11 +82,17 @@
 				</div>
 		</div>		
 		
+
+		
+
+
+
 		<div>
 			<input id="mostrar-modal" name="modal" type="radio" /> 
 			<label for="mostrar-modal" onclick="agrega_tarifa()"><h3>+</h3></label>
 				
 			<div id="modal">
+				<!-- Tarifas -->
 					<input id="cerrar-modal" name="modal" type="radio" /> 
 					<label for="cerrar-modal"> X </label> 
 					<div id="tarifa">
@@ -102,11 +115,11 @@
 								</select>
 							</div>
 						</div>
-						<!-- <div id="renglon">
-							<div id="columna1"><label>Tarifa</label></div>
-							<div id="columna2"><input type="text" id="precio" name="precio" value="0"></div>
+						<div id="renglon">
+							<div id="columna1"><label>Tarifa UT</label></div>
+							<div id="columna2"><input type="number" id="precio" name="precio" value="0"></div>
 							</div>
-						-->
+						
 						<div id="renglon">
 							<div id="columna4"><input type="button" id="guardar" onclick="guarda_tarifa()" value="Aceptar"></div>
 						</div>
@@ -116,8 +129,8 @@
 					  	
 
 		</div>
-
-				
+		
+		
 					  	
 		<div class="tablas">
 				
@@ -126,7 +139,7 @@
 					<tr>
 						<th width="60%">Descripcion</th>					
 						<th>Unidad</th>
-						<th>Tarifa</th>		
+						<th>Tarifa UT</th>		
 						<th>Fecha Inicio</th>		
 						<th>Fecha Fin</th>					
 						<th>Acciones</th>
@@ -139,5 +152,79 @@
 	   
 	</div>
 	 
+	<!-- Modal Generación de Tarifas -->
+<div id="modalGenerarTarifas" class="modal-overlay">
+
+    <div class="modal-contenido">
+
+        <span class="cerrar-modal" onclick="cerrarGeneradorPeriodos()">
+            &times;
+        </span>
+
+        <h2>Generar Tarifas para Nuevo Período</h2>
+
+        <div class="formulario-modal">
+
+            <div>
+                <label>Nueva Unidad Tributaria</label>
+                <input type="number" id="nueva_ut" step="0.01">
+            </div>
+
+            <div>
+                <label>Fecha Inicio</label>
+                <input type="date" id="periodo_inicio">
+            </div>
+
+            <div>
+                <label>Fecha Fin</label>
+                <input type="date" id="periodo_fin">
+            </div>
+
+            <br>
+
+            <button type="button" onclick="calcularTarifas()">
+                Calcular
+            </button>
+
+        </div>
+
+        <br>
+
+        <div id="preview_tarifas">
+
+            <table id="tabla_preview" class="tabla">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Unidad</th>
+                        <th>Tarifa UT</th>
+                        <th>Precio Actual</th>
+                        <th>Calculado</th>
+                        <th>Ajustado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <br>
+
+        <div style="text-align:right;">
+            <button onclick="cerrarGeneradorPeriodos()">
+                Cancelar
+            </button>
+
+            <button onclick="guardarNuevoPeriodo()">
+                Generar Período
+            </button>
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>

@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\elementType;
+
 include('../conexion.php');
 include('../php/funciones.php');
 error_reporting(E_ALL ^ E_NOTICE);
@@ -69,8 +72,37 @@ if ($accion == 1) {
                 //select * from tarifas_precios left join tarifas_precios_precios on tarifas_precios.id=tarifas_precios_precios.idtarifa where baja=0 and  CURDATE() between fecha_inicio and fecha_fin order by unidad, descripcion"
             }
             //listar para una tarifa, el precio ultimo
+        } else {
+            if ($accion == 5) {
+                //insert masivos de nuevo periodo
+
+                $precios      = json_decode($_POST['precios'], true);
+                $fecha_inicio = $_POST['fecha_inicio'];
+                $fecha_fin    = $_POST['fecha_fin'];
+
+                $db->beginTransaction();
+                try {
+                    foreach ($precios as $p) {
+                        $sql = "INSERT INTO tarifas_precios 
+                                        (idtarifa, precio, fecha_inicio, fecha_fin)
+                                    VALUES (?, ?, ?, ?)";
+                        $db->execute($sql, [
+                            $p['idtarifa'],
+                            $p['precio'],
+                            $fecha_inicio,
+                            $fecha_fin
+                        ]);
+                    }
+                    $db->commit();
+                    echo json_encode(["error" => 0, "valor" => "OK"]);
+                } catch (Exception $e) {
+                    $db->rollback();  // si algo falla, no queda nada a medias
+                    echo json_encode(["error" => 1, "valor" => $e->getMessage()]);
+                }
+            }
         }
     }
+
 
 
 

@@ -654,12 +654,57 @@ function imprimecajanueva(fecha){
   
 }
 
+	function traePagos(fdesde,fhasta,idusuario){
+			var diferido = $.Deferred();
+
+			$.ajax({
+				url:"reporte_caja.php",
+				type:"POST",
+				dataType:'json',
+				data:{
+					fdesde:fdesde,
+					fhasta:fhasta,
+					idusuario:idusuario
+				},
+				success:function(data){
+					diferido.resolve(data);
+				}
+			});
+			
+			return diferido.promise();
+
+		};
+
+function imprimereporte(fdesde,fhasta,idusuario){
 
 
-function imprimereporte(fdesde,fhasta,usuario){
-
+  /*
   window.open("imp_reporte_caja.html?fdesde="+fdesde+"&fhasta="+fhasta+"&idusuario="+usuario);
-  
+  */
+    $(".tiempo").show();
+
+    traePagos(fdesde, fhasta, idusuario)
+    .then((data)=>{
+
+        $(".tiempo").hide();
+
+        // Validación 
+        if (!data || data.length === 0) {
+            alert("No hay pagos en ese período");
+            return;
+        }
+
+        // Solo si hay datos se abre el reporte
+        var url = "imp_reporte_caja.html?fdesde="+fdesde+
+                  "&fhasta="+fhasta+
+                  "&idusuario="+idusuario;
+
+        window.open(url);
+    })
+    .catch(()=>{
+        $(".tiempo").hide();
+        alert("Error al consultar los pagos");
+    });
 }
 
 

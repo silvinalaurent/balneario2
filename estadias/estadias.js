@@ -731,117 +731,128 @@ function guarda_estadia()
     
       var datos = $("#form_estadia").serialize();
       
-      var total= $("#total").text();
-      var montodescuento= $("#montodescuento").text();
-      
-      var forma_pago= $("#forma_pago").val();
-      var usuarioactivo = sessionStorage.getItem("Usuario");
-      var lote=$("#lote").val();
-      var cupon=$("#cupon").val();
-     
-      //tomar valor de la tabla
+      //var total= $("#total").text();
+      var total = parseFloat($("#total").text());
 
-      //1 - guardo datos de la estadia, con el turista a cargo
-      //2 - guardo el grupo de turistas
-      //controlar, si los datos importantes estan cargados, por ejemplo si hay un turista cargado al menos
-      // controlar si se cargo la forma de pago tb!!! y si las fechas estan cargadas
+      if (!isNaN(total) || total > 0) {
 
-          //buscamos el primer turista para guardar con la estadia
-           var turista ='';
-           var nro=0;
-           var parcela=$("#numeroparcela2").val(); //antes era id parcela  pero luego se vio la opcion de cambiar la parcela reservada
-           $('#tablaturistas tr').each(function () 
+            var montodescuento= $("#montodescuento").text();
+            
+            var forma_pago= $("#forma_pago").val();
+            var usuarioactivo = sessionStorage.getItem("Usuario");
+            var lote=$("#lote").val();
+            var cupon=$("#cupon").val();
+          
+            //tomar valor de la tabla
+
+            //1 - guardo datos de la estadia, con el turista a cargo
+            //2 - guardo el grupo de turistas
+            //controlar, si los datos importantes estan cargados, por ejemplo si hay un turista cargado al menos
+            // controlar si se cargo la forma de pago tb!!! y si las fechas estan cargadas
+
+                //buscamos el primer turista para guardar con la estadia
+                var turista ='';
+                var nro=0;
+                var parcela=$("#numeroparcela2").val(); //antes era id parcela  pero luego se vio la opcion de cambiar la parcela reservada
+                $('#tablaturistas tr').each(function () 
+                          {
+                            //console.log("Turista ",$(this).find("td").eq(0).html());
+                            if (nro==1)  {
+                                          turista=$(this).find("td").eq(0).html();
+                                          
+                                        }
+                            nro=nro+1;
+                          });
+                
+                var cantidad=$("#cantidad").val()
+                //controles antes de grabar
+                
+                if (($("#listadotarifas").val()!="0")  && (turista!='') && (parcela>0) && (cantidad!='') && !datos_enviados && 
+                ($("#fechad").val()!=null) && ($("#fechah").val()!=null) && ($("#fechad").val()<=$("#fechah").val()))
+                {
+                  if ($("#forma_pago").val()=='D' && ($("#lote").val()=='' || $("#cupon").val()==''))
                     {
-                      //console.log("Turista ",$(this).find("td").eq(0).html());
-                      if (nro==1)  {
-                                    turista=$(this).find("td").eq(0).html();
-                                    
-                                  }
-                      nro=nro+1;
-                    });
-           
-           var cantidad=$("#cantidad").val()
-           //controles antes de grabar
-           
-           if (($("#listadotarifas").val()!="0")  && (turista!='') && (parcela>0) && (cantidad!='') && !datos_enviados && 
-           ($("#fechad").val()!=null) && ($("#fechah").val()!=null) && ($("#fechad").val()<=$("#fechah").val()))
-           {
-             if ($("#forma_pago").val()=='D' && ($("#lote").val()=='' || $("#cupon").val()==''))
-              {
-                alert('Ingrese Lote y Cupon de pago del Debito, gracias');
-              }
-              else
-              {
-                datos=datos+ "&total="+total+"&montodescuento="+montodescuento+"&forma_pago="+forma_pago+"&turista="+turista+"&usuario="+usuarioactivo+"&lote="+lote+"&cupon="+cupon+"&accion="+1;
-                datos_enviados=true;
-                $.ajax({      
-                    type: "post",
-                    url:"../estadias/estadias.php",
-                    data:datos,
-                    dataType: "json",
-                    async: false,
-              
-                    success: function(estadias){
-                          
-                                  if (estadias["error"]==0) {
-
-                                    
-                                    document.getElementById("cerrar-modal").checked =true;
-
-                                    //finaliza la estadia anterior si es una estension
-                                    if (sessionStorage.getItem("operacion")=='E')
-                                    {
-                                      var idestadiaanterior= sessionStorage.getItem("idestadia");
-                                      var idparcela= sessionStorage.getItem("idparcela");
-                                      finaliza_estadia(idestadiaanterior,idparcela);
-                                    }
-
-                                    //pone ocupada a la parcela                                         
-                                    cambiar_estado(parcela);
-                                    //registrar pago, con el dato de idestadia
-                                    var idestadia= estadias["ultimoid"];
-                                          
-                                            //enviar reglamento por email y comprobante de estadia, chequear si tiene mail
-                                            envio_mail_estadia(idestadia,turista);
-
-                                            $("#numeroparcela2").focus();
-                                          
-                                            //imprime pago, opcioneal preguntar si desea hacerlo
-                                            window.open("../estadias/imprimeestadia.html?variable="+idestadia);
-
-
-                                            //vamos a guardar a los acompañantes 
-                                            var nro=0;
-                                            $('#tablaturistas tr').each(function () {
-                                                            if (nro>1) {
-                                                              var idturista=$(this).find("td").eq(0).html();
-                                                              guarda_acompanante(idturista, idestadia);
-
-                                                            } 
-                                                            nro=nro+1; 
-                                                            
-                                                          });
-                                            trae_estadias(3,parcela,"P");//corrobar que sea esta busqueda
-                                    
-                                  } 
-                                  else{
-                                      alert(estadias["valor"]);
-                                      
-                                  };                  
-                                  $(".tiempo").hide();      
-                    },
-              
-                    error: function (obj, error, objError){
-                        alert(error);//avisar que ocurrió un error
-                        
+                      alert('Ingrese Lote y Cupon de pago del Debito, gracias');
                     }
+                    else
+                    {
+                      datos=datos+ "&total="+total+"&montodescuento="+montodescuento+"&forma_pago="+forma_pago+"&turista="+turista+"&usuario="+usuarioactivo+"&lote="+lote+"&cupon="+cupon+"&accion="+1;
+                      datos_enviados=true;
+                      $.ajax({      
+                          type: "post",
+                          url:"../estadias/estadias.php",
+                          data:datos,
+                          dataType: "json",
+                          async: false,
+                    
+                          success: function(estadias){
+                                
+                                        if (estadias["error"]==0) {
 
-              });
+                                          
+                                          document.getElementById("cerrar-modal").checked =true;
+
+                                          //finaliza la estadia anterior si es una estension
+                                          if (sessionStorage.getItem("operacion")=='E')
+                                          {
+                                            var idestadiaanterior= sessionStorage.getItem("idestadia");
+                                            var idparcela= sessionStorage.getItem("idparcela");
+                                            finaliza_estadia(idestadiaanterior,idparcela);
+                                          }
+
+                                          //pone ocupada a la parcela                                         
+                                          cambiar_estado(parcela);
+                                          //registrar pago, con el dato de idestadia
+                                          var idestadia= estadias["ultimoid"];
+                                                
+                                                  //enviar reglamento por email y comprobante de estadia, chequear si tiene mail
+                                                  envio_mail_estadia(idestadia,turista);
+
+                                                  $("#numeroparcela2").focus();
+                                                
+                                                  //imprime pago, opcioneal preguntar si desea hacerlo
+                                                  window.open("../estadias/imprimeestadia.html?variable="+idestadia);
+
+
+                                                  //vamos a guardar a los acompañantes 
+                                                  var nro=0;
+                                                  $('#tablaturistas tr').each(function () {
+                                                                  if (nro>1) {
+                                                                    var idturista=$(this).find("td").eq(0).html();
+                                                                    guarda_acompanante(idturista, idestadia);
+
+                                                                  } 
+                                                                  nro=nro+1; 
+                                                                  
+                                                                });
+                                                  trae_estadias(3,parcela,"P");//corrobar que sea esta busqueda
+                                          
+                                        } 
+                                        else{
+                                            alert(estadias["valor"]);
+                                            
+                                        };                  
+                                        $(".tiempo").hide();      
+                          },
+                    
+                          error: function (obj, error, objError){
+                              alert(error);//avisar que ocurrió un error
+                              
+                          }
+
+                    });
+                }
+              }        
+              else
+                alert("Por Favor, complete la informacion ");
           }
-        }        
+        }
         else
-          alert("Por Favor, complete la informacion ");
+        {
+          alert("El total calculado es inválido o igual a cero. Verifique los datos de la estadía.");
+          $(".tiempo").hide();
     }
+    
     else
     alert("Esa parcela no esta disponible");
   }

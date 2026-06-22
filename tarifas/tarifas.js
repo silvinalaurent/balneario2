@@ -22,7 +22,7 @@ function trae_tarifas(tipooperacion,letras) {
                             var fecha_fin='';
                             if (unatarifa.fecha_fin!=null) {
                                 fecha_fin=convertDateFormat(unatarifa.fecha_fin);}
-                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa+ "</td><td>"+fecha_inicio+ "</td><td>"+fecha_fin+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+JSON.stringify(unatarifa)+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
+                              $("#tabla tbody").append("<tr><td>" + unatarifa.descripcion + "</td><td>"+unatarifa.unidad+ "</td><td>"+unatarifa.tarifa_ut+ "</td><td>"+fecha_inicio+ "</td><td>"+fecha_fin+ "</td><td><a href='#' onclick='modifica_tarifa("+JSON.stringify(unatarifa)+")'><i class=\"icon-pencil\"></i></a> - <a href='#' onclick='precios_tarifa("+JSON.stringify(unatarifa)+")'> $ </a> -  <a href='#' onclick='borra_tarifa("+unatarifa.id+")'><i class=\"icon-trash\"></i></a> </td> </tr>"); 
 
       							       } 
         							 
@@ -72,6 +72,8 @@ function lista_tarifas(nombreselector) {
             });
 };
  
+
+
 
 function eligetarifa(idtarifa){
     //hay que modificar para obtener el precio que corresponde al periodo actual
@@ -349,3 +351,118 @@ function guarda_precio() {
             else
                 alert('Complete el nombre por favor');
 };
+
+function abrirGeneradorPeriodos()
+{
+    
+        $("#modalGenerarTarifas").show();
+}
+
+function cerrarGeneradorPeriodos()
+{
+    $("#modalGenerarTarifas").hide();
+
+}
+
+//Codigo para actualizar en forma masiva las tarifas en relacion a la unidad tributaria
+//actualmente se actualiza cada 6 meses
+
+
+function tarifas_actuales() {
+    //trae las tarifas actuales
+    //reemplazar en otras funcciones como lista_tarifas      
+      return $.ajax({
+                      type: "POST",
+                      url:"../tarifas/tarifas.php",
+                      data: {accion:4, operacion:0, caracteres:''},
+                      dataType: "json",
+                      async: true,
+            });
+};
+
+
+
+
+
+async function calcularTarifas()
+{
+    let nuevaUT = parseFloat($("#nueva_ut").val());
+
+    $("#tabla_preview tbody").html("");
+
+    try {
+        const tarifas = await tarifas_actuales();
+        console.log(tarifas);
+        tarifas.forEach(tarifa => {
+
+            let valor = tarifa.tarifa_ut * nuevaUT;
+
+            $("#tabla_preview tbody").append(`
+                <tr>
+                    <td>${tarifa.descripcion}</td>
+                    <td>${tarifa.unidad}</td>
+                    <td>${tarifa.tarifa_ut}</td>
+                    <td>${tarifa.tarifa}</td>
+                    <td>${valor.toFixed(2)}</td>
+                    <td>
+                        <input type="number"
+                            value="${valor.toFixed(2)}"
+                            class="valor-ajustado">
+                    </td>
+                </tr>
+            `);
+        })
+    } catch(error) {
+        alert("Error al cargar tarifas");
+    }
+       
+}
+
+
+function guardarNuevoPeriodo() {
+    let fecha_inicio = $("#periodo_inicio").val();
+    let fecha_fin    = $("#periodo_fin").val();
+    let nueva_ut     = $("#nueva_ut").val();
+
+    if (!fecha_inicio || !fecha_fin || !nueva_ut) {
+        alert("Complete todos los campos");
+        return;
+    }
+
+    let precios = [];
+    $(".valor-ajustado").each(function() {
+        precios.push({
+            idtarifa: $(this).data("id"),
+            precio:   $(this).val()
+        });
+    });
+    console.log(precios);
+    if (precios.length === 0) {
+        alert("Primero calcule las tarifas");
+        return;
+    }
+/*
+    $.ajax({
+        type: "POST",
+        url: "precios.php",
+        data: {
+            accion: 5,          // nueva acción batch
+            precios: JSON.stringify(precios),
+            fecha_inicio: fecha_inicio,
+            fecha_fin: fecha_fin,
+            nueva_ut: nueva_ut
+        },
+        dataType: "json",
+        success: function(resp) {
+            if (resp.error == 0) {
+                cerrarGeneradorPeriodos();
+                trae_tarifas(0, "");
+                alert("Período guardado correctamente");
+            } else {
+                alert(resp.valor);
+            }
+        },
+        error: function() { alert("Error al guardar"); }
+    });
+    */
+}

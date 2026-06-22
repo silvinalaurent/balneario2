@@ -148,6 +148,19 @@ function trae_cobros2(fecha1,fecha2)
 };	 */
 
 
+function gestionar_forma_pago()
+{
+  $("#cupon").val(''); $("#lote").val('');
+  let forma_pago = document.getElementById("forma_pago").value;
+ // console.log(forma_pago);
+  if (forma_pago=='D'){
+    $("div[name='datos_debito']").show();
+  }
+  else{
+    $("div[name='datos_debito']").hide();
+  }
+}
+
 function blanquea_cobro(){
    
     // limpiar formulario
@@ -159,7 +172,10 @@ function blanquea_cobro(){
     $("#ticket_hasta").val('0');
     $("#cantidad").val('0');
     $("#observaciones").val('');
+    $("#forma_pago").val('E');
+    gestionar_forma_pago();
     $("#efectivo").val('');
+     $("#cupon").val(''); $("#lote").val('');
     
   };
 
@@ -243,8 +259,15 @@ function guarda_cobro() {
             
             if (($("#efectivo").val()!='') && ($("#tipo_cobro").val()!='') && !datos_enviados )
               {
+              if ($("#forma_pago").val()=='D' && ($("#lote").val()=='' || $("#cupon").val()==''))
+              {
+                alert('Ingrese Lote y Cupon de pago del Debito, gracias');
+              }
+              else
+              {
                 datos_enviados=true;
                 var datos = $("form").serialize();
+                console.log(datos);
                 var fecha_cobro = $("#fecha_cobro").text();
                 var monto =parseFloat($("#total").text());
                 datos=datos+"&fecha_cobro="+fecha_cobro+"&idusuario="+usuario;
@@ -264,7 +287,7 @@ function guarda_cobro() {
                           success: function(cobro){
                                         if (cobro["error"]==0) {
                                            document.getElementById("cerrar-modal").checked =true;
-                                           if ($("#tipo_cobro").val()!=12)//para online es 10
+                                           if ($("#tipo_cobro").val()!=10)//para online es 10 12 local
                                            {//se imprime comprobante para los demas cobros que no sean parrilla
                                              window.open("../cobros/imprimecobro.html?variable="+cobro["ultimoid"],"_blank"); 
                                            }
@@ -281,6 +304,8 @@ function guarda_cobro() {
                               alert(error);//avisar que ocurrió un error
                           }
                     });
+                }
+                  
             }
             else
                alert('Complete el turno, cobro e importe, por favor');
@@ -304,7 +329,7 @@ function evaluaCobro(tipo_cobro)
   var importe=obtiene_monto_tipo(tipo_cobro).then(r =>{
     var monto= r;
     $("#monto").text(monto);
-    if (tipo_cobro=="12") //Parrillas 
+    if (tipo_cobro=="10") //Parrillas 
       {
         //Por talonario
         ultimoticket().then(function(ultimo) {
@@ -373,6 +398,22 @@ function imprime_cobro(idcobro) {
                                   detalle=detalle+'  '+uncobro.observaciones;
                                 } 
                               var fecha_hora_impresion=fecha_hora_actual();
+                              
+                              var forma_pago;
+
+                              switch (uncobro.forma_pago) {
+                              case 'E':
+                                  forma_pago = 'Efectivo';
+                                  break;
+                              case 'T':
+                                  forma_pago = 'Transferencia';
+                                  break;
+                              case 'D':
+                                  forma_pago = 'Débito';
+                                  break;
+                              default:
+                                  forma_pago = 'Desconocido';
+                          }
                               //original
                               console.log(uncobro.id);
                               document.getElementById("secuencia").textContent=uncobro.idpago;
@@ -383,6 +424,7 @@ function imprime_cobro(idcobro) {
                               document.getElementById("usuario").textContent=uncobro.usuario;
                               document.getElementById("observaciones").textContent=detalle;
                               document.getElementById("total").textContent=uncobro.monto;
+                              document.getElementById("forma_pago").textContent=forma_pago;
                               document.getElementById("fecha_hora").textContent=fecha_hora_impresion;
                               
                               //duplicado
@@ -394,6 +436,7 @@ function imprime_cobro(idcobro) {
                               document.getElementById("usuariod").textContent=uncobro.usuario;
                               document.getElementById("observacionesd").textContent=detalle;
                               document.getElementById("totald").textContent=uncobro.monto;
+                              document.getElementById("forma_pagod").textContent=forma_pago;
                               document.getElementById("fecha_horad").textContent=fecha_hora_impresion;
                               
                               

@@ -15,7 +15,7 @@ if ($accion == 1) {
 	# agregar 
 
 	$_SESSION["accion"] = "ALTA";
-	$query = "insert into tarifas (descripcion,unidad,tarifa,baja) values ('$descripcion','$unidad','$tarifa',0)";
+	$query = "insert into tarifas (descripcion,unidad,tarifa_ut,baja) values ('$descripcion','$unidad','$tarifa',0)";
 
 	//generar un registro en tarifas-precios con los valores nulos de fecha y precio, para que luego los modifiquen
 	$resultado = mysqli_query($con, $query);
@@ -77,7 +77,7 @@ if ($accion == 1) {
 		if ($accion == 4) {
 			# listar
 			$operacion = $_POST["operacion"];
-			$consulta = "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas_precios.precio as tarifa, fecha_inicio, fecha_fin from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin";
+			$consulta = "select tarifas.id,tarifas.descripcion, tarifas.unidad, tarifas.tarifa_ut, tarifas_precios.precio as tarifa, fecha_inicio, fecha_fin from tarifas left join tarifas_precios on tarifas.id=tarifas_precios.idtarifa where tarifas.baja=0 and CURDATE() between tarifas_precios.fecha_inicio and tarifas_precios.fecha_fin";
 			if ($operacion == 0) {
 				//Para listado en Tarifas.html
 				$consulta = $consulta . " order by tarifas.unidad, tarifas.descripcion";

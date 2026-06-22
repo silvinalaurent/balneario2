@@ -8,19 +8,22 @@
 	<link rel="stylesheet" href="../css/estilos.css?v=1.0">
 	<link type="text/css" rel="stylesheet" href="../fontello/css/fontello.css" />
 	<script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="cobros.js?v=11.0"></script>
+	<script type="text/javascript" src="cobros.js?v=13.0"></script>
 	<script type="text/javascript" src="tipos_cobros.js?v=6.0"></script>
 	<script type="text/javascript" src="../js/funciones.js?v=2.0"> </script>
 	
 
 
 <script type="text/javascript">	
- $( document ).ready(function() {
+
+
+$( document ).ready(function() {
  		lista_tipos_cobro("tipo_cobro");
  		trae_cobros(0,"");
     });      
 </script>
-   
+
+
 </head>
 
 
@@ -103,8 +106,27 @@
 		  		<div class="linea">
 		  			<div id="columna1"><label>Total $</label></div>
 		  			<div id="columna2"><input type="text" id="efectivo" name="efectivo" size="10" readonly></div>
-		  			
+		  			<div id="columna3"><label for="forma_pago">Forma de Pago</label></div>
+					<div id="columna4">
+					  			<select name="forma_pago" id="forma_pago" onchange="gestionar_forma_pago()">
+					  				<option value="E" selected>EFECTIVO</option>
+					  				<option value="D">DEBITO</option>
+									<option value="T">TRANSFERENCIA</option>
+				  				</select>
+							
+			  		</div>
+					
 		  		</div> 
+				<div class="linea" name="datos_debito" style="display: none;">
+								<div id="columna1"></div>
+								<div id="columna2"></div>
+								<div id="columna3"><label for="lote">Lote</label></div>
+								<div id="columna4">
+									<input type="number" id="lote" name="lote" size="5" >
+									<label for="cupon">Cupon</label>
+									<input type="number" id="cupon" name="cupon" size="10" >
+								</div>
+					  		</div>
 				  <div class="linea">
 					<div id="columna1"><label>Observaciones</label></div>
 					<div id="columna234"><textarea id="observaciones" name="observaciones" rows="2" cols="50"></textarea></div>

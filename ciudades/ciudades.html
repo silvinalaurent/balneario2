@@ -12,6 +12,8 @@
 	<script type="text/javascript" src="provincias.js?v=3.0"></script>
 	<script type="text/javascript" src="paises.js?v=3.0"></script>
 
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
 <script type="text/javascript">	
  $( document ).ready(function() {
@@ -33,14 +35,14 @@
 	<form name="busqueda" method="post" accept-charset="utf-8">
 		<div class="cuadro" id="cajabusqueda">
 			<div id="fila1" class="titulos"><h3>Buscar por... </h3></div>
-			<div id="columna1fila2"><label>País</label>
+			<!-- <div id="columna1fila2"><label>País</label>
 				<select name="qpais" id="qpais" onclick="lista_provincias_pais('qprovincia',this.value);"></select></div>
 			
 			<div id="columna2fila2"><label>Provincia</label>
-				<select name="qprovincia" id="qprovincia" onclick="trae_ciudades(2,this.value)"></select></div>
+				<select name="qprovincia" id="qprovincia" onclick="trae_ciudades(2,this.value)"></select></div> -->
 			
 
-			<div id="columna3fila2">
+			<div id="columna1fila2">
 				<label>Ciudad</label>
 				<input type="search" name="buscaciudad" id="buscaciudad" size="50" placeholder="Ingrese al menos 4 letras..." onkeyup="filtrar_ciudades(this.value);">
 			</div>

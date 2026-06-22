@@ -194,3 +194,56 @@ function lista_ciudades_provincia(nombreselector,idprovincia) {
           });
 };
 
+$("#nombre").autocomplete({
+
+    minLength: 3,
+
+    source: function(request, response) {
+
+        $.ajax({
+            url: "../ciudades/ciudades.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                accion: 5,
+                texto: request.term
+            },
+
+            success: function(data) {
+
+                response($.map(data, function(item) {
+
+                    return {
+                        label: item.ciudad + " - " + item.provincia + " - " + item.pais,
+                        value: item.ciudad,
+                        idciudad: item.id,
+                        idprovincia: item.idprovincia,
+                        idpais: item.idpais
+                    };
+
+                }));
+
+            }
+        });
+    },
+
+    select: function(event, ui) {
+
+        $("#idciudad").val(ui.item.idciudad);
+        $("#nombre").val(ui.item.value);
+
+        // cargar país
+        $("#buscapais").val(ui.item.idpais).trigger("change");
+
+        // cargar provincias del país
+        lista_provincias_pais('buscaprovincia', ui.item.idpais);
+
+        // esperar que carguen provincias
+        setTimeout(function() {
+            $("#buscaprovincia").val(ui.item.idprovincia);
+        }, 300);
+
+        return false;
+    }
+
+});

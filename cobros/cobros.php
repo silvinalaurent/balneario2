@@ -20,6 +20,9 @@ if ($accion == 1) {
 	$desde_ticket = (!empty($_POST['desde_ticket'])) ? $_POST['desde_ticket'] : 0;
 	$hasta_ticket = (!empty($_POST['hasta_ticket'])) ? $_POST['hasta_ticket'] : 0;
 	$monto = $_POST['efectivo'];
+	$forma_pago = $_POST['forma_pago'];
+	$lote = (!empty($_POST['lote'])) ? $_POST['lote'] : 0;
+	$cupon = (!empty($_POST['cupon'])) ? $_POST['cupon'] : 0;
 	$observaciones = $_POST['observaciones'];
 	$idusuario = $_POST['idusuario'];
 
@@ -42,7 +45,7 @@ if ($accion == 1) {
 
 	$query1 = "insert into cobros (fecha,id_tipocobro,turno,talonario,ticket_desde,ticket_hasta,monto,observaciones,idusuario,fecha_hora) values ('$fecha','$id_tipocobro','$turno','$talonario','$desde_ticket','$hasta_ticket','$monto','$observaciones','$idusuario','$fechaHora')";
 
-	$query2 = "insert into pagos (fecha,idestadia,idcobro, forma_pago, lote, cupon, importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',0,(select max(id) from cobros),'E',0,0,'$monto','$idusuario','N','$fechaHora',0)";
+	$query2 = "insert into pagos (fecha,idestadia,idcobro, forma_pago, lote, cupon, importe, idusuario, estado,fecha_hora,modificado) values ('$fecha',0,(select max(id) from cobros),'$forma_pago','$cupon','$lote','$monto','$idusuario','N','$fechaHora',0)";
 
 	// Ejecutar primera consulta
 	if (mysqli_query($con, $query1)) {
@@ -119,7 +122,7 @@ if ($accion == 1) {
 							//busqueda para imprimir el cobro 
 							$idcobro = $_POST["caracteres"];
 
-							$json = queryToJson($con, "select cobros.*, tipos_cobros.nombre as concepto, usuarios.usuario as usuario, pagos.id as idpago from cobros inner join tipos_cobros on cobros.id_tipocobro=tipos_cobros.id inner join usuarios on cobros.idusuario = usuarios.id inner join pagos on cobros.id=pagos.idcobro where cobros.id='$idcobro' order by fecha,turno;");
+							$json = queryToJson($con, "select cobros.*, tipos_cobros.nombre as concepto, usuarios.usuario as usuario, pagos.id as idpago, pagos.forma_pago as forma_pago from cobros inner join tipos_cobros on cobros.id_tipocobro=tipos_cobros.id inner join usuarios on cobros.idusuario = usuarios.id inner join pagos on cobros.id=pagos.idcobro where cobros.id='$idcobro' order by fecha,turno;");
 						} else
 										if ($operacion == 5) {
 							$fecha = $_POST["caracteres"];
@@ -140,7 +143,7 @@ if ($accion == 1) {
 													if ($operacion == 8) {
 							//ultimo ticket cargado		
 							// $json = queryToJson($con, "SELECT MAX(ticket_hasta) AS ultimo_ticket FROM cobros WHERE ticket_hasta IS NOT NULL");
-							$json = queryToJson($con, "SELECT ticket_hasta as ultimo_ticket FROM cobros ORDER BY fecha_hora DESC, id DESC LIMIT 1");
+							$json = queryToJson($con, "SELECT ticket_hasta as ultimo_ticket FROM cobros WHERE ticket_hasta <> 0 ORDER BY fecha_hora DESC, id DESC LIMIT 1");
 						}
 					}
 		}

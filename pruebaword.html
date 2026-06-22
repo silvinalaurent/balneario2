@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar DOCX con JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        #btnPlantilla {
+            background-color: #2196F3;
+            color: white;
+        }
+        #btnPlantilla:hover {
+            background-color: #0b7dda;
+        }
+        #btnCrear {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #btnCrear:hover {
+            background-color: #45a049;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-input-label {
+            display: block;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .file-input-label:hover {
+            background-color: #e0e0e0;
+        }
+        .file-name {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 Generador de Documentos DOCX</h1>
+        
+        <form id="formulario">
+            <div class="form-group">
+                <label>Plantilla DOCX (opcional):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="plantilla" accept=".docx">
+                    <label for="plantilla" class="file-input-label">
+                        📁 Seleccionar plantilla DOCX
+                    </label>
+                    <div class="file-name" id="fileName"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="Juan Pérez" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="empresa">Empresa:</label>
+                <input type="text" id="empresa" name="empresa" value="Tech Solutions SA" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cargo">Cargo:</label>
+                <input type="text" id="cargo" name="cargo" value="Desarrollador Senior">
+            </div>
+            
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" required>Este es un documento de ejemplo generado dinámicamente con JavaScript.</textarea>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" id="btnPlantilla">Usar Plantilla</button>
+                <button type="button" id="btnCrear">Crear desde Cero</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- CDN Libraries -->
+    <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
+    <script src="https://unpkg.com/docxtemplater@3.42.0/build/docxtemplater.js"></script>
+    <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip-utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+
+    <script>
+        // Mostrar nombre del archivo seleccionado
+        document.getElementById('plantilla').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'Ningún archivo seleccionado';
+            document.getElementById('fileName').textContent = fileName;
+        });
+
+        // Establecer fecha actual por defecto
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        // MÉTODO 1: Usar plantilla DOCX
+        document.getElementById('btnPlantilla').addEventListener('click', function() {
+            const archivoPlantilla = document.getElementById('plantilla').files[0];
+            
+            if (!archivoPlantilla) {
+                alert('Por favor, selecciona un archivo de plantilla DOCX');
+                return;
+            }
+
+            // Obtener datos del formulario
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                empresa: document.getElementById('empresa').value,
+                fecha: document.getElementById('fecha').value,
+                cargo: document.getElementById('cargo').value,
+                descripcion: document.getElementById('descripcion').value
+            };
+
+            // Leer el archivo de plantilla
+            const reader = new FileReader();
+            reader.readAsBinaryString(archivoPlantilla);
+            
+            reader.onerror = function(evt) {
+                console.error("Error al leer el archivo");
+            };
+            
+            reader.onload = function(evt) {
+                const content = evt.target.result;
+                const zip = new PizZip(content);
+                
+                try {
+                    const doc = new window.docxtemplater(zip, {
+                        paragraphLoop: true,
+                        linebreaks: true,
+                    });
+
+                    // Reemplazar las variables
+                    doc.render(datos);
+
+                    // Generar el archivo
+                    const out = doc.getZip().generate({
+                        type: "blob",
+                        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    });
+
+                    // Descargar
+                    saveAs(out, "documento_generado.docx");
+                    
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert('Error al generar el documento. Asegúrate de que la plantilla tenga el formato correcto.');
+                }
+            };
+        });
+
+        // MÉTODO 2: Crear documento desde cero
+        document.getElementById('btnCrear').addEventListener('click', function() {
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                empresa: document.getElementById('empresa').value,
+                fecha: document.getElementById('fecha').value,
+                cargo: document.getElementById('cargo').value,
+                descripcion: document.getElementById('descripcion').value
+            };
+
+            // Usando la librería docx
+            const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
+
+            const doc = new Document({
+                sections: [{
+                    properties: {},
+                    children: [
+                        // Título
+                        new Paragraph({
+                            text: "DOCUMENTO GENERADO",
+                            heading: HeadingLevel.HEADING_1,
+                            alignment: AlignmentType.CENTER,
+                            spacing: {
+                                after: 400,
+                            },
+                        }),
+
+                        // Información básica
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Nombre: ",
+                                    bold: true,
+                                }),
+                                new TextRun({
+                                    text: datos.nombre,
+                                }),
+                            ],
+                            spacing: {
+                                after: 200,
+                            },
+                        }),
+
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Empresa: ",
+                                    bold: true,
+                                }),
+                                new TextRun({
+                                    text: datos.empresa,
+                                }),
+                            ],
+                            spacing: {
+                                after: 200,
+                            },
+                        }),
+
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Cargo: ",
+                                    bold: true,
+                                }),
+                                new TextRun({
+                                    text: datos.cargo,
+                                }),
+                            ],
+                            spacing: {
+                                after: 200,
+                            },
+                        }),
+
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Fecha: ",
+                                    bold: true,
+                                }),
+                                new TextRun({
+                                    text: datos.fecha,
+                                }),
+                            ],
+                            spacing: {
+                                after: 400,
+                            },
+                        }),
+
+                        // Descripción
+                        new Paragraph({
+                            text: "Descripción:",
+                            heading: HeadingLevel.HEADING_2,
+                            spacing: {
+                                before: 400,
+                                after: 200,
+                            },
+                        }),
+
+                        new Paragraph({
+                            text: datos.descripcion,
+                            spacing: {
+                                after: 200,
+                            },
+                        }),
+
+                        // Pie de página
+                        new Paragraph({
+                            text: "___________________________",
+                            alignment: AlignmentType.CENTER,
+                            spacing: {
+                                before: 800,
+                                after: 200,
+                            },
+                        }),
+
+                        new Paragraph({
+                            text: "Firma",
+                            alignment: AlignmentType.CENTER,
+                        }),
+                    ],
+                }],
+            });
+
+            // Generar y descargar
+            Packer.toBlob(doc).then(blob => {
+                saveAs(blob, "documento_creado.docx");
+            });
+        });
+    </script>
+</body>
+</html>
+`

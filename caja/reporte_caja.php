@@ -101,10 +101,10 @@ UNION ALL
 SELECT 
     devoluciones.id AS secuencia,
     'E' AS forma,
+    'N' AS estado,
     devoluciones.fecha_hora AS fpago,
     devoluciones.idestadia AS estadia,
     NULL AS modificado,  -- no existe en devoluciones
-    NULL AS estado,
     CONCAT(estadias.fecha_ingreso, ' / ', estadias.fecha_egreso) AS fechas,
     CASE 
         WHEN devoluciones.idestadia > 0 THEN CONCAT(turistas.apellido, ' ', turistas.nombres)

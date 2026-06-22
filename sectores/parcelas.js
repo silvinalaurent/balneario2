@@ -258,25 +258,29 @@ function calcula_dias() {
 
 
 function calculaestadia()
-
 {
   const unidad_tarifa = localStorage.getItem("unidad_tarifa");
-  var dias= document.getElementById("dias").textContent;
-  if (dias=='') {dias=0};
-  var tarifa= document.getElementById("importe").value;
-  if (tarifa=='') {tarifa=0};
-  var descuento= document.getElementById("descuento").value;
-  if (descuento=='') {descuento=0};
- /*  var adicional= document.getElementById("adicional").value;
-  if (adicional=='') {adicional=0};
-  var adicional2= document.getElementById("adicional2").value;
-  if (adicional2=='') {adicional2=0};
-  */ 
-  var adicional=0;
-  var adicional2=0;
-  var adicional3= document.getElementById("adicional3").value;
-  if (adicional3=='') {adicional3=0};
+  var dias= parseFloat(document.getElementById("dias").textContent) || 0;
+  var tarifa= parseFloat(document.getElementById("importe").value) || 0;
+  var descuento= parseFloat(document.getElementById("descuento").value) || 0;
+  var adicional3= parseFloat(document.getElementById("adicional3").value) || 0;
   var importe_estadia=0;
+
+// CASO ESPECIAL: INVITADO ESPECIAL (tipo 25)
+    if (tipoAlojamiento == 25) {
+        // El invitado especial no paga estadía
+        importe_estadia = 0;
+        // Mostrar mensaje informativo
+        $("#dias").text("INVITADO");
+        document.getElementById("importedias").value = 0;
+        // Calcular solo adicionales si las hay
+        var totalestadia = parseFloat(adicional3);
+        document.getElementById("montodescuento").textContent = "0";
+        document.getElementById("total").textContent = totalestadia.toFixed(2);
+        return;
+    }
+    
+
   if (unidad_tarifa=='DIA')
   {
      importe_estadia=parseFloat(tarifa)*parseInt(dias);
@@ -297,21 +301,8 @@ function calculaestadia()
       if (unidad_tarifa=='MES')
         //si el tipo de alojamiento elegido es uno que tiene unidad de cobro por mes
         {
-          /*
-          importe_estadia= parseFloat(tarifa);
-          //si es por mes la fecha de egreso se puede calcular sumando un mes a fecha de ingreso
-          let fecha_ingreso= document.getElementById('fechad').value;
-          let fecha_egreso = new Date(fecha_ingreso); // 10 de junio de 2024
-          // Incrementar un mes
-          fecha_egreso.setMonth(fecha_egreso.getMonth() + 1);
-          let fechaFormateada = armaFecha(fecha_egreso);
-          document.getElementById("fechah").value = fechaFormateada;
-          //calcula_dias();
-*/
            importe_estadia = parseFloat(tarifa);
-
-            let fecha_ingreso = document.getElementById('fechad').value;
-            console.log(fecha_ingreso);
+           let fecha_ingreso = document.getElementById('fechad').value;
             // separar la fecha
             let partes = fecha_ingreso.split("-");
             let dia = partes[2];
@@ -319,29 +310,29 @@ function calculaestadia()
             let anio = partes[0];
 
             let fecha_egreso = new Date(anio, mes, dia);
-            console.log(fecha_egreso);
             // sumar un mes
             fecha_egreso.setMonth(fecha_egreso.getMonth() + 1);
-            console.log(fecha_egreso);
             let fechaFormateada = armaFecha(fecha_egreso);
-            console.log(fechaFormateada);
             document.getElementById("fechah").value = fechaFormateada;
           }
         }
     
   }
   document.getElementById("importedias").value=importe_estadia;
-  //document.getElementById("adicionaldias").value= parseFloat(adicional)*parseInt(dias);
-  //document.getElementById("adicional2dias").value= parseFloat(adicional2)*parseInt(dias);
-  var totalestadia= importe_estadia+parseInt(dias)*parseFloat(adicional)+parseInt(dias)*parseFloat(adicional2)+parseFloat(adicional3);
+  var totalestadia= importe_estadia+parseFloat(adicional3);
   var montodescuento=0;
 
   montodescuento= totalestadia * parseFloat(descuento)/100;
   
   totalestadia= totalestadia - montodescuento;
   
-  document.getElementById("montodescuento").textContent=montodescuento;
-  document.getElementById("total").textContent=totalestadia;
+  if (isNaN(totalestadia)) {
+        totalestadia = 0;
+        console.warn("Error en cálculo de total, se setea a 0");
+    }
+    
+  document.getElementById("montodescuento").textContent=montodescuento.toFixed(2);
+  document.getElementById("total").textContent=totalestadia.toFixed(2);
 }; 
 
 

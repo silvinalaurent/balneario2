@@ -65,7 +65,7 @@
 
 		  	$(".tiempo").show();
 		    traePagos(fdesde,fhasta,idusuario).then((data)=>{
-		    	console.log(data);
+		    	
 		    	for(var x in data){
 		    		data[x].cantidad_personas = data[x].cantidad_personas==null?0:data[x].cantidad_personas;
 		    	};
