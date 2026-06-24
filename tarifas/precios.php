@@ -73,31 +73,51 @@ if ($accion == 1) {
             }
             //listar para una tarifa, el precio ultimo
         } else {
+
             if ($accion == 5) {
-                //insert masivos de nuevo periodo
 
                 $precios      = json_decode($_POST['precios'], true);
                 $fecha_inicio = $_POST['fecha_inicio'];
                 $fecha_fin    = $_POST['fecha_fin'];
 
-                $db->beginTransaction();
+                mysqli_begin_transaction($con);
+
                 try {
+
+                    $sql = "INSERT INTO tarifas_precios 
+                            (idtarifa, precio, fecha_inicio, fecha_fin)
+                            VALUES (?, ?, ?, ?)";
+
+                    $stmt = mysqli_prepare($con, $sql);
+
                     foreach ($precios as $p) {
-                        $sql = "INSERT INTO tarifas_precios 
-                                        (idtarifa, precio, fecha_inicio, fecha_fin)
-                                    VALUES (?, ?, ?, ?)";
-                        $db->execute($sql, [
+
+                        mysqli_stmt_bind_param(
+                            $stmt,
+                            "idss",
                             $p['idtarifa'],
                             $p['precio'],
                             $fecha_inicio,
                             $fecha_fin
-                        ]);
+                        );
+
+                        mysqli_stmt_execute($stmt);
                     }
-                    $db->commit();
-                    echo json_encode(["error" => 0, "valor" => "OK"]);
+
+                    mysqli_commit($con);
+
+                    echo json_encode([
+                        "error" => 0,
+                        "valor" => "OK"
+                    ]);
                 } catch (Exception $e) {
-                    $db->rollback();  // si algo falla, no queda nada a medias
-                    echo json_encode(["error" => 1, "valor" => $e->getMessage()]);
+
+                    mysqli_rollback($con);
+
+                    echo json_encode([
+                        "error" => 1,
+                        "valor" => $e->getMessage()
+                    ]);
                 }
             }
         }

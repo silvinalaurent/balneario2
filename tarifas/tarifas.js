@@ -399,6 +399,7 @@ async function calcularTarifas()
 
             $("#tabla_preview tbody").append(`
                 <tr>
+                   
                     <td>${tarifa.descripcion}</td>
                     <td>${tarifa.unidad}</td>
                     <td>${tarifa.tarifa_ut}</td>
@@ -407,6 +408,7 @@ async function calcularTarifas()
                     <td>
                         <input type="number"
                             value="${valor.toFixed(2)}"
+                            data-id="${tarifa.id}"
                             class="valor-ajustado">
                     </td>
                 </tr>
@@ -437,32 +439,33 @@ function guardarNuevoPeriodo() {
         });
     });
     console.log(precios);
-    if (precios.length === 0) {
-        alert("Primero calcule las tarifas");
-        return;
+    if (precios.length != 0) {
+        
+
+        $.ajax({
+            type: "POST",
+            url: "precios.php",
+            data: {
+                accion: 5,         
+                precios: JSON.stringify(precios),
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                nueva_ut: nueva_ut
+            },
+            dataType: "json",
+            success: function(resp) {
+                if (resp.error == 0) {
+                    cerrarGeneradorPeriodos();
+                    trae_tarifas(0, "");
+                    alert("Período guardado correctamente");
+                } else {
+                    alert(resp.valor);
+                }
+            },
+            error: function() { alert("Error al guardar"); }
+        });
     }
-/*
-    $.ajax({
-        type: "POST",
-        url: "precios.php",
-        data: {
-            accion: 5,          // nueva acción batch
-            precios: JSON.stringify(precios),
-            fecha_inicio: fecha_inicio,
-            fecha_fin: fecha_fin,
-            nueva_ut: nueva_ut
-        },
-        dataType: "json",
-        success: function(resp) {
-            if (resp.error == 0) {
-                cerrarGeneradorPeriodos();
-                trae_tarifas(0, "");
-                alert("Período guardado correctamente");
-            } else {
-                alert(resp.valor);
-            }
-        },
-        error: function() { alert("Error al guardar"); }
-    });
-    */
+    else
+        alert('No se puede guardar la información');
+
 }
